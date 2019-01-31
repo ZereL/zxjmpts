@@ -1,14 +1,12 @@
-import { ComponentClass } from 'react'
-import Taro, { Component, Config } from '@tarojs/taro'
-import { View, Button, Text } from '@tarojs/components'
-import { connect } from '@tarojs/redux'
+// import { ComponentClass } from "react";
+import Taro, { Component, Config } from "@tarojs/taro";
+import { View, Button, Text } from "@tarojs/components";
+import { connect } from "@tarojs/redux";
 
-import { add, minus, asyncAdd } from '../../actions/counter'
-
-import './index.scss'
+import "./index.scss";
 
 // #region 书写注意
-// 
+//
 // 目前 typescript 版本还无法在装饰器模式下将 Props 注入到 Taro.Component 中的 props 属性
 // 需要显示声明 connect 的参数类型并通过 interface 的方式指定 Taro.Component 子类的 props
 // 这样才能完成类型检查和 IDE 的自动提示
@@ -17,74 +15,114 @@ import './index.scss'
 //
 // #endregion
 
-type PageStateProps = {
-  counter: {
-    num: number
-  }
+// type PageStateProps = {
+//   home: {
+//     num: number;
+//   };
+// };
+
+// type PageDispatchProps = {
+//   add: () => void;
+//   dec: () => void;
+//   asyncAdd: () => any;
+// };
+
+// type PageOwnProps = {};
+
+// type PageState = {};
+
+// type IProps = PageStateProps & PageDispatchProps & PageOwnProps;
+
+// interface Index {
+//   props: IProps;
+// }
+
+interface IProps {
+  // recommendList: any;
+  // onFetchRecommendList: (payload: { callback: any }) => any;
+  // onUpdateState: (namespace: string, payload: any) => any;
 }
 
-type PageDispatchProps = {
-  add: () => void
-  dec: () => void
-  asyncAdd: () => any
-}
+// const mapStateToProps = ({ recommend }) => ({
+//   recommendList: recommend.recommendList
+// })
+// const mapDispatchToProps = ({
+//   onFetchRecommendList: fetchRecommendList,
+//   onUpdateState: updateState
+// })
 
-type PageOwnProps = {}
-
-type PageState = {}
-
-type IProps = PageStateProps & PageDispatchProps & PageOwnProps
-
-interface Index {
-  props: IProps;
-}
-
-@connect(({ counter }) => ({
-  counter
-}), (dispatch) => ({
-  add () {
-    dispatch(add())
-  },
-  dec () {
-    dispatch(minus())
-  },
-  asyncAdd () {
-    dispatch(asyncAdd())
-  }
+@connect(({ home }) => ({
+  ...home
 }))
-class Index extends Component {
-
-    /**
+export class Index extends Component<IProps> {
+  /**
    * 指定config的类型声明为: Taro.Config
    *
    * 由于 typescript 对于 object 类型推导只能推出 Key 的基本类型
    * 对于像 navigationBarTextStyle: 'black' 这样的推导出的类型是 string
    * 提示和声明 navigationBarTextStyle: 'black' | 'white' 类型冲突, 需要显示声明类型
    */
-    config: Config = {
-    navigationBarTitleText: '首页'
+  config: Config = {
+    navigationBarTitleText: "首页"
+  };
+
+  /********************* 生命周期函数 **********************/
+  componentWillReceiveProps(nextProps) {
+    console.log(this.props, nextProps);
   }
 
-  componentWillReceiveProps (nextProps) {
-    console.log(this.props, nextProps)
-  }
+  componentWillUnmount() {}
 
-  componentWillUnmount () { }
+  componentDidShow() {}
 
-  componentDidShow () { }
+  componentDidHide() {}
 
-  componentDidHide () { }
+  /********************* 事件handler **********************/
+  add = () => {
+    this.props.dispatch({
+      type: "home/add"
+    });
+  };
+  /********************* 渲染页面的方法 *********************/
+  /********************* 页面render方法 ********************/
 
-  render () {
+  // render() {
+  //   return (
+  //     <View className="index">
+  //       <Button className="add_btn" onClick={this.props.add}>
+  //         +
+  //       </Button>
+  //       <Button className="dec_btn" onClick={this.props.dec}>
+  //         -
+  //       </Button>
+  //       <Button className="dec_btn" onClick={this.props.asyncAdd}>
+  //         async
+  //       </Button>
+  //       <View>
+  //         <Text>{this.props.home.num}</Text>
+  //       </View>
+  //       <View>
+  //         <Text>Hello, World</Text>
+  //       </View>
+  //     </View>
+  //   );
+  // }
+  render() {
+    console.log("this.props", this.props);
     return (
-      <View className='index'>
-        <Button className='add_btn' onClick={this.props.add}>+</Button>
-        <Button className='dec_btn' onClick={this.props.dec}>-</Button>
-        <Button className='dec_btn' onClick={this.props.asyncAdd}>async</Button>
-        <View><Text>{this.props.counter.num}</Text></View>
-        <View><Text>Hello, World</Text></View>
+      <View className="index">
+        <Button className="add_btn" onClick={this.add}>
+          +
+        </Button>
+        <View>
+          <Text>{this.props.num}</Text>
+        </View>
+        <View>
+        <Text>{this.props.num}</Text>
+          <Text>Hello, World</Text>
+        </View>
       </View>
-    )
+    );
   }
 }
 
@@ -95,4 +133,4 @@ class Index extends Component {
 //
 // #endregion
 
-export default Index as ComponentClass<PageOwnProps, PageState>
+// export default Index as ComponentClass<PageOwnProps, PageState>;
