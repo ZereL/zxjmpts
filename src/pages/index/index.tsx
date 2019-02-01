@@ -42,7 +42,13 @@ interface Index {
   }),
   dispatch => ({
     add(namespace, payload) {
-      dispatch(add(namespace, payload));
+      dispatch(add(namespace, payload))
+        .then(result => {
+          console.log("请求成功", result);
+        })
+        .catch(error => {
+          console.log("请求失败", error);
+        });
     }
   })
 )

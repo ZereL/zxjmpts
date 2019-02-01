@@ -24,6 +24,8 @@ export default {
           num: num + 1
         }
       });
+
+      return requestResult;
     }
   }
 };
