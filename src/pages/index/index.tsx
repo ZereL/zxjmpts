@@ -1,9 +1,10 @@
-// import { ComponentClass } from "react";
+import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
 import { View, Button, Text } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 
 import "./index.scss";
+import { add } from "../../actions/home";
 
 // #region 书写注意
 //
@@ -15,46 +16,37 @@ import "./index.scss";
 //
 // #endregion
 
-// type PageStateProps = {
-//   home: {
-//     num: number;
-//   };
-// };
+type PageStateProps = {
+  home: {
+    num: number;
+  };
+};
 
-// type PageDispatchProps = {
-//   add: () => void;
-//   dec: () => void;
-//   asyncAdd: () => any;
-// };
+type PageDispatchProps = {
+  add: (namespace: string, payload?: any) => any;
+};
 
-// type PageOwnProps = {};
+type PageOwnProps = {};
 
-// type PageState = {};
+type PageState = {};
 
-// type IProps = PageStateProps & PageDispatchProps & PageOwnProps;
+type IProps = PageStateProps & PageDispatchProps & PageOwnProps;
 
-// interface Index {
-//   props: IProps;
-// }
-
-interface IProps {
-  // recommendList: any;
-  // onFetchRecommendList: (payload: { callback: any }) => any;
-  // onUpdateState: (namespace: string, payload: any) => any;
+interface Index {
+  props: IProps;
 }
 
-// const mapStateToProps = ({ recommend }) => ({
-//   recommendList: recommend.recommendList
-// })
-// const mapDispatchToProps = ({
-//   onFetchRecommendList: fetchRecommendList,
-//   onUpdateState: updateState
-// })
-
-@connect(({ home }) => ({
-  ...home
-}))
-export class Index extends Component<IProps> {
+@connect(
+  ({ home }) => ({
+    home
+  }),
+  dispatch => ({
+    add(namespace, payload) {
+      dispatch(add(namespace, payload));
+    }
+  })
+)
+class Index extends Component {
   /**
    * 指定config的类型声明为: Taro.Config
    *
@@ -78,35 +70,16 @@ export class Index extends Component<IProps> {
   componentDidHide() {}
 
   /********************* 事件handler **********************/
+  // 尝试抽离handlers！
   add = () => {
-    this.props.dispatch({
-      type: "home/add"
-    });
+    // this.props.dispatch({
+    //   type: "home/add"
+    // });
+
+    this.props.add("home");
   };
   /********************* 渲染页面的方法 *********************/
   /********************* 页面render方法 ********************/
-
-  // render() {
-  //   return (
-  //     <View className="index">
-  //       <Button className="add_btn" onClick={this.props.add}>
-  //         +
-  //       </Button>
-  //       <Button className="dec_btn" onClick={this.props.dec}>
-  //         -
-  //       </Button>
-  //       <Button className="dec_btn" onClick={this.props.asyncAdd}>
-  //         async
-  //       </Button>
-  //       <View>
-  //         <Text>{this.props.home.num}</Text>
-  //       </View>
-  //       <View>
-  //         <Text>Hello, World</Text>
-  //       </View>
-  //     </View>
-  //   );
-  // }
   render() {
     console.log("this.props", this.props);
     return (
@@ -115,10 +88,10 @@ export class Index extends Component<IProps> {
           +
         </Button>
         <View>
-          <Text>{this.props.num}</Text>
+          <Text>{this.props.home.num}</Text>
         </View>
         <View>
-        <Text>{this.props.num}</Text>
+          <Text>{this.props.home.num}</Text>
           <Text>Hello, World</Text>
         </View>
       </View>
@@ -133,4 +106,4 @@ export class Index extends Component<IProps> {
 //
 // #endregion
 
-// export default Index as ComponentClass<PageOwnProps, PageState>;
+export default Index as ComponentClass<PageOwnProps, PageState>;

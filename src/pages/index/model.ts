@@ -3,10 +3,22 @@ export default {
   state: {
     num: 1
   },
-  reducers: {},
+  reducers: {
+    SetAdd(state, { payload }) {
+      return { ...state, ...payload };
+    }
+  },
   effects: {
-    *add({ payload }, { put, call }) {
-      console.log("收到请求");
+    *add({ payload }, { select, put, call }) {
+      console.log("收到请求", payload);
+      const { num } = yield select(state => state.home);
+
+      yield put({
+        type: "SetAdd",
+        payload: {
+          num: num + 1
+        }
+      });
     }
   }
 };
