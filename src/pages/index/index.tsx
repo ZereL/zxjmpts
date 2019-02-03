@@ -41,14 +41,13 @@ interface Index {
     home
   }),
   dispatch => ({
-    add(namespace, payload) {
-      dispatch(add(namespace, payload))
-        .then(result => {
-          console.log("请求成功", result);
-        })
-        .catch(error => {
-          console.log("请求失败", error);
-        });
+    async add(namespace, payload) {
+      try {
+        const result = await dispatch(add(namespace, payload));
+        console.log("请求成功", result);
+      } catch (error) {
+        console.log("error", error);
+      }
     }
   })
 )
