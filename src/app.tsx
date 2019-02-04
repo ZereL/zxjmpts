@@ -1,5 +1,5 @@
 import Taro, { Component, Config } from "@tarojs/taro";
-import Index from "./pages/index";
+import Home from "./pages/home/home";
 import "@tarojs/async-await";
 import { Provider } from "@tarojs/redux";
 import dva from "./utils/dva";
@@ -21,7 +21,7 @@ const store = dvaApp.getStore(); //  getStore是一个函数！！！要执行�
 
 class App extends Component {
   config: Config = {
-    pages: ["pages/index/index"],
+    pages: ["pages/home/home"],
     window: {
       backgroundTextStyle: "light",
       navigationBarBackgroundColor: "#fff",
@@ -45,7 +45,7 @@ class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <Index />
+        <Home />
       </Provider>
     );
   }

@@ -3,18 +3,8 @@ import Taro, { Component, Config } from "@tarojs/taro";
 import { View, Button, Text } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 
-import "./index.scss";
-import { add } from "../../actions/home";
-
-// #region 书写注意
-//
-// 目前 typescript 版本还无法在装饰器模式下将 Props 注入到 Taro.Component 中的 props 属性
-// 需要显示声明 connect 的参数类型并通过 interface 的方式指定 Taro.Component 子类的 props
-// 这样才能完成类型检查和 IDE 的自动提示
-// 使用函数模式则无此限制
-// ref: https://github.com/DefinitelyTyped/DefinitelyTyped/issues/20796
-//
-// #endregion
+import "./Home.scss";
+import { add, login } from "../../actions";
 
 type PageStateProps = {
   home: {
@@ -24,6 +14,7 @@ type PageStateProps = {
 
 type PageDispatchProps = {
   add: (namespace: string, payload?: any) => any;
+  login: (namespace: string, payload?: any) => any;
 };
 
 type PageOwnProps = {};
@@ -40,16 +31,10 @@ interface Index {
   ({ home }) => ({
     home
   }),
-  dispatch => ({
-    async add(namespace, payload) {
-      try {
-        const result = await dispatch(add(namespace, payload));
-        console.log("请求成功", result);
-      } catch (error) {
-        console.log("error", error);
-      }
-    }
-  })
+  {
+    add: add,
+    login: login
+  }
 )
 class Index extends Component {
   /**
@@ -75,14 +60,27 @@ class Index extends Component {
   componentDidHide() {}
 
   /********************* 事件handler **********************/
-  // 尝试抽离handlers！
-  add = () => {
-    // this.props.dispatch({
-    //   type: "home/add"
-    // });
-
-    this.props.add("home");
+  add = async() => {
+    try {
+      const result = await this.props.add("home");
+      console.log("请求成功", result);
+    } catch (error) {
+      console.log("error", error);
+    }
   };
+
+  /**
+   * 登录
+   */
+  login = async () => {
+    try {
+      const result = await this.props.login("home");
+      console.log("请求成功", result);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
   /********************* 渲染页面的方法 *********************/
   /********************* 页面render方法 ********************/
   render() {
@@ -91,6 +89,9 @@ class Index extends Component {
       <View className="index">
         <Button className="add_btn" onClick={this.add}>
           +
+        </Button>
+        <Button className="add_btn" onClick={this.login}>
+          登录
         </Button>
         <View>
           <Text>{this.props.home.num}</Text>
@@ -104,11 +105,5 @@ class Index extends Component {
   }
 }
 
-// #region 导出注意
-//
-// 经过上面的声明后需要将导出的 Taro.Component 子类修改为子类本身的 props 属性
-// 这样在使用这个子类时 Ts 才不会提示缺少 JSX 类型参数错误
-//
-// #endregion
 
 export default Index as ComponentClass<PageOwnProps, PageState>;

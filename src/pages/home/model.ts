@@ -1,4 +1,6 @@
+import { REQUEST_LOGIN, ADD } from './../../constants/index';
 import { fetchHomeData } from "../../services/homeService";
+import Taro from "@tarojs/taro";
 
 export default {
   namespace: "home",
@@ -11,7 +13,7 @@ export default {
     }
   },
   effects: {
-    *add({ payload }, { select, put, call }) {
+    *[ADD]({ payload }, { select, put, call }) {
       console.log("收到请求", payload);
       const { num } = yield select(state => state.home);
       console.log("准备请求");
@@ -26,6 +28,12 @@ export default {
       });
 
       return requestResult;
+    },
+    *[REQUEST_LOGIN]({ payload }, { }) {
+      console.log("收到请求", payload);
+      Taro.login().then(result => {
+        console.log("result请求", result);
+      });
     }
   }
 };
