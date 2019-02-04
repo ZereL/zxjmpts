@@ -3,7 +3,7 @@ import Taro, { Component, Config } from "@tarojs/taro";
 import { View, Button, Text } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 
-import "./cart.scss";
+import "./index.scss";
 import { add, login } from "../../actions";
 import { CART } from "../../constants";
 
