@@ -3,11 +3,12 @@ import Taro, { Component, Config } from "@tarojs/taro";
 import { View, Button, Text } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 
-import "./home.scss";
+import "./user.scss";
 import { add, login } from "../../actions";
+import { USER } from "../../constants";
 
 type PageStateProps = {
-  home: {
+  user: {
     num: number;
   };
 };
@@ -23,20 +24,20 @@ type PageState = {};
 
 type IProps = PageStateProps & PageDispatchProps & PageOwnProps;
 
-interface Home {
+interface User {
   props: IProps;
 }
 
 @connect(
-  ({ home }) => ({
-    home
+  ({ user }) => ({
+    user
   }),
   {
     add: add,
     login: login
   }
 )
-class Home extends Component {
+class User extends Component {
   /**
    * 指定config的类型声明为: Taro.Config
    *
@@ -45,7 +46,7 @@ class Home extends Component {
    * 提示和声明 navigationBarTextStyle: 'black' | 'white' 类型冲突, 需要显示声明类型
    */
   config: Config = {
-    navigationBarTitleText: "首页"
+    navigationBarTitleText: "小主"
   };
 
   /********************* 生命周期函数 **********************/
@@ -62,7 +63,7 @@ class Home extends Component {
   /********************* 事件handler **********************/
   add = async () => {
     try {
-      const result = await this.props.add("home");
+      const result = await this.props.add(USER);
       console.log("请求成功", result);
     } catch (error) {
       console.log("error", error);
@@ -74,7 +75,7 @@ class Home extends Component {
    */
   login = async () => {
     try {
-      const result = await this.props.login("home");
+      const result = await this.props.login(USER);
       console.log("请求成功", result);
     } catch (error) {
       console.log("error", error);
@@ -84,25 +85,14 @@ class Home extends Component {
   /********************* 渲染页面的方法 *********************/
   /********************* 页面render方法 ********************/
   render() {
-    const { home } = this.props;
     return (
       <View className="index">
-        <Button className="add_btn" onClick={this.add}>
-          +
-        </Button>
-        <Button className="add_btn" onClick={this.login}>
-          登录
-        </Button>
         <View>
-          <Text>{home.num}</Text>
-        </View>
-        <View>
-          <Text>{home.num}</Text>
-          <Text>Hello, World</Text>
+          <Text>小主页面</Text>
         </View>
       </View>
     );
   }
 }
 
-export default Home as ComponentClass<PageOwnProps, PageState>;
+export default User as ComponentClass<PageOwnProps, PageState>;

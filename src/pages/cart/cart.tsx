@@ -3,11 +3,12 @@ import Taro, { Component, Config } from "@tarojs/taro";
 import { View, Button, Text } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 
-import "./home.scss";
+import "./cart.scss";
 import { add, login } from "../../actions";
+import { CART } from "../../constants";
 
 type PageStateProps = {
-  home: {
+  cart: {
     num: number;
   };
 };
@@ -23,29 +24,22 @@ type PageState = {};
 
 type IProps = PageStateProps & PageDispatchProps & PageOwnProps;
 
-interface Home {
+interface Cart {
   props: IProps;
 }
 
 @connect(
-  ({ home }) => ({
-    home
+  ({ cart }) => ({
+    cart
   }),
   {
     add: add,
     login: login
   }
 )
-class Home extends Component {
-  /**
-   * 指定config的类型声明为: Taro.Config
-   *
-   * 由于 typescript 对于 object 类型推导只能推出 Key 的基本类型
-   * 对于像 navigationBarTextStyle: 'black' 这样的推导出的类型是 string
-   * 提示和声明 navigationBarTextStyle: 'black' | 'white' 类型冲突, 需要显示声明类型
-   */
+class Cart extends Component {
   config: Config = {
-    navigationBarTitleText: "首页"
+    navigationBarTitleText: "聚宝盆"
   };
 
   /********************* 生命周期函数 **********************/
@@ -62,7 +56,7 @@ class Home extends Component {
   /********************* 事件handler **********************/
   add = async () => {
     try {
-      const result = await this.props.add("home");
+      const result = await this.props.add(CART);
       console.log("请求成功", result);
     } catch (error) {
       console.log("error", error);
@@ -74,7 +68,7 @@ class Home extends Component {
    */
   login = async () => {
     try {
-      const result = await this.props.login("home");
+      const result = await this.props.login(CART);
       console.log("请求成功", result);
     } catch (error) {
       console.log("error", error);
@@ -84,25 +78,14 @@ class Home extends Component {
   /********************* 渲染页面的方法 *********************/
   /********************* 页面render方法 ********************/
   render() {
-    const { home } = this.props;
     return (
       <View className="index">
-        <Button className="add_btn" onClick={this.add}>
-          +
-        </Button>
-        <Button className="add_btn" onClick={this.login}>
-          登录
-        </Button>
         <View>
-          <Text>{home.num}</Text>
-        </View>
-        <View>
-          <Text>{home.num}</Text>
-          <Text>Hello, World</Text>
+          <Text>聚宝盆</Text>
         </View>
       </View>
     );
   }
 }
 
-export default Home as ComponentClass<PageOwnProps, PageState>;
+export default Cart as ComponentClass<PageOwnProps, PageState>;

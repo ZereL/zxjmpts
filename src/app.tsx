@@ -21,12 +21,38 @@ const store = dvaApp.getStore(); //  getStore是一个函数！！！要执行�
 
 class App extends Component {
   config: Config = {
-    pages: ["pages/home/home"],
+    pages: ["pages/home/home", "pages/cart/cart", "pages/user/user"],
     window: {
       backgroundTextStyle: "light",
       navigationBarBackgroundColor: "#fff",
       navigationBarTitleText: "WeChat",
       navigationBarTextStyle: "black"
+    },
+    tabBar: {
+      list: [
+        {
+          pagePath: "pages/home/home",
+          text: "首页",
+          iconPath: "./assets/icons/home.png",
+          selectedIconPath: "./assets/icons/home.png"
+        },
+        {
+          pagePath: "pages/cart/cart",
+          text: "聚宝盆",
+          iconPath: "./assets/icons/home.png",
+          selectedIconPath: "./assets/icons/home.png"
+        },
+        {
+          pagePath: "pages/user/user",
+          text: "我的",
+          iconPath: "./assets/icons/home.png",
+          selectedIconPath: "./assets/icons/home.png"
+        }
+      ],
+      color: "#333",
+      selectedColor: "#333",
+      backgroundColor: "white",
+      borderStyle: "white"
     }
   };
 
