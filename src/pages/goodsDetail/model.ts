@@ -1,39 +1,30 @@
-import { REQUEST_LOGIN, ADD } from './../../constants/index';
-import { fetchHomeData } from "../../services/homeService";
-import Taro from "@tarojs/taro";
+import {  GOODSDETAIL, FETCH_PAGEDATA, SET_PAGEDATA } from "./../../constants/index";
+import { fetchGoodsData } from "../../services/goodsServices";
 
 export default {
-  namespace: "home",
+  namespace: GOODSDETAIL,
   state: {
     num: 1
   },
   reducers: {
-    SetAdd(state, { payload }) {
+    [SET_PAGEDATA](state, { payload }) {
       return { ...state, ...payload };
     }
   },
   effects: {
-    *[ADD]({ payload }, { select, put, call }) {
-      console.log("收到请求", payload);
-      const { num } = yield select(state => state.home);
-      console.log("准备请求");
-      const requestResult = yield call(fetchHomeData);
+    *[FETCH_PAGEDATA]({ payload }, { select, put, call }) {
+
+      const requestResult = yield call(fetchGoodsData, payload);
       console.log("requestResult", requestResult);
 
       yield put({
-        type: "SetAdd",
+        type: SET_PAGEDATA,
         payload: {
-          num: num + 1
+          requestResult
         }
       });
 
       return requestResult;
-    },
-    *[REQUEST_LOGIN]({ payload }, { }) {
-      console.log("收到请求", payload);
-      Taro.login().then(result => {
-        console.log("result请求", result);
-      });
     }
   }
 };

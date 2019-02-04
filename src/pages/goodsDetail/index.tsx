@@ -4,16 +4,17 @@ import { View, Button, Text } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 
 import "./index.scss";
-import { add, login } from "../../actions";
+import { login, fetchPageData } from "../../actions";
+import { GOODSDETAIL } from "../../constants";
 
 type PageStateProps = {
-  home: {
+  goodsDetail: {
     num: number;
   };
 };
 
 type PageDispatchProps = {
-  add: (namespace: string, payload?: any) => any;
+  fetchPageData: (namespace: string, payload?: any) => any;
   login: (namespace: string, payload?: any) => any;
 };
 
@@ -23,29 +24,22 @@ type PageState = {};
 
 type IProps = PageStateProps & PageDispatchProps & PageOwnProps;
 
-interface Home {
+interface GoodsDetail {
   props: IProps;
 }
 
 @connect(
-  ({ home }) => ({
-    home
+  ({ goodsDetail }) => ({
+    goodsDetail
   }),
   {
-    add: add,
+    fetchPageData: fetchPageData,
     login: login
   }
 )
-class Home extends Component {
-  /**
-   * 指定config的类型声明为: Taro.Config
-   *
-   * 由于 typescript 对于 object 类型推导只能推出 Key 的基本类型
-   * 对于像 navigationBarTextStyle: 'black' 这样的推导出的类型是 string
-   * 提示和声明 navigationBarTextStyle: 'black' | 'white' 类型冲突, 需要显示声明类型
-   */
+class GoodsDetail extends Component {
   config: Config = {
-    navigationBarTitleText: "首页"
+    navigationBarTitleText: "商品详情"
   };
 
   /********************* 生命周期函数 **********************/
@@ -55,26 +49,20 @@ class Home extends Component {
 
   componentWillUnmount() {}
 
-  componentDidShow() {}
+  componentDidShow() {
+    this.fetchPageData();
+  }
 
   componentDidHide() {}
 
   /********************* 事件handler **********************/
-  add = async () => {
-    try {
-      const result = await this.props.add("home");
-      console.log("请求成功", result);
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
+  fetchPageData = async () => {
+    const { id } = this.$router.params;
+    console.log("id", id);
+    console.log("this.$router", this.$router);
 
-  /**
-   * 登录
-   */
-  login = async () => {
     try {
-      const result = await this.props.login("home");
+      const result = await this.props.fetchPageData(GOODSDETAIL, { id: id });
       console.log("请求成功", result);
     } catch (error) {
       console.log("error", error);
@@ -84,24 +72,14 @@ class Home extends Component {
   /********************* 渲染页面的方法 *********************/
   /********************* 页面render方法 ********************/
   render() {
-    const { home } = this.props;
     return (
       <View className="index">
-        <Button className="add_btn" onClick={this.add}>
-          +
-        </Button>
-        <Button className="add_btn" onClick={this.login}>
-          登录
-        </Button>
         <View>
-          <Text>{home.num}</Text>
-        </View>
-        <View>
-          <Text>首页</Text>
+          <Text>单品页面</Text>
         </View>
       </View>
     );
   }
 }
 
-export default Home as ComponentClass<PageOwnProps, PageState>;
+export default GoodsDetail as ComponentClass<PageOwnProps, PageState>;

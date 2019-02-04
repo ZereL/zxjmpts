@@ -21,7 +21,12 @@ const store = dvaApp.getStore(); //  getStore是一个函数！！！要执行�
 
 class App extends Component {
   config: Config = {
-    pages: ["pages/home/index", "pages/cart/index", "pages/user/index"],
+    pages: [
+      "pages/home/index",
+      "pages/cart/index",
+      "pages/user/index",
+      "pages/goodsDetail/index"
+    ],
     window: {
       backgroundTextStyle: "light",
       navigationBarBackgroundColor: "#fff",

@@ -5,6 +5,7 @@ import { connect } from "@tarojs/redux";
 
 import "./index.scss";
 import { add, login } from "../../actions";
+import { HOME } from "../../constants";
 
 type PageStateProps = {
   home: {
@@ -37,13 +38,6 @@ interface Home {
   }
 )
 class Home extends Component {
-  /**
-   * 指定config的类型声明为: Taro.Config
-   *
-   * 由于 typescript 对于 object 类型推导只能推出 Key 的基本类型
-   * 对于像 navigationBarTextStyle: 'black' 这样的推导出的类型是 string
-   * 提示和声明 navigationBarTextStyle: 'black' | 'white' 类型冲突, 需要显示声明类型
-   */
   config: Config = {
     navigationBarTitleText: "首页"
   };
@@ -62,7 +56,7 @@ class Home extends Component {
   /********************* 事件handler **********************/
   add = async () => {
     try {
-      const result = await this.props.add("home");
+      const result = await this.props.add(HOME);
       console.log("请求成功", result);
     } catch (error) {
       console.log("error", error);
@@ -72,13 +66,19 @@ class Home extends Component {
   /**
    * 登录
    */
-  login = async () => {
+  loginHandler = async () => {
     try {
-      const result = await this.props.login("home");
+      const result = await this.props.login(HOME);
       console.log("请求成功", result);
     } catch (error) {
       console.log("error", error);
     }
+  };
+
+  goGoodsDetailHandler = () => {
+    Taro.navigateTo({
+      url: `/pages/goodsDetail/index?id=1271`
+    });
   };
 
   /********************* 渲染页面的方法 *********************/
@@ -90,8 +90,11 @@ class Home extends Component {
         <Button className="add_btn" onClick={this.add}>
           +
         </Button>
-        <Button className="add_btn" onClick={this.login}>
+        <Button className="add_btn" onClick={this.loginHandler}>
           登录
+        </Button>
+        <Button className="add_btn" onClick={this.goGoodsDetailHandler}>
+          查看商品详情
         </Button>
         <View>
           <Text>{home.num}</Text>

@@ -1,9 +1,10 @@
+import { HOME } from './../../constants/index';
 import { REQUEST_LOGIN, ADD } from './../../constants/index';
 import { fetchHomeData } from "../../services/homeService";
 import Taro from "@tarojs/taro";
 
 export default {
-  namespace: "home",
+  namespace: HOME,
   state: {
     num: 1
   },

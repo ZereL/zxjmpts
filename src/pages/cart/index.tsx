@@ -63,18 +63,6 @@ class Cart extends Component {
     }
   };
 
-  /**
-   * 登录
-   */
-  login = async () => {
-    try {
-      const result = await this.props.login(CART);
-      console.log("请求成功", result);
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-
   /********************* 渲染页面的方法 *********************/
   /********************* 页面render方法 ********************/
   render() {

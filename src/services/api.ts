@@ -94,7 +94,7 @@ export default {
     return this.request(
       {
         ...options,
-        data: JSON.stringify(options.data)
+        data: JSON.stringify(options.payload)
       },
       "POST"
     );
