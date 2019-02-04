@@ -97,8 +97,7 @@ class Home extends Component {
           <Text>{home.num}</Text>
         </View>
         <View>
-          <Text>{home.num}</Text>
-          <Text>Hello, World</Text>
+          <Text>首页</Text>
         </View>
       </View>
     );

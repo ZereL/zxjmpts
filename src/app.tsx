@@ -1,5 +1,5 @@
 import Taro, { Component, Config } from "@tarojs/taro";
-import Home from "./pages/home/home";
+import Home from "./pages/home";
 import "@tarojs/async-await";
 import { Provider } from "@tarojs/redux";
 import dva from "./utils/dva";
@@ -21,7 +21,7 @@ const store = dvaApp.getStore(); //  getStore是一个函数！！！要执行�
 
 class App extends Component {
   config: Config = {
-    pages: ["pages/home/home", "pages/cart/cart", "pages/user/user"],
+    pages: ["pages/home/index", "pages/cart/index", "pages/user/index"],
     window: {
       backgroundTextStyle: "light",
       navigationBarBackgroundColor: "#fff",
@@ -31,19 +31,19 @@ class App extends Component {
     tabBar: {
       list: [
         {
-          pagePath: "pages/home/home",
+          pagePath: "pages/home/index",
           text: "首页",
           iconPath: "./assets/icons/home.png",
           selectedIconPath: "./assets/icons/home.png"
         },
         {
-          pagePath: "pages/cart/cart",
+          pagePath: "pages/cart/index",
           text: "聚宝盆",
           iconPath: "./assets/icons/home.png",
           selectedIconPath: "./assets/icons/home.png"
         },
         {
-          pagePath: "pages/user/user",
+          pagePath: "pages/user/index",
           text: "我的",
           iconPath: "./assets/icons/home.png",
           selectedIconPath: "./assets/icons/home.png"
