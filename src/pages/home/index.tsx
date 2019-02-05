@@ -14,6 +14,7 @@ import "./index.scss";
 import { add, login, fetchPageData } from "../../actions";
 import { HOME } from "../../constants";
 import ZXJCarousel from "../../components/Carousel/index";
+import GoodsList from "../../components/GoodsList/index";
 
 type PageStateProps = {};
 
@@ -47,7 +48,6 @@ interface Home {
     fetchPageData: fetchPageData
   }
 )
-
 
 // TODO: 研究代替switch case遍历homeItems数组的办法
 class Home extends Component {
@@ -151,7 +151,7 @@ class Home extends Component {
 
     return (
       <View className="index">
-        {/* <Button className="add_btn" onClick={this.add}>
+        <Button className="add_btn" onClick={this.add}>
           +
         </Button>
         <Button className="add_btn" onClick={this.loginHandler}>
@@ -162,7 +162,7 @@ class Home extends Component {
         </Button>
         <View>
           <Text>首页</Text>
-        </View> */}
+        </View>
         <View>
           {/* <Image
             mode="widthFix"
@@ -173,7 +173,16 @@ class Home extends Component {
           })} */}
           {homeItems.map((item, index) => {
             return (
-              item.type === "SliderImage" && <ZXJCarousel images={item.content} />
+              item.type === "SliderImage" && (
+                <ZXJCarousel images={item.content} key={index} />
+              )
+            );
+          })}
+          {homeItems.map((item, index) => {
+            return (
+              item.type === "DynamicList" && (
+                <GoodsList list={item.content} key={index} />
+              )
             );
           })}
         </View>
