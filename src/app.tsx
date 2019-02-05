@@ -76,7 +76,7 @@ class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <Home />
+        <Home home={store.home} />
       </Provider>
     );
   }

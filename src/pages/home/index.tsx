@@ -13,7 +13,7 @@ import { connect } from "@tarojs/redux";
 import "./index.scss";
 import { add, login, fetchPageData } from "../../actions";
 import { HOME } from "../../constants";
-import Slider from "../../components/Slider";
+import ZXJCarousel from "../../components/Carousel/index";
 
 type PageStateProps = {};
 
@@ -47,6 +47,9 @@ interface Home {
     fetchPageData: fetchPageData
   }
 )
+
+
+// TODO: 研究代替switch case遍历homeItems数组的办法
 class Home extends Component {
   config: Config = {
     navigationBarTitleText: "首页"
@@ -54,7 +57,7 @@ class Home extends Component {
 
   /********************* 生命周期函数 **********************/
   componentWillReceiveProps(nextProps) {
-    console.log(this.props, nextProps);
+    // console.log(this.props, nextProps);
   }
 
   componentWillUnmount() {}
@@ -141,12 +144,14 @@ class Home extends Component {
   //     }
   //   });
   // };
+
   /********************* 页面render方法 ********************/
   render() {
-    // const { homeItems } = this.props.home;
+    const { homeItems } = this.props.home;
+
     return (
       <View className="index">
-        <Button className="add_btn" onClick={this.add}>
+        {/* <Button className="add_btn" onClick={this.add}>
           +
         </Button>
         <Button className="add_btn" onClick={this.loginHandler}>
@@ -157,7 +162,7 @@ class Home extends Component {
         </Button>
         <View>
           <Text>首页</Text>
-        </View>
+        </View> */}
         <View>
           {/* <Image
             mode="widthFix"
@@ -166,41 +171,11 @@ class Home extends Component {
           {/* {homeItems.map((item, index) => {
             return item.type === "SliderImage" && <Text>{item.type}</Text>
           })} */}
-          {/* {homeItems.map((item, index) => {
+          {homeItems.map((item, index) => {
             return (
-              item.type === "SliderImage" && <Slider banner={item.content} />
+              item.type === "SliderImage" && <ZXJCarousel images={item.content} />
             );
-          })} */}
-          <Swiper
-            className="swiper "
-            circular
-            indicatorDots
-            indicatorColor="#999"
-            indicatorActiveColor="#bf708f"
-            autoplay
-          >
-            <SwiperItem>
-              {/* <Image mode="widthFix" src={`${IMAGE_URL}${item.image}`} /> */}
-              <Image
-                mode="widthFix"
-                src={`https://cdn2u.com/images/upload/241018-afe6ced15f8b064ad9d91e1d24cf1af9-1242x600.jpg`}
-              />
-            </SwiperItem>
-            <SwiperItem>
-              {/* <Image mode="widthFix" src={`${IMAGE_URL}${item.image}`} /> */}
-              <Image
-                mode="widthFix"
-                src={`https://cdn2u.com/images/upload/241018-afe6ced15f8b064ad9d91e1d24cf1af9-1242x600.jpg`}
-              />
-            </SwiperItem>
-            <SwiperItem>
-              {/* <Image mode="widthFix" src={`${IMAGE_URL}${item.image}`} /> */}
-              <Image
-                mode="widthFix"
-                src={`https://cdn2u.com/images/upload/241018-afe6ced15f8b064ad9d91e1d24cf1af9-1242x600.jpg`}
-              />
-            </SwiperItem>
-          </Swiper>
+          })}
         </View>
       </View>
     );
