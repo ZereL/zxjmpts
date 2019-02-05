@@ -1,5 +1,5 @@
 import {  GOODSDETAIL, FETCH_PAGEDATA, SET_PAGEDATA } from "./../../constants/index";
-import { fetchGoodsData } from "../../services/goodsServices";
+import { fetchGoodsData } from "../../services/goodsService";
 
 export default {
   namespace: GOODSDETAIL,

@@ -1,24 +1,33 @@
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
-import { View, Button, Text } from "@tarojs/components";
+import {
+  Swiper,
+  SwiperItem,
+  View,
+  Button,
+  Text,
+  Image
+} from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 
 import "./index.scss";
-import { add, login } from "../../actions";
+import { add, login, fetchPageData } from "../../actions";
 import { HOME } from "../../constants";
+import Slider from "../../components/Slider";
 
-type PageStateProps = {
-  home: {
-    num: number;
-  };
-};
+type PageStateProps = {};
 
 type PageDispatchProps = {
   add: (namespace: string, payload?: any) => any;
   login: (namespace: string, payload?: any) => any;
+  fetchPageData: (namespace: string, payload?: any) => any;
 };
 
-type PageOwnProps = {};
+type PageOwnProps = {
+  home: {
+    homeItems: [{ content: Array<object>; type: string }];
+  };
+};
 
 type PageState = {};
 
@@ -34,7 +43,8 @@ interface Home {
   }),
   {
     add: add,
-    login: login
+    login: login,
+    fetchPageData: fetchPageData
   }
 )
 class Home extends Component {
@@ -49,7 +59,9 @@ class Home extends Component {
 
   componentWillUnmount() {}
 
-  componentDidShow() {}
+  componentDidShow() {
+    this.fetchPageData();
+  }
 
   componentDidHide() {}
 
@@ -57,6 +69,15 @@ class Home extends Component {
   add = async () => {
     try {
       const result = await this.props.add(HOME);
+      console.log("请求成功", result);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  fetchPageData = async () => {
+    try {
+      const result = await this.props.fetchPageData(HOME);
       console.log("请求成功", result);
     } catch (error) {
       console.log("error", error);
@@ -82,9 +103,47 @@ class Home extends Component {
   };
 
   /********************* 渲染页面的方法 *********************/
+  // /**
+  //  * 渲染首页slider
+  //  */
+  // renderSlider = () => {
+  //   const {data} = this.props.home
+  //   return (
+  //     <Slider banner={data.}/>
+  //   )
+  // }
+
+  // /**
+  //  * 渲染首页
+  //  */
+  // renderHome = () => {
+  //   const { homeItems } = this.props.home;
+  //   return homeItems.map((item, index) => {
+  //     switch (item.type) {
+  //       case "SliderImage": {
+  //         return <Slider banner={item.content} />;
+  //       }
+
+  //       default: {
+  //         break;
+  //       }
+  //     }
+  //   });
+  // };
+
+  /**
+   * 渲染首页
+   */
+  // renderHome = homeItems => {
+  //   return homeItems.map((item, index) => {
+  //     if (item.type == "SliderImage") {
+  //       return <Slider banner={item.content} />;
+  //     }
+  //   });
+  // };
   /********************* 页面render方法 ********************/
   render() {
-    const { home } = this.props;
+    // const { homeItems } = this.props.home;
     return (
       <View className="index">
         <Button className="add_btn" onClick={this.add}>
@@ -97,10 +156,51 @@ class Home extends Component {
           查看商品详情
         </Button>
         <View>
-          <Text>{home.num}</Text>
+          <Text>首页</Text>
         </View>
         <View>
-          <Text>首页</Text>
+          {/* <Image
+            mode="widthFix"
+            src={`https://cdn2u.com/images/upload/241018-afe6ced15f8b064ad9d91e1d24cf1af9-1242x600.jpg`}
+          /> */}
+          {/* {homeItems.map((item, index) => {
+            return item.type === "SliderImage" && <Text>{item.type}</Text>
+          })} */}
+          {/* {homeItems.map((item, index) => {
+            return (
+              item.type === "SliderImage" && <Slider banner={item.content} />
+            );
+          })} */}
+          <Swiper
+            className="swiper "
+            circular
+            indicatorDots
+            indicatorColor="#999"
+            indicatorActiveColor="#bf708f"
+            autoplay
+          >
+            <SwiperItem>
+              {/* <Image mode="widthFix" src={`${IMAGE_URL}${item.image}`} /> */}
+              <Image
+                mode="widthFix"
+                src={`https://cdn2u.com/images/upload/241018-afe6ced15f8b064ad9d91e1d24cf1af9-1242x600.jpg`}
+              />
+            </SwiperItem>
+            <SwiperItem>
+              {/* <Image mode="widthFix" src={`${IMAGE_URL}${item.image}`} /> */}
+              <Image
+                mode="widthFix"
+                src={`https://cdn2u.com/images/upload/241018-afe6ced15f8b064ad9d91e1d24cf1af9-1242x600.jpg`}
+              />
+            </SwiperItem>
+            <SwiperItem>
+              {/* <Image mode="widthFix" src={`${IMAGE_URL}${item.image}`} /> */}
+              <Image
+                mode="widthFix"
+                src={`https://cdn2u.com/images/upload/241018-afe6ced15f8b064ad9d91e1d24cf1af9-1242x600.jpg`}
+              />
+            </SwiperItem>
+          </Swiper>
         </View>
       </View>
     );
