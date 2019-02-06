@@ -1,8 +1,8 @@
 /*
  * @Author: Hank 
  * @Date: 2019-02-07 10:07:36 
- * @Last Modified by:   Hank 
- * @Last Modified time: 2019-02-07 10:07:36 
+ * @Last Modified by: Hank
+ * @Last Modified time: 2019-02-07 10:25:34
  */
 import { ComponentClass } from "react";
 import Taro, { Component } from "@tarojs/taro";
@@ -85,7 +85,7 @@ class GoodsList extends Component {
                   )} */}
                   {item.content.price && (
                     <View className="zan-capsule__right">
-                      参考价¥
+                      ¥
                       {item.content.price}
                     </View>
                   )}

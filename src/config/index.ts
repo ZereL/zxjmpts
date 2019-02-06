@@ -1,8 +1,8 @@
 /*
  * @Author: Hank 
  * @Date: 2019-02-07 10:07:56 
- * @Last Modified by:   Hank 
- * @Last Modified time: 2019-02-07 10:07:56 
+ * @Last Modified by: Hank
+ * @Last Modified time: 2019-02-07 11:03:56
  */
 export const IS_DEV = process.env.NODE_ENV === "development";
 
@@ -11,6 +11,9 @@ export const BASE_URL = IS_DEV
   ? "https://zxj.niuaomall.com/api/0.0.165.10/1001"
   : "https://zxj.niuaomall.com/api/0.0.165.10/1001";
 export const IMAGE_URL = IS_DEV ? "https://cdn2u.com" : "https://cdn2u.com";
+
+// 主题红色
+export const THEME_RED = "#e94e41";
 
 export const HTTP_ERROR = {
   "400": "发出的请求有错误，服务器没有进行新建或修改数据的操作。",

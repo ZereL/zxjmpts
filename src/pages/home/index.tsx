@@ -1,19 +1,12 @@
 /*
- * @Author: Hank 
- * @Date: 2019-02-07 10:07:40 
- * @Last Modified by:   Hank 
- * @Last Modified time: 2019-02-07 10:07:40 
+ * @Author: Hank
+ * @Date: 2019-02-07 10:07:40
+ * @Last Modified by: Hank
+ * @Last Modified time: 2019-02-07 10:39:15
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
-import {
-  Swiper,
-  SwiperItem,
-  View,
-  Button,
-  Text,
-  Image
-} from "@tarojs/components";
+import { View, Button, Text } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 
 import "./index.scss";
@@ -63,7 +56,7 @@ class Home extends Component {
 
   /********************* 生命周期函数 **********************/
   componentWillReceiveProps(nextProps) {
-    // console.log(this.props, nextProps);
+    console.log(this.props, nextProps);
   }
 
   componentWillUnmount() {}

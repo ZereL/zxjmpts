@@ -1,8 +1,8 @@
 /*
- * @Author: Hank 
- * @Date: 2019-02-07 10:09:17 
- * @Last Modified by:   Hank 
- * @Last Modified time: 2019-02-07 10:09:17 
+ * @Author: Hank
+ * @Date: 2019-02-07 10:09:17
+ * @Last Modified by: Hank
+ * @Last Modified time: 2019-02-07 10:33:04
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -69,13 +69,22 @@ class Cart extends Component {
     }
   };
 
+  goHome = () => {
+    Taro.switchTab({
+      url: '/pages/home/index',
+    })
+  };
+
   /********************* 渲染页面的方法 *********************/
   /********************* 页面render方法 ********************/
   render() {
     return (
-      <View className="index">
-        <View>
-          <Text>聚宝盆</Text>
+      <View className="cart-page">
+        <View className="empty">
+          <View style="margin-top: 250px">购物车为空</View>
+          <Button type="primary" className="am-button" onClick={this.goHome}>
+            立即去框框
+          </Button>
         </View>
       </View>
     );
