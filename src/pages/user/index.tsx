@@ -2,11 +2,11 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:58
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-07 10:57:53
+ * @Last Modified time: 2019-02-07 11:25:25
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
-import { View, Button, Text, Image } from "@tarojs/components";
+import { View, Text, Image } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 
 import "./index.scss";
@@ -90,14 +90,13 @@ class User extends Component {
   /********************* 渲染页面的方法 *********************/
   /********************* 页面render方法 ********************/
   render() {
-    const { mobile, coupon_number, nickname, list } = this.props;
+    const { mobile, nickname } = this.props;
     return (
       <View className="user-page">
         <View className="not-login">
           <View
             className="to-login"
             data-url="/pages/login/index"
-            onClick={this.goPage}
           >
             <View className="left">
               <View className={mobile ? "name black" : "name "}>
@@ -107,15 +106,8 @@ class User extends Component {
                 <View
                   className="msg"
                   data-url="/pages/message/index"
-                  onClick={this.goToPage}
                 >
                   <Image mode="widthFix" src={messageIcon} />
-                </View>
-                <View className="msg">
-                  <Image
-                    mode="widthFix"
-                    src="http://static-r.msparis.com/uploads/9/a/9a00ce9a5953a6813a03ee3324cbad2a.png"
-                  />
                 </View>
               </View>
             </View>
@@ -152,7 +144,7 @@ class User extends Component {
           </View>
         </View>
         <View className="login">
-          <View className="card">
+          {/* <View className="card">
             <View className="type type0">
               <View className="operation">
                 <View className="txt">
@@ -170,39 +162,37 @@ class User extends Component {
                 )}
               </View>
             </View>
-          </View>
+          </View> */}
           <View
             className="item"
             data-url="/pages/addressList/index"
-            onClick={this.goToPage}
           >
             <View className="left">
               <Image className="icon-left" src={zxjLogo} />
               <Text>收藏的宝贝</Text>
             </View>
-            <View className="right">
-              {coupon_number && <View className="num">{coupon_number}</View>}
-              <View className="iconfont icon-more arrow" />
-            </View>
+          </View>
+          <View
+            className="item"
+            data-url="/pages/addressList/index"
+          >
+            <View className="left">
+              <Image className="icon-left" src={zxjLogo} />
+              <Text>成为金主</Text>
+            </View>>
           </View>
           <View
             className="item"
             data-url="/pages/couponList/index"
-            onClick={this.goToPage}
           >
             <View className="left">
               <Image className="icon-left" src={zxjLogo} />
               <Text>帮助中心</Text>
             </View>
-            <View className="right">
-              {coupon_number && <View className="num">{coupon_number}</View>}
-              <View className="iconfont icon-more arrow" />
-            </View>
           </View>
           <View
             className="item"
             data-url="/pages/about/index"
-            onClick={this.goPage}
           >
             <View className="left">
               <Image className="icon-left" src={zxjLogo} />
