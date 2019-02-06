@@ -1,3 +1,9 @@
+/*
+ * @Author: Hank 
+ * @Date: 2019-02-07 10:07:32 
+ * @Last Modified by:   Hank 
+ * @Last Modified time: 2019-02-07 10:07:32 
+ */
 import { ComponentClass } from "react";
 import Taro, { Component } from "@tarojs/taro";
 import { Swiper, SwiperItem, Image } from "@tarojs/components";

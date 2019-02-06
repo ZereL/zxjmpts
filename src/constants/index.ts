@@ -1,3 +1,9 @@
+/*
+ * @Author: Hank 
+ * @Date: 2019-02-07 10:09:00 
+ * @Last Modified by:   Hank 
+ * @Last Modified time: 2019-02-07 10:09:00 
+ */
 export const ADD = 'ADD'
 export const REQUEST_LOGIN = 'REQUEST_LOGIN'
 export const FETCH_PAGEDATA = 'FETCH_PAGEDATA'

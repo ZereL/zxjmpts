@@ -1,3 +1,9 @@
+/*
+ * @Author: Hank 
+ * @Date: 2019-02-07 10:08:02 
+ * @Last Modified by:   Hank 
+ * @Last Modified time: 2019-02-07 10:08:02 
+ */
 import {  GOODSDETAIL, FETCH_PAGEDATA, SET_PAGEDATA } from "./../../constants/index";
 import { fetchGoodsData } from "../../services/goodsService";
 

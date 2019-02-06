@@ -1,3 +1,9 @@
+/*
+ * @Author: Hank 
+ * @Date: 2019-02-07 10:07:36 
+ * @Last Modified by:   Hank 
+ * @Last Modified time: 2019-02-07 10:07:36 
+ */
 import { ComponentClass } from "react";
 import Taro, { Component } from "@tarojs/taro";
 import { View, Text, Image } from "@tarojs/components";
@@ -42,10 +48,13 @@ class GoodsList extends Component {
                   <View className="Image-container">
                     <Image
                       mode="aspectFit"
-                      className="img"
+                      style='width: 172px;height: 250px;background: #fff;' // TODO: 这里为什么使用className就改变不了样式？？？？？？？
+                      // className="img"
                       src={
                         item.content.image
-                          ? `${IMAGE_URL}${item.content.image}?width=250&height=250&constrain=true&bgcolor=white`
+                          ? `${IMAGE_URL}${
+                              item.content.image
+                            }?width=300&constrain=true&bgcolor=white`
                           : ""
                       }
                     />

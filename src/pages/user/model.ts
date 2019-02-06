@@ -1,3 +1,9 @@
+/*
+ * @Author: Hank 
+ * @Date: 2019-02-07 10:10:01 
+ * @Last Modified by:   Hank 
+ * @Last Modified time: 2019-02-07 10:10:01 
+ */
 import { REQUEST_LOGIN, ADD, USER } from './../../constants/index';
 import { fetchHomeData } from "../../services/homeService";
 import Taro from "@tarojs/taro";

@@ -1,3 +1,9 @@
+/*
+ * @Author: Hank 
+ * @Date: 2019-02-07 10:10:06 
+ * @Last Modified by:   Hank 
+ * @Last Modified time: 2019-02-07 10:10:06 
+ */
 import Taro from "@tarojs/taro";
 // import qs from "qs";
 import { BASE_URL, HTTP_ERROR } from "../config/index";

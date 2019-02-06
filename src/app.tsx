@@ -1,3 +1,10 @@
+/*
+ * @Author: Hank 
+ * @Date: 2019-02-07 10:11:03 
+ * @Last Modified by:   Hank 
+ * @Last Modified time: 2019-02-07 10:11:03 
+ */
+
 import Taro, { Component, Config } from "@tarojs/taro";
 import Home from "./pages/home";
 import "@tarojs/async-await";

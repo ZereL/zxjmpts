@@ -1,3 +1,9 @@
+/*
+ * @Author: Hank 
+ * @Date: 2019-02-07 10:07:40 
+ * @Last Modified by:   Hank 
+ * @Last Modified time: 2019-02-07 10:07:40 
+ */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
 import {

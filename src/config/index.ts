@@ -1,3 +1,9 @@
+/*
+ * @Author: Hank 
+ * @Date: 2019-02-07 10:07:56 
+ * @Last Modified by:   Hank 
+ * @Last Modified time: 2019-02-07 10:07:56 
+ */
 export const IS_DEV = process.env.NODE_ENV === "development";
 
 // 开发时本地可自己开启NeteaseCloudMusicApi服务(https://binaryify.github.io/NeteaseCloudMusicApi/#/)

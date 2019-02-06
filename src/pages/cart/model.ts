@@ -1,3 +1,9 @@
+/*
+ * @Author: Hank 
+ * @Date: 2019-02-07 10:09:21 
+ * @Last Modified by:   Hank 
+ * @Last Modified time: 2019-02-07 10:09:21 
+ */
 import { CART } from "../../constants";
 import { REQUEST_LOGIN, ADD } from './../../constants/index';
 import { fetchHomeData } from "../../services/homeService";
