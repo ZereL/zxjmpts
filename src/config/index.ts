@@ -1,8 +1,8 @@
 /*
- * @Author: Hank 
- * @Date: 2019-02-07 10:07:56 
+ * @Author: Hank
+ * @Date: 2019-02-07 10:07:56
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-07 11:03:56
+ * @Last Modified time: 2019-02-07 15:45:12
  */
 export const IS_DEV = process.env.NODE_ENV === "development";
 
@@ -11,6 +11,21 @@ export const BASE_URL = IS_DEV
   ? "https://zxj.niuaomall.com/api/0.0.165.10/1001"
   : "https://zxj.niuaomall.com/api/0.0.165.10/1001";
 export const IMAGE_URL = IS_DEV ? "https://cdn2u.com" : "https://cdn2u.com";
+
+
+// CDN缩放URL后缀
+export const cdnTinySuffix = "?width=120&constrain=true&bgcolor=white";
+export const cdnTinySuffixTransBgc = "?width=120&constrain=true";
+export const cdnSmallSuffix = "?width=300&constrain=true&bgcolor=white";
+export const cdnSmallSuffixTransBgc = "?width=300&constrain=true";
+export const cdnMediumSuffix = "?width=600&constrain=true&bgcolor=white";
+export const cdnMediumSuffixTransBgc = "?width=600&constrain=true";
+export const cdnBigSuffix = "?width=1000&constrain=true&bgcolor=white";
+export const cdnBigSuffixTransBgc = "?width=1000&constrain=true";
+
+// 默认商品图片
+export const defaultGoodsImage =
+  IMAGE_URL + "/static/img/default.jpg" + cdnSmallSuffix;
 
 // 主题红色
 export const THEME_RED = "#e94e41";

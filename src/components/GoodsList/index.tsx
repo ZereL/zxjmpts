@@ -2,7 +2,7 @@
  * @Author: Hank 
  * @Date: 2019-02-07 10:07:36 
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-07 10:25:34
+ * @Last Modified time: 2019-02-07 15:59:38
  */
 import { ComponentClass } from "react";
 import Taro, { Component } from "@tarojs/taro";
@@ -27,7 +27,7 @@ interface GoodsList {
 class GoodsList extends Component {
   gotoDetail = e => {
     Taro.navigateTo({
-      url: `/pages/detail/index?id=${e.currentTarget.dataset.id}`
+      url: `/pages/goodsDetail/index?id=${e.currentTarget.dataset.id}`
     });
   };
 

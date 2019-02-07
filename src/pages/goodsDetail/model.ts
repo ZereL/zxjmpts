@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:08:02
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-07 11:57:15
+ * @Last Modified time: 2019-02-07 15:07:32
  */
 import {
   GOODSDETAIL,
@@ -15,7 +15,10 @@ export default {
   namespace: GOODSDETAIL,
   state: {
     num: 1,
-    image: []
+    image: [],
+    contentImages: [],
+    name: "",
+    price: ""
   },
   reducers: {
     [SET_PAGEDATA](state, { payload }) {
