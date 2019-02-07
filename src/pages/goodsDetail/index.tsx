@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:36
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-07 15:51:35
+ * @Last Modified time: 2019-02-07 17:37:56
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -10,7 +10,7 @@ import { View, Button, Text, Image } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 
 import "./index.scss";
-import { login, fetchPageData } from "../../actions";
+import { login, fetchPageData, clearPageData } from "../../actions";
 import { GOODSDETAIL } from "../../constants";
 import Carousel from "../../components/Carousel";
 import { AtTabBar, AtDivider } from "taro-ui";
@@ -28,6 +28,7 @@ type PageStateProps = {
 
 type PageDispatchProps = {
   fetchPageData: (namespace: string, payload?: any) => any;
+  clearPageData: (namespace: string, payload?: any) => any;
   login: (namespace: string, payload?: any) => any;
 };
 
@@ -47,13 +48,24 @@ interface GoodsDetail {
   }),
   {
     fetchPageData: fetchPageData,
+    clearPageData: clearPageData,
     login: login
   }
 )
 class GoodsDetail extends Component {
+  static defaultProps = {
+    goodsDetail: {
+      images: [],
+      name: "",
+      price: "",
+      contentImages: []
+    }
+  };
+
   state = {
     activeTab: 0
   };
+
   config: Config = {
     navigationBarTitleText: "商品详情"
   };
@@ -63,13 +75,17 @@ class GoodsDetail extends Component {
     console.log(this.props, nextProps);
   }
 
-  componentWillUnmount() {}
+  componentWillUnmount() {
+    console.log("componentWillUnmount");
+    this.props.clearPageData(GOODSDETAIL);
+  }
 
   componentDidShow() {
     this.fetchPageData();
   }
 
-  componentDidHide() {}
+  componentDidHide() {
+  }
 
   /********************* 事件handler **********************/
   fetchPageData = async () => {
@@ -160,10 +176,7 @@ class GoodsDetail extends Component {
             />
             客服
           </View>
-          <View
-            className="nav"
-            onClick={this.goCart}
-          >
+          <View className="nav" onClick={this.goCart}>
             <Image
               className="nav-img"
               src={require("../../assets/icon/resource14.png")}

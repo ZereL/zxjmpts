@@ -2,19 +2,19 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:07:40
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-07 13:58:24
+ * @Last Modified time: 2019-02-07 17:28:01
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
-import { View, Button, Text } from "@tarojs/components";
+import { View, Button, Text, Image } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 
 import "./index.scss";
-import { add, login, fetchPageData } from "../../actions";
+import { login, fetchPageData } from "../../actions";
 import { HOME } from "../../constants";
 import ZXJCarousel from "../../components/Carousel/index";
 import GoodsList from "../../components/GoodsList/index";
-import { AtButton } from "taro-ui";
+import { AtButton, AtSearchBar } from "taro-ui";
 
 type PageStateProps = {};
 
@@ -43,7 +43,7 @@ interface Home {
     home
   }),
   {
-    add: add,
+    // add: add,
     login: login,
     fetchPageData: fetchPageData
   }
@@ -69,14 +69,14 @@ class Home extends Component {
   componentDidHide() {}
 
   /********************* 事件handler **********************/
-  add = async () => {
-    try {
-      const result = await this.props.add(HOME);
-      console.log("请求成功", result);
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
+  // add = async () => {
+  //   try {
+  //     const result = await this.props.add(HOME);
+  //     console.log("请求成功", result);
+  //   } catch (error) {
+  //     console.log("error", error);
+  //   }
+  // };
 
   fetchPageData = async () => {
     try {
@@ -99,11 +99,15 @@ class Home extends Component {
     }
   };
 
-  goGoodsDetailHandler = () => {
-    Taro.navigateTo({
-      url: `/pages/goodsDetail/index?id=1271`
-    });
+  atSearchBarChangeHandler = () => {
+    console.log("点击搜索");
   };
+
+  // goGoodsDetailHandler = () => {
+  //   Taro.navigateTo({
+  //     url: `/pages/goodsDetail/index?id=1271`
+  //   });
+  // };
 
   /********************* 渲染页面的方法 *********************/
   // /**
@@ -150,20 +154,17 @@ class Home extends Component {
     const { homeItems } = this.props.home;
 
     return (
-      <View className="index">
-        <AtButton type="primary">TARO UI 按钮</AtButton>
-        <Button className="add_btn" onClick={this.add}>
+      <View className="home-page">
+        {/* <AtButton type="primary">TARO UI 按钮</AtButton> */}
+        {/* <Button className="add_btn" onClick={this.add}>
           +
-        </Button>
-        <Button className="add_btn" onClick={this.loginHandler}>
+        </Button> */}
+        {/* <Button className="add_btn" onClick={this.loginHandler}>
           登录
-        </Button>
-        <Button className="add_btn" onClick={this.goGoodsDetailHandler}>
+        </Button> */}
+        {/* <Button className="add_btn" onClick={this.goGoodsDetailHandler}>
           查看商品详情
-        </Button>
-        <View>
-          <Text>首页</Text>
-        </View>
+        </Button> */}
         <View>
           {/* <Image
             mode="widthFix"
@@ -172,6 +173,23 @@ class Home extends Component {
           {/* {homeItems.map((item, index) => {
             return item.type === "SliderImage" && <Text>{item.type}</Text>
           })} */}
+          {/* <AtSearchBar value={""} onChange={this.atSearchBarChangeHandler} /> */}
+          <View className="search-bar">
+            <Image
+              src={require("../../assets/icon/resource18.png")}
+              className="message-icon"
+            />
+            <View className="search-text-view">
+              <Image
+                src={require("../../assets/icon/resource32.png")}
+                className="search-icon"
+              />
+            </View>
+            <Image
+              src={require("../../assets/icon/resource51.png")}
+              className="share-icon"
+            />
+          </View>
           {homeItems.map((item, index) => {
             return (
               item.type === "SliderImage" && (
