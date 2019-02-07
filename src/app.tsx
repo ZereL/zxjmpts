@@ -1,8 +1,8 @@
 /*
  * @Author: Hank 
  * @Date: 2019-02-07 10:11:03 
- * @Last Modified by:   Hank 
- * @Last Modified time: 2019-02-07 10:11:03 
+ * @Last Modified by: Hank
+ * @Last Modified time: 2019-02-07 13:56:42
  */
 
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -13,6 +13,7 @@ import dva from "./utils/dva";
 import models from "./models";
 // import { setGlobalData } from "./utils/common";
 import "./app.scss";
+import 'taro-ui/dist/style/index.scss' 
 
 // 如果需要在 h5 环境中开启 React Devtools
 // 取消以下注释：

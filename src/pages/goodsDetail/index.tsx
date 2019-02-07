@@ -1,8 +1,8 @@
 /*
- * @Author: Hank 
- * @Date: 2019-02-07 10:09:36 
- * @Last Modified by:   Hank 
- * @Last Modified time: 2019-02-07 10:09:36 
+ * @Author: Hank
+ * @Date: 2019-02-07 10:09:36
+ * @Last Modified by: Hank
+ * @Last Modified time: 2019-02-07 11:56:58
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -12,10 +12,12 @@ import { connect } from "@tarojs/redux";
 import "./index.scss";
 import { login, fetchPageData } from "../../actions";
 import { GOODSDETAIL } from "../../constants";
+import Carousel from "../../components/Carousel";
 
 type PageStateProps = {
   goodsDetail: {
     num: number;
+    images: [];
   };
 };
 
@@ -78,10 +80,12 @@ class GoodsDetail extends Component {
   /********************* 渲染页面的方法 *********************/
   /********************* 页面render方法 ********************/
   render() {
+    console.log("this.props", this.props);
+    const { images } = this.props.goodsDetail;
     return (
       <View className="index">
         <View>
-          <Text>单品页面</Text>
+          <Carousel images={images} />
         </View>
       </View>
     );

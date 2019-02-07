@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:58
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-07 11:25:25
+ * @Last Modified time: 2019-02-07 11:32:20
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -90,7 +90,7 @@ class User extends Component {
   /********************* 渲染页面的方法 *********************/
   /********************* 页面render方法 ********************/
   render() {
-    const { mobile, nickname } = this.props;
+    // const { mobile, nickname } = this.props;
     return (
       <View className="user-page">
         <View className="not-login">
@@ -99,8 +99,8 @@ class User extends Component {
             data-url="/pages/login/index"
           >
             <View className="left">
-              <View className={mobile ? "name black" : "name "}>
-                {nickname || "请登录 >"}
+              <View className={"name "}>
+                {"请登录 >"}
               </View>
               <View>
                 <View
