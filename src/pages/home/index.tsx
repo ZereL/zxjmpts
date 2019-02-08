@@ -2,18 +2,18 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:07:40
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-08 13:21:05
+ * @Last Modified time: 2019-02-08 16:59:27
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
-import { View, Image } from "@tarojs/components";
+import { View, Image, Button } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 
 import "./index.scss";
 import { fetchPageData } from "../../actions";
 import { HOME } from "../../constants";
 import ZXJCarousel from "../../components/Carousel/index";
-import GoodsList from "../../components/GoodsList/index";
+import DynamicList from "../../components/DynamicList/index";
 
 type PageStateProps = {};
 
@@ -93,6 +93,10 @@ class Home extends Component {
     Taro.navigateTo({ url: "/pages/search/index" });
   };
 
+  goGoodsList = () => {
+    Taro.navigateTo({ url: "/pages/goodsList/index" });
+  };
+
   // goGoodsDetailHandler = () => {
   //   Taro.navigateTo({
   //     url: `/pages/goodsDetail/index?id=1271`
@@ -152,6 +156,9 @@ class Home extends Component {
         {/* <Button className="add_btn" onClick={this.loginHandler}>
           登录
         </Button> */}
+        <Button className="add_btn" onClick={this.goGoodsList}>
+          商品列表
+        </Button>
         {/* <Button className="add_btn" onClick={this.goGoodsDetailHandler}>
           查看商品详情
         </Button> */}
@@ -193,7 +200,7 @@ class Home extends Component {
           {homeItems.map((item, index) => {
             return (
               item.type === "DynamicList" && (
-                <GoodsList list={item.content} key={index} />
+                <DynamicList list={item.content} key={index} />
               )
             );
           })}

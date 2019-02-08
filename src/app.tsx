@@ -2,7 +2,7 @@
  * @Author: Hank 
  * @Date: 2019-02-07 10:11:03 
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-08 13:16:27
+ * @Last Modified time: 2019-02-08 15:43:21
  */
 
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -34,7 +34,8 @@ class App extends Component {
       "pages/cart/index",
       "pages/user/index",
       "pages/goodsDetail/index",
-      "pages/search/index"
+      "pages/search/index",
+      "pages/goodsList/index"
     ],
     window: {
       backgroundTextStyle: "light",

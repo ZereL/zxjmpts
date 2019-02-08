@@ -1,8 +1,8 @@
 /*
- * @Author: Hank 
- * @Date: 2019-02-07 10:07:36 
+ * @Author: Hank
+ * @Date: 2019-02-07 10:07:36
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-07 15:59:38
+ * @Last Modified time: 2019-02-08 16:56:49
  */
 import { ComponentClass } from "react";
 import Taro, { Component } from "@tarojs/taro";
@@ -14,17 +14,17 @@ type PageStateProps = {};
 
 type PageDispatchProps = {};
 
-type PageOwnProps = { list: any; loading?: any };
+type PageOwnProps = { list: any; loading?: any;};
 
 type PageState = {};
 
 type IProps = PageStateProps & PageDispatchProps & PageOwnProps;
 
-interface GoodsList {
+interface DynamicList {
   props: IProps;
 }
 
-class GoodsList extends Component {
+class DynamicList extends Component {
   gotoDetail = e => {
     Taro.navigateTo({
       url: `/pages/goodsDetail/index?id=${e.currentTarget.dataset.id}`
@@ -48,7 +48,7 @@ class GoodsList extends Component {
                   <View className="Image-container">
                     <Image
                       mode="aspectFit"
-                      style='width: 172px;height: 250px;background: #fff;' // TODO: 这里为什么使用className就改变不了样式？？？？？？？
+                      style="width: 172px;height: 250px;background: #fff;" // TODO: 这里为什么使用className就改变不了样式？？？？？？？
                       // className="img"
                       src={
                         item.content.image
@@ -60,33 +60,32 @@ class GoodsList extends Component {
                     />
                   </View>
                   {/* {item.mode_id == 3 &&
-                    (item.enabled != 1 || item.sale_stock == 0) && (
-                      <View className="sold-out">
-                        <View className="sales-end">已售罄</View>
-                      </View>
-                    )}
-                  {item.enabled &&
-                    item.enabled != 0 &&
-                    item.enabled != 1 &&
-                    item.enabled != 2 && (
-                      <View className="unable">
-                        <View className="sales-end">下架</View>
-                      </View>
-                    )} */}
+                      (item.enabled != 1 || item.sale_stock == 0) && (
+                        <View className="sold-out">
+                          <View className="sales-end">已售罄</View>
+                        </View>
+                      )}
+                    {item.enabled &&
+                      item.enabled != 0 &&
+                      item.enabled != 1 &&
+                      item.enabled != 2 && (
+                        <View className="unable">
+                          <View className="sales-end">下架</View>
+                        </View>
+                      )} */}
                 </View>
                 <View className="zan-capsule">
                   {/* {item.type_id == 2 && item.mode_id == 1 && (
-                    <View className="zan-capsule__left">VIP</View>
-                  )}
-                  {item.limit_tag && item.limit_tag != "" && (
-                    <View className="zan-capsule__center">
-                      {item.limit_tag}
-                    </View>
-                  )} */}
+                      <View className="zan-capsule__left">VIP</View>
+                    )}
+                    {item.limit_tag && item.limit_tag != "" && (
+                      <View className="zan-capsule__center">
+                        {item.limit_tag}
+                      </View>
+                    )} */}
                   {item.content.price && (
                     <View className="zan-capsule__right">
-                      ¥
-                      {item.content.price}
+                      ¥{item.content.price}
                     </View>
                   )}
                 </View>
@@ -109,4 +108,4 @@ class GoodsList extends Component {
   }
 }
 
-export default GoodsList as ComponentClass<PageOwnProps, PageState>;
+export default DynamicList as ComponentClass<PageOwnProps, PageState>;

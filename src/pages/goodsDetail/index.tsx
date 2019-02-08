@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:36
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-07 17:37:56
+ * @Last Modified time: 2019-02-08 15:24:11
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -136,6 +136,7 @@ class GoodsDetail extends Component {
     return (
       <View className="detail-page">
         {/* 顶部tabBar */}
+        {/* TODO： 如果这个TabBar想有用的话， 那么就得把这页换成scrollview中。 */}
         <AtTabBar
           tabList={[{ title: "商品" }, { title: "相关" }, { title: "详情" }]}
           onClick={this.tabBarClickHandler}
