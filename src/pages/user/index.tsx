@@ -2,11 +2,11 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:58
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-07 11:32:20
+ * @Last Modified time: 2019-02-08 14:05:52
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
-import { View, Text, Image } from "@tarojs/components";
+import { View, Text, Image, Button } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 
 import "./index.scss";
@@ -23,6 +23,7 @@ import pendingDeliveryIcon from "../../assets/icon/resource11.png";
 import pendingReceiveIcon from "../../assets/icon/resource12.png";
 import completeOrderIcon from "../../assets/icon/resource9.png";
 import refundIcon from "../../assets/icon/resource10.png";
+import { AtModal, AtModalHeader, AtModalContent, AtModalAction } from "taro-ui";
 
 type PageStateProps = {
   user: {
@@ -55,13 +56,11 @@ interface User {
   }
 )
 class User extends Component {
-  /**
-   * 指定config的类型声明为: Taro.Config
-   *
-   * 由于 typescript 对于 object 类型推导只能推出 Key 的基本类型
-   * 对于像 navigationBarTextStyle: 'black' 这样的推导出的类型是 string
-   * 提示和声明 navigationBarTextStyle: 'black' | 'white' 类型冲突, 需要显示声明类型
-   */
+  state = {
+    isOpened: true,
+    avatarUrl: "",
+    nickName: ""
+  };
   config: Config = {
     navigationBarTitleText: "小主"
   };
@@ -73,7 +72,10 @@ class User extends Component {
 
   componentWillUnmount() {}
 
-  componentDidShow() {}
+  async componentDidShow() {
+    const userInfo = await Taro.getUserInfo();
+    console.log("userInfo", userInfo);
+  }
 
   componentDidHide() {}
 
@@ -87,32 +89,73 @@ class User extends Component {
     }
   };
 
+  /**
+   * 登录
+   */
+  loginHandler = async () => {
+    // const result = await Taro.checkSession();
+    // console.log("checkSession result", result);
+    try {
+      const result = await this.props.login(USER);
+      console.log("请求成功", result);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  getUserInfo = userInfo => {
+    console.log("userinfo", userInfo);
+    if (userInfo.detail.userInfo) {
+      console.log(userInfo.detail.userInfo);
+      this.setState({
+        avatarUrl: userInfo.detail.userInfo.avatarUrl,
+        nickName: userInfo.detail.userInfo.nickName,
+        isOpened: false
+      });
+      //同意
+      // this.props.setBasicInfo(userInfo.detail.userInfo); //将用户信息存入redux
+      // Taro.setStorage({ key: "userInfo", data: userInfo.detail.userInfo }).then(
+      //   rst => {
+      //     //将用户信息存入缓存中
+      //     Taro.navigateBack();
+      //   }
+      // );
+    } else {
+      //拒绝,保持当前页面，直到同意
+    }
+  };
+
+  modalCancelHandler = () => {
+    this.setState({ isOpened: false });
+  };
+
+  handleConfirm = () => {};
+
   /********************* 渲染页面的方法 *********************/
   /********************* 页面render方法 ********************/
   render() {
     // const { mobile, nickname } = this.props;
+    const { nickName, avatarUrl } = this.state;
     return (
       <View className="user-page">
+        <Button onClick={this.loginHandler}>1233</Button>
         <View className="not-login">
-          <View
-            className="to-login"
-            data-url="/pages/login/index"
-          >
+          <View className="to-login" data-url="/pages/login/index">
             <View className="left">
-              <View className={"name "}>
-                {"请登录 >"}
+              <View className={nickName ? "name black" : "name "}>
+                {nickName ? nickName : "已经是小主？请登录 >"}
               </View>
               <View>
-                <View
-                  className="msg"
-                  data-url="/pages/message/index"
-                >
+                <View className="msg" data-url="/pages/message/index">
                   <Image mode="widthFix" src={messageIcon} />
                 </View>
               </View>
             </View>
             <View className="avatar-container">
-              <Image className="avatar" src={avatar_img} />
+              <Image
+                className="avatar"
+                src={avatarUrl ? avatarUrl : avatar_img}
+              />
             </View>
           </View>
           <View className="list">
@@ -163,37 +206,26 @@ class User extends Component {
               </View>
             </View>
           </View> */}
-          <View
-            className="item"
-            data-url="/pages/addressList/index"
-          >
+          <View className="item" data-url="/pages/addressList/index">
             <View className="left">
               <Image className="icon-left" src={zxjLogo} />
               <Text>收藏的宝贝</Text>
             </View>
           </View>
-          <View
-            className="item"
-            data-url="/pages/addressList/index"
-          >
+          <View className="item" data-url="/pages/addressList/index">
             <View className="left">
               <Image className="icon-left" src={zxjLogo} />
               <Text>成为金主</Text>
-            </View>>
+            </View>
+            >
           </View>
-          <View
-            className="item"
-            data-url="/pages/couponList/index"
-          >
+          <View className="item" data-url="/pages/couponList/index">
             <View className="left">
               <Image className="icon-left" src={zxjLogo} />
               <Text>帮助中心</Text>
             </View>
           </View>
-          <View
-            className="item"
-            data-url="/pages/about/index"
-          >
+          <View className="item" data-url="/pages/about/index">
             <View className="left">
               <Image className="icon-left" src={zxjLogo} />
               <Text>联系客服</Text>
@@ -203,6 +235,21 @@ class User extends Component {
             </View>
           </View>
         </View>
+
+        <AtModal isOpened={this.state.isOpened}>
+          <AtModalHeader>标题</AtModalHeader>
+          <AtModalContent>
+            <View>
+              <Text>申请获取你的公开信息（昵称、头像等）</Text>
+              <Button open-type="getUserInfo" onGetUserInfo={this.getUserInfo}>
+                微信授权
+              </Button>
+            </View>
+          </AtModalContent>
+          <AtModalAction>
+            <Button onClick={this.modalCancelHandler}>取消授权</Button>
+          </AtModalAction>
+        </AtModal>
       </View>
     );
   }

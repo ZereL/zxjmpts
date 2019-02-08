@@ -2,19 +2,18 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:07:40
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-07 17:28:01
+ * @Last Modified time: 2019-02-08 13:21:05
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
-import { View, Button, Text, Image } from "@tarojs/components";
+import { View, Image } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 
 import "./index.scss";
-import { login, fetchPageData } from "../../actions";
+import { fetchPageData } from "../../actions";
 import { HOME } from "../../constants";
 import ZXJCarousel from "../../components/Carousel/index";
 import GoodsList from "../../components/GoodsList/index";
-import { AtButton, AtSearchBar } from "taro-ui";
 
 type PageStateProps = {};
 
@@ -44,7 +43,6 @@ interface Home {
   }),
   {
     // add: add,
-    login: login,
     fetchPageData: fetchPageData
   }
 )
@@ -87,20 +85,12 @@ class Home extends Component {
     }
   };
 
-  /**
-   * 登录
-   */
-  loginHandler = async () => {
-    try {
-      const result = await this.props.login(HOME);
-      console.log("请求成功", result);
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-
   atSearchBarChangeHandler = () => {
     console.log("点击搜索");
+  };
+
+  searchViewClickHandler = () => {
+    Taro.navigateTo({ url: "/pages/search/index" });
   };
 
   // goGoodsDetailHandler = () => {
@@ -179,7 +169,10 @@ class Home extends Component {
               src={require("../../assets/icon/resource18.png")}
               className="message-icon"
             />
-            <View className="search-text-view">
+            <View
+              className="search-text-view"
+              onClick={this.searchViewClickHandler}
+            >
               <Image
                 src={require("../../assets/icon/resource32.png")}
                 className="search-icon"
