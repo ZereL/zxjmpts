@@ -1,15 +1,16 @@
 /*
- * @Author: Hank 
- * @Date: 2019-02-08 15:12:38 
+ * @Author: Hank
+ * @Date: 2019-02-08 15:12:38
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-08 15:46:52
+ * @Last Modified time: 2019-02-08 17:34:42
  */
 
 import { GOODSLIST } from "./../../constants/index";
 import {
   ADD,
   FETCH_PAGEDATA,
-  SET_PAGEDATA
+  SET_PAGEDATA,
+  FETCH_MOREPAGEDATA
 } from "./../../constants/index";
 import { fetchGoodsListData } from "../../services/goodsService";
 
@@ -32,6 +33,24 @@ export default {
       const requestResult = yield call(fetchGoodsListData, payload);
       console.log("requestResult", requestResult);
       const requestResultData = requestResult.data;
+
+      yield put({
+        type: SET_PAGEDATA,
+        payload: requestResultData
+      });
+      return requestResult;
+    },
+    *[FETCH_MOREPAGEDATA]({ payload }, { select, put, call }) {
+      // 当前列表数据
+      const currentState = yield select(state => state.commissionList);
+      // console.log("currentState", currentState);
+      const currentList = currentState.commissionList;
+
+      const requestResult = yield call(fetchGoodsListData, payload);
+      console.log("requestResult", requestResult);
+      const requestResultData = requestResult.data;
+
+      const fetchlist = requestResult.data.items;
 
       yield put({
         type: SET_PAGEDATA,
