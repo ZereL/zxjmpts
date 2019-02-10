@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-08 15:12:38
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-08 17:34:42
+ * @Last Modified time: 2019-02-11 09:50:32
  */
 
 import { GOODSLIST } from "./../../constants/index";
@@ -25,6 +25,7 @@ export default {
       return { ...state, ...payload };
     },
     [SET_PAGEDATA](state, { payload }) {
+      console.log("SET_PAGEDATA, payload", payload);
       return { ...state, ...payload };
     }
   },
@@ -42,23 +43,31 @@ export default {
     },
     *[FETCH_MOREPAGEDATA]({ payload }, { select, put, call }) {
       // 当前列表数据
-      const currentState = yield select(state => state.commissionList);
+      const currentState = yield select(state => state.goodsList);
       // console.log("currentState", currentState);
-      const currentList = currentState.commissionList;
+      const currentList = currentState.items;
 
+      // 请求返回所有数据
       const requestResult = yield call(fetchGoodsListData, payload);
       console.log("requestResult", requestResult);
+      // 请求返回的data
       const requestResultData = requestResult.data;
-
+      // 请求返回的产品列表
       const fetchlist = requestResult.data.items;
+      // 新的产品列表数据
+      const newList = currentList.concat(fetchlist);
+      console.log("newList", newList);
 
       yield put({
         type: SET_PAGEDATA,
-        payload: requestResultData
+        payload: {
+          ...currentState,
+          ...requestResultData,
+          items: newList
+        }
       });
       return requestResult;
     },
-
     *[ADD]({ payload }, { select, put, call }) {
       console.log("收到请求", payload);
       const { num } = yield select(state => state.home);

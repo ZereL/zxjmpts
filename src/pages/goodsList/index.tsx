@@ -2,17 +2,17 @@
  * @Author: Hank
  * @Date: 2019-02-08 15:12:23
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-08 17:28:57
+ * @Last Modified time: 2019-02-11 10:38:31
  */
 
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
-import { View, Image， ScrollView } from "@tarojs/components";
+import { View, Image, ScrollView } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 
 import "./index.scss";
 import { fetchPageData, fetchMorePageData } from "../../actions";
-import { GOODSLIST } from "../../constants";
+import { GOODSLIST, GOODSDETAIL } from "../../constants";
 import ZXJGoodsList from "../../components/ZXJGoodsList/index";
 
 type PageStateProps = {};
@@ -27,6 +27,9 @@ type PageDispatchProps = {
 type PageOwnProps = {
   goodsList: {
     items: Array<object>;
+    currentPage: number;
+    hasNext: boolean;
+    pageSize: number;
   };
 };
 
@@ -43,11 +46,13 @@ interface GoodsList {
     goodsList
   }),
   {
-    fetchPageData: fetchPageData
+    fetchPageData: fetchPageData,
+    fetchMorePageData: fetchMorePageData
   }
 )
 
 // TODO: 研究代替switch case遍历homeItems数组的办法
+// TODO: 分页加载的时候显示加载中
 class GoodsList extends Component {
   config: Config = {
     navigationBarTitleText: "首页"
@@ -87,10 +92,10 @@ class GoodsList extends Component {
       console.log("error", error);
     }
   };
-  
+
   fetchMorePageData = async () => {
-    const { currentPage, hasNext, pageSize} = this.props.goodsList
-     
+    const { currentPage, hasNext, pageSize } = this.props.goodsList;
+
     try {
       if (hasNext) {
         const result = await this.props.fetchMorePageData(GOODSLIST, {
@@ -107,17 +112,24 @@ class GoodsList extends Component {
         });
         console.log("请求成功", result);
       } else {
-        console.log('没有更多了');
+        console.log("没有更多了");
       }
-
     } catch (error) {
       console.log("error", error);
     }
   };
 
   onScrollToLower = () => {
-    console.log('滑到底部');
-  }
+    const { currentPage, hasNext, pageSize } = this.props.goodsList;
+    // console.log('滑到底部');
+    this.props.fetchMorePageData(GOODSLIST, {
+      pageSize: pageSize,
+      currentPage: currentPage + 1,
+      // brandId: item.brandId ? item.brandId : null,
+      // cateId: item.cateId ? item.cateId : null,
+      keyword: "奶粉"
+    });
+  };
   // goGoodsDetailHandler = () => {
   //   Taro.navigateTo({
   //     url: `/pages/goodsDetail/index?id=1271`
@@ -141,9 +153,9 @@ class GoodsList extends Component {
         // upperThreshold="20"
         // onScrolltoupper={this.onScrolltoupper}
         // onScroll={this.onScroll}
-        onScrollToLower = { this.onScrollToLower}
+        onScrollToLower={this.onScrollToLower}
       >
-        <ZXJGoodsList list={items}/>
+        <ZXJGoodsList list={items} />
       </ScrollView>
       // <View className="goodsList-page">
 
