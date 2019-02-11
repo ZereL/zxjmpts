@@ -1,8 +1,8 @@
 /*
- * @Author: Hank 
- * @Date: 2019-02-07 10:10:06 
- * @Last Modified by:   Hank 
- * @Last Modified time: 2019-02-07 10:10:06 
+ * @Author: Hank
+ * @Date: 2019-02-07 10:10:06
+ * @Last Modified by: Hank
+ * @Last Modified time: 2019-02-11 16:54:50
  */
 import Taro from "@tarojs/taro";
 // import qs from "qs";
@@ -40,6 +40,11 @@ function checkSuccess(data: any, resolve) {
   }
 
   if (typeof data.resultCode === "number" && data.resultCode === 0) {
+    return resolve(data);
+  }
+
+  // just for kevin的接口，明天改了接口就改回去
+  if (typeof data.resultCode === "number" && data.resultCode === 200) {
     return resolve(data);
   }
 

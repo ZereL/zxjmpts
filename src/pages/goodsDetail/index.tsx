@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:36
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-08 15:24:11
+ * @Last Modified time: 2019-02-11 13:00:47
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -13,8 +13,8 @@ import "./index.scss";
 import { login, fetchPageData, clearPageData } from "../../actions";
 import { GOODSDETAIL } from "../../constants";
 import Carousel from "../../components/Carousel";
-import { AtTabBar, AtDivider } from "taro-ui";
-import { IMAGE_URL, cdnMediumSuffix } from "../../config";
+import { AtTabBar, AtDivider, AtButton } from "taro-ui";
+import { IMAGE_URL, cdnMediumSuffix, cdnSmallSuffix } from "../../config";
 
 type PageStateProps = {
   goodsDetail: {
@@ -81,10 +81,32 @@ class GoodsDetail extends Component {
   }
 
   componentDidShow() {
+    let params = this.$router.params;
+    console.log("params", params);
     this.fetchPageData();
   }
 
-  componentDidHide() {
+  componentDidHide() {}
+
+  //这个分享的函数必须写在入口中，写在子组件中不生效
+  onShareAppMessage() {
+    const { images } = this.props.goodsDetail;
+    const goodsId = 128;
+    const code = `FSI005`;
+    const hash = `570AD6F305EC6EA60DCA5DCFAE67AE09`;
+    return {
+      title: "海淘更便宜，分享有收益❤️全球臻选好物等您来👇。",
+      path: `/pages/goodsDetail/index?id=${goodsId}&code=${code}&hash=${hash}&share=true`,
+      imageUrl: `/src/assets/icon/resource63.png`, // TODO：自定义分享图片目前好像不行
+      success: function(res) {
+        console.log(res);
+        console.log("转发成功:" + JSON.stringify(res));
+      },
+      fail: function(res) {
+        // 转发失败
+        console.log("转发失败:" + JSON.stringify(res));
+      }
+    };
   }
 
   /********************* 事件handler **********************/
@@ -133,10 +155,13 @@ class GoodsDetail extends Component {
   render() {
     console.log("this.props", this.props);
     const { images, name, price, contentImages } = this.props.goodsDetail;
+    let share = this.$router.params.share; //获取分享进来的参数share
     return (
       <View className="detail-page">
         {/* 顶部tabBar */}
         {/* TODO： 如果这个TabBar想有用的话， 那么就得把这页换成scrollview中。 */}
+        <Button open-type="share">分享本页</Button>
+        {share ? <Text className="fixIndex">通过分享进入页面</Text> : null}
         <AtTabBar
           tabList={[{ title: "商品" }, { title: "相关" }, { title: "详情" }]}
           onClick={this.tabBarClickHandler}
