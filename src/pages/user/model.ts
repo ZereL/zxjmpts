@@ -2,17 +2,19 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:10:01
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-11 15:49:35
+ * @Last Modified time: 2019-02-11 17:26:25
  */
 import {
   REQUEST_LOGIN,
   ADD,
   USER,
   FETCH_USERTOKEN,
-  SET_USERTOKEN
+  SET_USERTOKEN,
+  FETCH_USERINFO,
+  SET_USERINFO
 } from "./../../constants/index";
 import { fetchHomeData } from "../../services/homeService";
-import { fetchUserData } from "../../services/memberService";
+import { fetchUserData, fetchUserInfo } from "../../services/memberService";
 import Taro from "@tarojs/taro";
 
 export default {
@@ -57,6 +59,17 @@ export default {
 
       yield put({
         type: SET_USERTOKEN,
+        payload: requestResult.data
+      });
+
+      return requestResult;
+    },
+    *[FETCH_USERINFO]({ payload }, { select, put, call }) {
+      const requestResult = yield call(fetchUserInfo, payload);
+      console.log("requestResult", requestResult);
+
+      yield put({
+        type: SET_USERINFO,
         payload: requestResult.data
       });
 

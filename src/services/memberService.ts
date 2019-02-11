@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-11 15:38:30
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-11 16:59:42
+ * @Last Modified time: 2019-02-11 17:32:26
  */
 import api from "./api";
 
@@ -25,7 +25,7 @@ export function fetchUserData(payload) {
  */
 export const fetchUserInfo = () => {
   return api.post({
-    url: "/memberService/member/WechatMinLoginAndGetWechatInfo",
+    url: "/memberService/member/current",
     payload: {}
   });
 };

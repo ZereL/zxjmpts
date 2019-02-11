@@ -2,12 +2,14 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:10:06
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-11 16:54:50
+ * @Last Modified time: 2019-02-11 17:24:19
  */
 import Taro from "@tarojs/taro";
 // import qs from "qs";
 import { BASE_URL, HTTP_ERROR } from "../config/index";
+import { getGlobalData } from "../utils/common";
 
+const authToken = getGlobalData("token");
 /**
  * 检查http状态值
  * @param response
@@ -79,6 +81,7 @@ export default {
         url: `${BASE_URL}${url}`,
         header: {
           "content-type": "application/json",
+          Authorization: "Bearer " + authToken,
           ...options.header
         }
       })

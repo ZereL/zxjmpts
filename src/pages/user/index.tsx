@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:58
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-11 16:16:20
+ * @Last Modified time: 2019-02-11 17:30:36
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -10,7 +10,7 @@ import { View, Text, Image, Button } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 
 import "./index.scss";
-import { add, login, fetchUserToken } from "../../actions";
+import { add, login, fetchUserToken, fetchUserInfo } from "../../actions";
 import { USER } from "../../constants";
 
 import messageIcon from "../../assets/icon/resource52.png";
@@ -24,6 +24,7 @@ import pendingReceiveIcon from "../../assets/icon/resource12.png";
 import completeOrderIcon from "../../assets/icon/resource9.png";
 import refundIcon from "../../assets/icon/resource10.png";
 import { AtModal, AtModalHeader, AtModalContent, AtModalAction } from "taro-ui";
+import { setGlobalData } from "./../../utils/common";
 
 type PageStateProps = {
   user: {
@@ -35,6 +36,7 @@ type PageDispatchProps = {
   add: (namespace: string, payload?: any) => any;
   login: (namespace: string, payload?: any) => any;
   fetchUserToken: (namespace: string, payload?: any) => any;
+  fetchUserInfo: (namespace: string, payload?: any) => any;
 };
 
 type PageOwnProps = {};
@@ -54,7 +56,8 @@ interface User {
   {
     add: add,
     login: login,
-    fetchUserToken: fetchUserToken
+    fetchUserToken: fetchUserToken,
+    fetchUserInfo: fetchUserInfo
   }
 )
 class User extends Component {
@@ -147,7 +150,13 @@ class User extends Component {
       encryptedData: encryptedData,
       iv: iv
     });
+    // 设置全局变量
+    setGlobalData("token", data.token);
+    Taro.setStorage({ key: "token", data: data.token });
     console.log(data);
+    const result = this.props.fetchUserInfo(USER);
+    console.log(result);
+
     // Taro.login().then(result => {
     //   // 拿到用户登录凭证
     //   const wxCode = result.code;
