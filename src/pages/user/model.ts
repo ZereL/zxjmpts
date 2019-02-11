@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:10:01
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-11 17:26:25
+ * @Last Modified time: 2019-02-12 10:26:33
  */
 import {
   REQUEST_LOGIN,
@@ -26,7 +26,12 @@ export default {
     SetAdd(state, { payload }) {
       return { ...state, ...payload };
     },
+    // 把后台返回的token和用户名存入redux
     [SET_USERTOKEN](state, { payload }) {
+      return { ...state, ...payload };
+    },
+    // 把后台返回的用户完整信息写入redux
+    [SET_USERINFO](state, { payload }) {
       return { ...state, ...payload };
     }
   },

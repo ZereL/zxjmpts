@@ -1,8 +1,8 @@
 /*
- * @Author: Hank 
- * @Date: 2019-02-07 10:10:48 
- * @Last Modified by:   Hank 
- * @Last Modified time: 2019-02-07 10:10:48 
+ * @Author: Hank
+ * @Date: 2019-02-07 10:10:48
+ * @Last Modified by: Hank
+ * @Last Modified time: 2019-02-12 09:32:36
  */
 import Taro from "@tarojs/taro";
 
@@ -28,17 +28,19 @@ const globalData: object = {};
 
 /**
  * 给全局变量赋值
- * @param key 
- * @param value 
+ * @param key
+ * @param value
  */
 export function setGlobalData(key: string, value: any) {
   globalData[key] = value;
+  console.log("globalData", globalData);
 }
 
 /**
  * 读取全局变量
- * @param key 
+ * @param key
  */
 export function getGlobalData(key: string) {
+  console.log("globalData[key]", globalData[key]);
   return globalData[key];
 }

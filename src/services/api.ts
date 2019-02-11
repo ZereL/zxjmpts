@@ -2,14 +2,13 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:10:06
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-11 17:24:19
+ * @Last Modified time: 2019-02-12 09:45:09
  */
 import Taro from "@tarojs/taro";
 // import qs from "qs";
 import { BASE_URL, HTTP_ERROR } from "../config/index";
 import { getGlobalData } from "../utils/common";
 
-const authToken = getGlobalData("token");
 /**
  * 检查http状态值
  * @param response
@@ -72,7 +71,8 @@ function throwError(error, reject) {
 export default {
   request(options: any, method?: string) {
     const { url } = options;
-    console.log("请求URL", `${BASE_URL}${url}`);
+    // 拿到登录token
+    const authToken = getGlobalData("token")
     return new Promise((resolve, reject) => {
       Taro.showNavigationBarLoading();
       Taro.request({

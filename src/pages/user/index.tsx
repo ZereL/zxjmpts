@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:58
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-11 17:30:36
+ * @Last Modified time: 2019-02-12 11:06:55
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -25,10 +25,12 @@ import completeOrderIcon from "../../assets/icon/resource9.png";
 import refundIcon from "../../assets/icon/resource10.png";
 import { AtModal, AtModalHeader, AtModalContent, AtModalAction } from "taro-ui";
 import { setGlobalData } from "./../../utils/common";
+import { IMAGE_URL, cdnSmallSuffix } from "../../config";
 
 type PageStateProps = {
   user: {
-    num: number;
+    nickname: string;
+    image: any;
   };
 };
 
@@ -39,7 +41,13 @@ type PageDispatchProps = {
   fetchUserInfo: (namespace: string, payload?: any) => any;
 };
 
-type PageOwnProps = {};
+type PageOwnProps = {
+  user: {
+    nickName: string;
+    image: any;
+    name: any;
+  };
+};
 
 type PageState = {};
 
@@ -78,7 +86,7 @@ class User extends Component {
   componentWillUnmount() {}
 
   componentDidShow() {
-    Taro.getStorage({ key: "userInfo" })
+    Taro.getStorage({ key: "token" })
       .then(rst => {
         //从缓存中获取用户信息
         console.log("rst", rst);
@@ -105,41 +113,22 @@ class User extends Component {
     }
   };
 
-  // /**
-  //  * 登录
-  //  */
-  // loginHandler = async () => {
-  //   Taro.login().then(result => {
-  //     // 拿到用户登录凭证
-  //     const wxCode = result.code;
-  //     // 获取用户信息, 需要用户授权
-  //     Taro.getUserInfo().then(result => {
-  //       console.log("result", result);
-
-  //       // 拿到用户信息
-  //       if (result.userInfo) {
-  //         // this.props.setBasicInfo(result.userInfo) //将用户信息存入redux
-  //         //将用户信息存入缓存中
-  //         Taro.setStorage({ key: "userInfo", data: result.userInfo }).then(
-  //           rst => {
-  //             console.log("rst", rst);
-  //           }
-  //         );
-
-  //         const token = await this.props.fetchUserToken(USER, {
-  //           wechatCode: wxCode,
-  //           encryptedData: result.encryptedData,
-  //           iv: result.iv
-  //         });
-  //       } else {
-  //         //拒绝,保持当前页面，直到同意
-  //       }
-  //     });
-  //   });
-  // };
+  /**
+   * 获取权限同意的modal事件
+   */
+  getUserInfohandler = userInfo => {
+    console.log("userinfo", userInfo);
+    // if(userInfo.detail.userInfo){   //同意
+    //     this.props.setBasicInfo(userInfo.detail.userInfo) //将用户信息存入redux
+    //     Taro.setStorage({key:'userInfo',data:userInfo.detail.userInfo}).then(rst => {  //将用户信息存入缓存中
+    //         Taro.navigateBack()
+    //     })
+    // } else{ //拒绝,保持当前页面，直到同意
+    // }
+  };
 
   /**
-   * 登录
+   * 登录事件
    */
   loginHandler = async () => {
     // 拿到用户登录凭证
@@ -150,40 +139,14 @@ class User extends Component {
       encryptedData: encryptedData,
       iv: iv
     });
-    // 设置全局变量
+    console.log("data", data);
+    console.log("data.token", data.token);
+    // 设置全局变量token
     setGlobalData("token", data.token);
+    // 存储全局变量，下次进入程序自动登录
     Taro.setStorage({ key: "token", data: data.token });
     console.log(data);
     const result = this.props.fetchUserInfo(USER);
-    console.log(result);
-
-    // Taro.login().then(result => {
-    //   // 拿到用户登录凭证
-    //   const wxCode = result.code;
-    //   // 获取用户信息, 需要用户授权
-    //   Taro.getUserInfo().then(result => {
-    //     console.log("result", result);
-
-    //     // 拿到用户信息
-    //     if (result.userInfo) {
-    //       // this.props.setBasicInfo(result.userInfo) //将用户信息存入redux
-    //       //将用户信息存入缓存中
-    //       Taro.setStorage({ key: "userInfo", data: result.userInfo }).then(
-    //         rst => {
-    //           console.log("rst", rst);
-    //         }
-    //       );
-
-    //       const token = await this.props.fetchUserToken(USER, {
-    //         wechatCode: wxCode,
-    //         encryptedData: result.encryptedData,
-    //         iv: result.iv
-    //       });
-    //     } else {
-    //       //拒绝,保持当前页面，直到同意
-    //     }
-    //   });
-    // });
   };
 
   modalCancelHandler = () => {
@@ -195,16 +158,24 @@ class User extends Component {
   /********************* 渲染页面的方法 *********************/
   /********************* 页面render方法 ********************/
   render() {
-    // const { mobile, nickname } = this.props;
-    const { nickName, avatarUrl } = this.state;
+    const { image, nickName, name } = this.props.user;
+    // const { nickName, avatarUrl } = this.state;
+    console.log("nickName", nickName);
+    console.log("this.props", this.props);
     return (
       <View className="user-page">
         <Button onClick={this.loginHandler}>登录</Button>
         <View className="not-login">
           <View className="to-login" data-url="/pages/login/index">
             <View className="left">
-              <View className={nickName ? "name black" : "name "}>
-                {nickName ? nickName : "已经是小主？请登录 >"}
+              <View className={name ? "name black" : "name "}>
+                <Text>
+                  {name ? (
+                    <Text>{`欢迎您回来，${name}`}</Text>
+                  ) : (
+                    "已经是小主？请登录 >"
+                  )}
+                </Text>
               </View>
               <View>
                 <View className="msg" data-url="/pages/message/index">
@@ -215,7 +186,9 @@ class User extends Component {
             <View className="avatar-container">
               <Image
                 className="avatar"
-                src={avatarUrl ? avatarUrl : avatar_img}
+                src={
+                  image ? `${IMAGE_URL}${image}${cdnSmallSuffix}` : avatar_img
+                }
               />
             </View>
           </View>
@@ -302,7 +275,11 @@ class User extends Component {
           <AtModalContent>
             <View>
               <Text>申请获取你的公开信息（昵称、头像等）</Text>
-              <Button open-type="getUserInfo" onGetUserInfo={this.getUserInfo}>
+              {/* 这里需要修改 */}
+              <Button
+                open-type="getUserInfo"
+                onGetUserInfo={this.getUserInfoHandler}
+              >
                 微信授权
               </Button>
             </View>
