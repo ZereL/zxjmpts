@@ -2,20 +2,19 @@
  * @Author: Hank
  * @Date: 2019-02-08 15:12:23
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-12 17:35:36
+ * @Last Modified time: 2019-02-13 11:56:21
  */
 
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
-import { View, Image, ScrollView } from "@tarojs/components";
+import { View, Image, ScrollView, Text } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 
 import "./index.scss";
 import { fetchPageData, fetchMorePageData } from "../../actions";
-import { GOODSLIST, GOODSDETAIL } from "../../constants";
 import ZXJGoodsList from "../../components/ZXJGoodsList/index";
 import { getGlobalData } from "../../utils/common";
-import { AtTabBar, AtButton } from "taro-ui";
+import { AtTabBar, AtButton, AtNoticebar, AtAvatar } from "taro-ui";
 
 type PageStateProps = {};
 
@@ -128,9 +127,12 @@ class NotLoginShopkeeper extends Component {
     const goodsId = 128;
     const code = `FSI005`;
     const hash = `570AD6F305EC6EA60DCA5DCFAE67AE09`;
+    const name = `漠然`;
+    const avatarImage =
+      "https://cdn2u.com/images/upload/2141-1bec8a1242511c99891f6e80b9c5ebfe-132x132.jpg";
     return {
       title: "海淘更便宜，分享有收益❤️全球臻选好物等您来👇。",
-      path: `/pages/notLoginShopkeeper/index?id=${goodsId}&code=${code}&hash=${hash}&share=true`,
+      path: `/pages/notLoginShopkeeper/index?id=${goodsId}&code=${code}&hash=${hash}&name=${name}&avatarImage=${avatarImage}&share=true`,
       imageUrl: `/src/assets/icon/resource63.png`, // TODO：自定义分享图片目前好像不行
       success: function(res) {
         console.log(res);
@@ -150,12 +152,31 @@ class NotLoginShopkeeper extends Component {
     console.log("this.props", this.props);
     const { items } = this.props.notLoginShopkeeper;
     let share = this.$router.params.share; //获取分享进来的参数share
-    let {id, code, hash} = this.$router.params; //获取分享进来的参数share
-    console.log('params', this.$router.params);
+    let { id, code, hash, name, avatarImage } = this.$router.params; //获取分享进来的参数share
+    console.log("params", this.$router.params);
     // let {share} = this.$router.params.share; //获取分享进来的参数share
+    console.log("avatarImage", avatarImage);
     return (
       <View className="not-login-shopkeeper-page">
-        {share ? <View className="fixIndex">通过分享进入页面, id为{id} code为{code} hash为{hash}}</View> : null}
+        {/* {share ? (
+          <AtNoticebar className="fixIndex">
+            <AtAvatar circle image={avatarImage}></AtAvatar> 臻享家用户{name}, id为{id} code为{code} hash为{hash}}
+          </AtNoticebar>
+        ) : null} */}
+        {share ? (
+          <View className="fixIndex">
+            <AtAvatar
+              circle
+              image={avatarImage}
+              size="small"
+              className="avatar-image"
+            />
+            <View className="shared-data">
+              臻享家用户 {name}, 分享给您本页面。邀请码为： {id}
+            </View>
+          </View>
+        ) : null}
+
         {/* <Image
           mode="scaleToFill"
           src={require("../../assets/image/jinzhu.jpg")}
@@ -166,7 +187,11 @@ class NotLoginShopkeeper extends Component {
           style="width: 375px, height:1600px"
         /> */}
         <ScrollView
-          style={`height: ${getGlobalData("systemInfo").screenHeight - 140}px`}
+          style={
+            share
+              ? `height: ${getGlobalData("systemInfo").windowHeight - 100}px`
+              : `height: ${getGlobalData("systemInfo").windowHeight - 50}px`
+          }
           scrollY
           scrollWithAnimation
         >
@@ -175,9 +200,9 @@ class NotLoginShopkeeper extends Component {
               getGlobalData("systemInfo").screenWidth
             }px;height: ${(getGlobalData("systemInfo").screenWidth * 6080) /
               1242}px;background: #fff;`}
-            src="../../assets/image/jinzhu.jpg"
+            src={require("../../assets/image/jinzhu.jpg")}
           />
-          {/* <ZXJGoodsList list={items}  style="height:150px;"/> */}
+          <ZXJGoodsList list={items} />
         </ScrollView>
         <View className="bottom-view">
           <View className="bottom-view-text">

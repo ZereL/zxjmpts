@@ -2,17 +2,32 @@
  * @Author: Hank 
  * @Date: 2019-02-08 15:12:31 
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-12 17:29:03
+ * @Last Modified time: 2019-02-13 11:54:29
  */
 
 @import "../../styles/mixin";
 
 .not-login-shopkeeper-page {
+  .fixIndex {
+    font-size: 24px;
+    height: 100px;
+    background-color: #737373;
+    .avatar-image {
+      float: left;
+      margin: 10px;
+    }
+    .shared-data {
+      float: left;
+      margin: 20px;
+      color: #ffffff;
+    }
+  }
   .bottom-view {
-    height: 120px;
+    height: 40px;
     .bottom-view-text {
       color: $color-primary;
-      padding-bottom: 10;
+      padding-bottom: 10px;
+      padding-top: 10px;
       font-weight: "bold";
       font-size: 24px;
       text-align: center;
