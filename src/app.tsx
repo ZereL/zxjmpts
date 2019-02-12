@@ -1,8 +1,8 @@
 /*
- * @Author: Hank 
- * @Date: 2019-02-07 10:11:03 
+ * @Author: Hank
+ * @Date: 2019-02-07 10:11:03
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-08 15:43:21
+ * @Last Modified time: 2019-02-12 15:54:22
  */
 
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -13,7 +13,8 @@ import dva from "./utils/dva";
 import models from "./models";
 // import { setGlobalData } from "./utils/common";
 import "./app.scss";
-import 'taro-ui/dist/style/index.scss' 
+import "taro-ui/dist/style/index.scss";
+import { setGlobalData } from "./utils/common";
 
 // 如果需要在 h5 环境中开启 React Devtools
 // 取消以下注释：
@@ -35,7 +36,8 @@ class App extends Component {
       "pages/user/index",
       "pages/goodsDetail/index",
       "pages/search/index",
-      "pages/goodsList/index"
+      "pages/goodsList/index",
+      "pages/notLoginShopkeeper/index"
     ],
     window: {
       backgroundTextStyle: "light",
@@ -73,6 +75,9 @@ class App extends Component {
 
   async componentDidMount() {
     // setGlobalData('isLogin', true)
+    const token = Taro.getStorageSync("token");
+    setGlobalData("token", token);
+    setGlobalData("systemInfo", Taro.getSystemInfoSync());
   }
 
   componentDidShow() {}

@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:10:09
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-08 15:57:33
+ * @Last Modified time: 2019-02-12 15:10:09
  */
 import api from "./api";
 
@@ -30,6 +30,19 @@ export function fetchGoodsListData(payload) {
       brandId: brandId || null,
       cateId: cateId || null,
       keyword: keyword || null
+    }
+  });
+}
+
+// 获取入门商品列表
+export function fetchEntryGoodsListData(payload) {
+  const { pageSize, currentPage } = payload;
+  return api.post({
+    url: "/goodsService/goods/list",
+    payload: {
+      pageSize: pageSize == null ? 12 : pageSize,
+      currentPage: currentPage == null ? 1 : currentPage,
+      isEntry: true
     }
   });
 }

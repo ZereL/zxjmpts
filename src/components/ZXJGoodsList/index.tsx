@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:07:36
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-08 16:58:11
+ * @Last Modified time: 2019-02-12 16:35:45
  */
 import { ComponentClass } from "react";
 import Taro, { Component } from "@tarojs/taro";
@@ -14,7 +14,7 @@ type PageStateProps = {};
 
 type PageDispatchProps = {};
 
-type PageOwnProps = { list: any; loading?: any; };
+type PageOwnProps = { list: any; loading?: any };
 
 type PageState = {};
 
@@ -83,9 +83,10 @@ class ZXJGoodsList extends Component {
                         {item.limit_tag}
                       </View>
                     )} */}
+                  {/* TODO: 兼容未登录金主页面加入。。。需要排查找到最优办法。 */}
                   {item.price && (
                     <View className="zan-capsule__right">
-                      ¥{item.price}
+                      ¥{item.price.price}
                     </View>
                   )}
                 </View>

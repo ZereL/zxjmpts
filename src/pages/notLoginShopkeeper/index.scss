@@ -1,0 +1,28 @@
+/*
+ * @Author: Hank 
+ * @Date: 2019-02-08 15:12:31 
+ * @Last Modified by: Hank
+ * @Last Modified time: 2019-02-12 17:29:03
+ */
+
+@import "../../styles/mixin";
+
+.not-login-shopkeeper-page {
+  .bottom-view {
+    height: 120px;
+    .bottom-view-text {
+      color: $color-primary;
+      padding-bottom: 10;
+      font-weight: "bold";
+      font-size: 24px;
+      text-align: center;
+    }
+    .bottom-button {
+      background-color: $color-primary;
+      margin-left: 30px;
+      margin-right: 30px;
+      border-radius: 30px;
+      color: #ffffff;
+    }
+  }
+}

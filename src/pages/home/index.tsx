@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:07:40
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-08 16:59:27
+ * @Last Modified time: 2019-02-12 15:37:13
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -96,6 +96,9 @@ class Home extends Component {
   goGoodsList = () => {
     Taro.navigateTo({ url: "/pages/goodsList/index" });
   };
+  goSharePageHandler = () => {
+    Taro.navigateTo({ url: "/pages/notLoginShopkeeper/index" });
+  };
 
   // goGoodsDetailHandler = () => {
   //   Taro.navigateTo({
@@ -162,6 +165,9 @@ class Home extends Component {
         {/* <Button className="add_btn" onClick={this.goGoodsDetailHandler}>
           查看商品详情
         </Button> */}
+        <Button className="add_btn" onClick={this.goSharePageHandler}>
+          分享页面
+        </Button>
         <View>
           {/* <Image
             mode="widthFix"
