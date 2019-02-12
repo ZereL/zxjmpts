@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:36
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-11 13:00:47
+ * @Last Modified time: 2019-02-12 14:45:29
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -10,10 +10,21 @@ import { View, Button, Text, Image } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 
 import "./index.scss";
-import { login, fetchPageData, clearPageData } from "../../actions";
-import { GOODSDETAIL } from "../../constants";
+import {
+  login,
+  fetchPageData,
+  clearPageData,
+  requestUpdateCart
+} from "../../actions";
+import { GOODSDETAIL, CART } from "../../constants";
 import Carousel from "../../components/Carousel";
-import { AtTabBar, AtDivider, AtButton } from "taro-ui";
+import {
+  AtTabBar,
+  AtDivider,
+  AtButton,
+  AtActionSheet,
+  AtActionSheetItem
+} from "taro-ui";
 import { IMAGE_URL, cdnMediumSuffix, cdnSmallSuffix } from "../../config";
 
 type PageStateProps = {
@@ -23,6 +34,8 @@ type PageStateProps = {
     name: string;
     price: any;
     contentImages: Array<string>;
+    skus: Array<any>;
+    property: Array<any>;
   };
 };
 
@@ -30,11 +43,17 @@ type PageDispatchProps = {
   fetchPageData: (namespace: string, payload?: any) => any;
   clearPageData: (namespace: string, payload?: any) => any;
   login: (namespace: string, payload?: any) => any;
+  requestUpdateCart: (namespace: string, payload?: any) => any;
 };
 
-type PageOwnProps = {};
+type PageOwnProps = {
 
-type PageState = {};
+};
+
+type PageState = {
+  activeTab: number;
+  isChooseModelModalShow: boolean;
+};
 
 type IProps = PageStateProps & PageDispatchProps & PageOwnProps;
 
@@ -49,21 +68,22 @@ interface GoodsDetail {
   {
     fetchPageData: fetchPageData,
     clearPageData: clearPageData,
-    login: login
+    requestUpdateCart: requestUpdateCart
   }
 )
 class GoodsDetail extends Component {
-  static defaultProps = {
-    goodsDetail: {
-      images: [],
-      name: "",
-      price: "",
-      contentImages: []
-    }
-  };
+  // static defaultProps = {
+  //   goodsDetail: {
+  //     images: [],
+  //     name: "",
+  //     price: "",
+  //     contentImages: []
+  //   }
+  // };
 
   state = {
-    activeTab: 0
+    activeTab: 0,
+    isChooseModelModalShow: false
   };
 
   config: Config = {
@@ -111,9 +131,11 @@ class GoodsDetail extends Component {
 
   /********************* 事件handler **********************/
   fetchPageData = async () => {
-    const { id } = this.$router.params;
-    console.log("id", id);
-    console.log("this.$router", this.$router);
+    // const { id } = this.$router.params;
+    // console.log("id", id);
+    // console.log("this.$router", this.$router);
+
+    const id = 717;
 
     try {
       const result = await this.props.fetchPageData(GOODSDETAIL, { id: id });
@@ -142,8 +164,24 @@ class GoodsDetail extends Component {
     }
   };
 
+  /**
+   * 普通模式下加入购物车
+   */
   addToCart = () => {
-    console.log("加入购物车");
+    const { id } = this.$router.params;
+    console.log("加入购物车id", id);
+    const { skus } = this.props.goodsDetail;
+    this.props.requestUpdateCart(GOODSDETAIL, {
+      skuId: skus[0][0].id,
+      qty: 1
+    });
+  };
+
+  /**
+   * 选择规格
+   */
+  chooseModel = () => {
+    this.setState({ isChooseModelModalShow: true });
   };
 
   goCustomerService = () => {
@@ -154,13 +192,20 @@ class GoodsDetail extends Component {
   /********************* 页面render方法 ********************/
   render() {
     console.log("this.props", this.props);
-    const { images, name, price, contentImages } = this.props.goodsDetail;
+    const {
+      images,
+      name,
+      price,
+      contentImages,
+      property
+    } = this.props.goodsDetail;
     let share = this.$router.params.share; //获取分享进来的参数share
     return (
       <View className="detail-page">
         {/* 顶部tabBar */}
         {/* TODO： 如果这个TabBar想有用的话， 那么就得把这页换成scrollview中。 */}
         <Button open-type="share">分享本页</Button>
+        <Button open-type="share">显示modal</Button>
         {share ? <Text className="fixIndex">通过分享进入页面</Text> : null}
         <AtTabBar
           tabList={[{ title: "商品" }, { title: "相关" }, { title: "详情" }]}
@@ -215,11 +260,17 @@ class GoodsDetail extends Component {
           <View
             // className={currentChooseId == "" ? "join join-disabled" : "join"}
             className="join"
-            onClick={this.addToCart}
+            // onClick={property.length > 0 ? this.chooseModel : this.addToCart}
+            onClick={ this.chooseModel}
           >
-            加入聚宝盆
+            {property.length > 0 ? "选择规格" : "加入聚宝盆"}
           </View>
         </View>
+        {/* <AtActionSheet isOpened={this.state.isChooseModelModalShow}>
+          {property.map((item, index) => {
+            
+          })}
+        </AtActionSheet> */}
       </View>
     );
   }

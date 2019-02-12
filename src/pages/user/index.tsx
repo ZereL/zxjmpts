@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:58
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-12 11:06:55
+ * @Last Modified time: 2019-02-12 14:47:27
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -278,7 +278,7 @@ class User extends Component {
               {/* 这里需要修改 */}
               <Button
                 open-type="getUserInfo"
-                onGetUserInfo={this.getUserInfoHandler}
+                // onGetUserInfo={this.getUserInfoHandler} // TODO: 暂时注释掉
               >
                 微信授权
               </Button>

@@ -2,12 +2,11 @@
  * @Author: Hank
  * @Date: 2019-02-08 15:12:38
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-11 09:50:32
+ * @Last Modified time: 2019-02-12 14:46:21
  */
 
 import { GOODSLIST } from "./../../constants/index";
 import {
-  ADD,
   FETCH_PAGEDATA,
   SET_PAGEDATA,
   FETCH_MOREPAGEDATA
@@ -21,16 +20,13 @@ export default {
     homeItems: []
   },
   reducers: {
-    SetAdd(state, { payload }) {
-      return { ...state, ...payload };
-    },
     [SET_PAGEDATA](state, { payload }) {
       console.log("SET_PAGEDATA, payload", payload);
       return { ...state, ...payload };
     }
   },
   effects: {
-    *[FETCH_PAGEDATA]({ payload }, { select, put, call }) {
+    *[FETCH_PAGEDATA]({ payload }, { put, call }) {
       const requestResult = yield call(fetchGoodsListData, payload);
       console.log("requestResult", requestResult);
       const requestResultData = requestResult.data;
@@ -66,22 +62,6 @@ export default {
           items: newList
         }
       });
-      return requestResult;
-    },
-    *[ADD]({ payload }, { select, put, call }) {
-      console.log("收到请求", payload);
-      const { num } = yield select(state => state.home);
-      console.log("准备请求");
-      const requestResult = yield call(fetchHomeData);
-      console.log("requestResult", requestResult);
-
-      yield put({
-        type: "SetAdd",
-        payload: {
-          num: num + 1
-        }
-      });
-
       return requestResult;
     }
   }
