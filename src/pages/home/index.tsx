@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:07:40
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-12 15:37:13
+ * @Last Modified time: 2019-02-13 15:04:22
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -10,10 +10,11 @@ import { View, Image, Button } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 
 import "./index.scss";
-import { fetchPageData } from "../../actions";
+import { fetchPageData, fetchUserInfo } from "../../actions";
 import { HOME } from "../../constants";
 import ZXJCarousel from "../../components/Carousel/index";
 import DynamicList from "../../components/DynamicList/index";
+import { getGlobalData } from "../../utils/common";
 
 type PageStateProps = {};
 
@@ -21,6 +22,7 @@ type PageDispatchProps = {
   add: (namespace: string, payload?: any) => any;
   login: (namespace: string, payload?: any) => any;
   fetchPageData: (namespace: string, payload?: any) => any;
+  fetchUserInfo: (namespace: string, payload?: any) => any;
 };
 
 type PageOwnProps = {
@@ -43,7 +45,8 @@ interface Home {
   }),
   {
     // add: add,
-    fetchPageData: fetchPageData
+    fetchPageData: fetchPageData,
+    fetchUserInfo: fetchUserInfo
   }
 )
 
@@ -61,6 +64,9 @@ class Home extends Component {
   componentWillUnmount() {}
 
   componentDidShow() {
+    if (getGlobalData("token")) {
+      this.props.fetchUserInfo("user");
+    }
     this.fetchPageData();
   }
 
@@ -96,6 +102,7 @@ class Home extends Component {
   goGoodsList = () => {
     Taro.navigateTo({ url: "/pages/goodsList/index" });
   };
+
   goSharePageHandler = () => {
     Taro.navigateTo({ url: "/pages/notLoginShopkeeper/index" });
   };

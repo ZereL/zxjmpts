@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:58
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-12 14:47:27
+ * @Last Modified time: 2019-02-13 14:12:23
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -24,7 +24,7 @@ import pendingReceiveIcon from "../../assets/icon/resource12.png";
 import completeOrderIcon from "../../assets/icon/resource9.png";
 import refundIcon from "../../assets/icon/resource10.png";
 import { AtModal, AtModalHeader, AtModalContent, AtModalAction } from "taro-ui";
-import { setGlobalData } from "./../../utils/common";
+import { setGlobalData, getGlobalData } from "./../../utils/common";
 import { IMAGE_URL, cdnSmallSuffix } from "../../config";
 
 type PageStateProps = {
@@ -86,20 +86,28 @@ class User extends Component {
   componentWillUnmount() {}
 
   componentDidShow() {
-    Taro.getStorage({ key: "token" })
-      .then(rst => {
-        //从缓存中获取用户信息
-        console.log("rst", rst);
-        // this.props.setBasicInfo(rst.data)
-      })
-      .catch(error => {
-        // console.log("取缓存错误", error);
-        this.setState({ isOpened: true }); // 弹出请求权限的modal
-      });
-
-    // const userInfo = await Taro.getUserInfo();
-    // console.log("userInfo", userInfo);
+    const token = getGlobalData("token");
+    console.log("token", token);
+    if (token === "") {
+      this.setState({ isOpened: true });
+    }
   }
+
+  // componentDidShow() {
+  //   Taro.getStorage({ key: "token" })
+  //     .then(rst => {
+  //       //从缓存中获取用户信息
+  //       console.log("rst", rst);
+  //       // this.props.setBasicInfo(rst.data)
+  //     })
+  //     .catch(error => {
+  //       // console.log("取缓存错误", error);
+  //       this.setState({ isOpened: true }); // 弹出请求权限的modal
+  //     });
+
+  //   // const userInfo = await Taro.getUserInfo();
+  //   // console.log("userInfo", userInfo);
+  // }
 
   componentDidHide() {}
 

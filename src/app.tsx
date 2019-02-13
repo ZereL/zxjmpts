@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:11:03
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-12 15:54:22
+ * @Last Modified time: 2019-02-13 15:11:53
  */
 
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -37,7 +37,8 @@ class App extends Component {
       "pages/goodsDetail/index",
       "pages/search/index",
       "pages/goodsList/index",
-      "pages/notLoginShopkeeper/index"
+      "pages/notLoginShopkeeper/index",
+      "pages/becomeShopkeeper/index"
     ],
     window: {
       backgroundTextStyle: "light",
@@ -76,6 +77,8 @@ class App extends Component {
   async componentDidMount() {
     // setGlobalData('isLogin', true)
     const token = Taro.getStorageSync("token");
+    console.log("app.ts中的token", token);
+    // 如果token为空， globalData中就是空字符串
     setGlobalData("token", token);
     setGlobalData("systemInfo", Taro.getSystemInfoSync());
   }

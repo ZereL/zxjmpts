@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-08 15:12:23
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-13 11:56:21
+ * @Last Modified time: 2019-02-13 15:15:34
  */
 
 import { ComponentClass } from "react";
@@ -11,16 +11,17 @@ import { View, Image, ScrollView, Text } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 
 import "./index.scss";
-import { fetchPageData, fetchMorePageData } from "../../actions";
+import { fetchPageData, fetchMorePageData, fetchUserInfo } from "../../actions";
 import ZXJGoodsList from "../../components/ZXJGoodsList/index";
 import { getGlobalData } from "../../utils/common";
-import { AtTabBar, AtButton, AtNoticebar, AtAvatar } from "taro-ui";
+import { AtTabBar, AtButton, AtNoticebar, AtAvatar, AtModal } from "taro-ui";
 
 type PageStateProps = {};
 
 type PageDispatchProps = {
   fetchPageData: (namespace: string, payload?: any) => any;
   fetchMorePageData: (namespace: string, payload?: any) => any;
+  fetchUserInfo: (namespace: string, payload?: any) => any;
 };
 
 type PageOwnProps = {
@@ -30,6 +31,7 @@ type PageOwnProps = {
     hasNext: boolean;
     pageSize: number;
   };
+  user: any;
 };
 
 type PageState = {};
@@ -41,12 +43,14 @@ interface NotLoginShopkeeper {
 }
 
 @connect(
-  ({ notLoginShopkeeper }) => ({
-    notLoginShopkeeper
+  ({ notLoginShopkeeper, user }) => ({
+    notLoginShopkeeper,
+    user
   }),
   {
     fetchPageData: fetchPageData,
-    fetchMorePageData: fetchMorePageData
+    fetchMorePageData: fetchMorePageData,
+    fetchUserInfo: fetchUserInfo
   }
 )
 
@@ -57,6 +61,10 @@ class NotLoginShopkeeper extends Component {
     navigationBarTitleText: "臻享家"
   };
 
+  state = {
+    isShareModalshow: false
+  };
+
   /********************* 生命周期函数 **********************/
   componentWillReceiveProps(nextProps) {
     console.log(this.props, nextProps);
@@ -65,6 +73,12 @@ class NotLoginShopkeeper extends Component {
   componentWillUnmount() {}
 
   componentDidShow() {
+    // 判断用户是否之前登录过
+    console.log('getGlobalData("token")', getGlobalData("token"));
+    if (getGlobalData("token")) {
+      this.props.fetchUserInfo("user");
+    }
+
     this.fetchPageData();
   }
 
@@ -123,7 +137,6 @@ class NotLoginShopkeeper extends Component {
 
   //这个分享的函数必须写在入口中，写在子组件中不生效
   onShareAppMessage() {
-    // const { images } = this.props.goodsDetail;
     const goodsId = 128;
     const code = `FSI005`;
     const hash = `570AD6F305EC6EA60DCA5DCFAE67AE09`;
@@ -132,7 +145,7 @@ class NotLoginShopkeeper extends Component {
       "https://cdn2u.com/images/upload/2141-1bec8a1242511c99891f6e80b9c5ebfe-132x132.jpg";
     return {
       title: "海淘更便宜，分享有收益❤️全球臻选好物等您来👇。",
-      path: `/pages/notLoginShopkeeper/index?id=${goodsId}&code=${code}&hash=${hash}&name=${name}&avatarImage=${avatarImage}&share=true`,
+      path: `/pages/notLoginShopkeeper/index?goodsId=${goodsId}&code=${code}&hash=${hash}&name=${name}&avatarImage=${avatarImage}&share=true`,
       imageUrl: `/src/assets/icon/resource63.png`, // TODO：自定义分享图片目前好像不行
       success: function(res) {
         console.log(res);
@@ -145,14 +158,19 @@ class NotLoginShopkeeper extends Component {
     };
   }
 
+  goBecomeShopkeeperHandler = () => {
+    Taro.navigateTo({ url: "/pages/becomeShopkeeper/index" });
+  };
+
   /********************* 渲染页面的方法 *********************/
 
   /********************* 页面render方法 ********************/
   render() {
     console.log("this.props", this.props);
     const { items } = this.props.notLoginShopkeeper;
+    const { id } = this.props.user;
     let share = this.$router.params.share; //获取分享进来的参数share
-    let { id, code, hash, name, avatarImage } = this.$router.params; //获取分享进来的参数share
+    let { goodId, code, hash, name, avatarImage } = this.$router.params; //获取分享进来的参数share
     console.log("params", this.$router.params);
     // let {share} = this.$router.params.share; //获取分享进来的参数share
     console.log("avatarImage", avatarImage);
@@ -172,7 +190,8 @@ class NotLoginShopkeeper extends Component {
               className="avatar-image"
             />
             <View className="shared-data">
-              臻享家用户 {name}, 分享给您本页面。邀请码为： {id}
+              臻享家用户 {name}, 分享给您本页面。邀请码为： {code}{" "}
+              {id && "您已经是臻享家用户，不能再次接受邀请。"}
             </View>
           </View>
         ) : null}
@@ -208,7 +227,12 @@ class NotLoginShopkeeper extends Component {
           <View className="bottom-view-text">
             更多商品请点击“成为金主”后查看
           </View>
-          <AtButton className="bottom-button">成为金主</AtButton>
+          <AtButton
+            className="bottom-button"
+            onClick={this.goBecomeShopkeeperHandler}
+          >
+            成为金主
+          </AtButton>
         </View>
       </View>
 
