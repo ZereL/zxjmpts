@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-08 15:12:23
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-13 15:15:34
+ * @Last Modified time: 2019-02-13 15:34:16
  */
 
 import { ComponentClass } from "react";
@@ -137,6 +137,9 @@ class NotLoginShopkeeper extends Component {
 
   //这个分享的函数必须写在入口中，写在子组件中不生效
   onShareAppMessage() {
+
+    // 目前我不是金主，所以没从user页面的model中取数据
+    // TODO: 思考如果不是金主想分享怎么办？是直接不传邀请码还是怎么样。
     const goodsId = 128;
     const code = `FSI005`;
     const hash = `570AD6F305EC6EA60DCA5DCFAE67AE09`;

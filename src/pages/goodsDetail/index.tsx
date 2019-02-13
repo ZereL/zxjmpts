@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:36
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-12 14:45:29
+ * @Last Modified time: 2019-02-13 17:28:57
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -23,7 +23,9 @@ import {
   AtDivider,
   AtButton,
   AtActionSheet,
-  AtActionSheetItem
+  AtActionSheetItem,
+  AtFloatLayout,
+  AtTag
 } from "taro-ui";
 import { IMAGE_URL, cdnMediumSuffix, cdnSmallSuffix } from "../../config";
 
@@ -34,8 +36,10 @@ type PageStateProps = {
     name: string;
     price: any;
     contentImages: Array<string>;
-    skus: Array<any>;
-    property: Array<any>;
+    // property: Array<Object>;
+    // skus: Array<Array<Object>>;
+    property: any;
+    skus: any;
   };
 };
 
@@ -46,13 +50,15 @@ type PageDispatchProps = {
   requestUpdateCart: (namespace: string, payload?: any) => any;
 };
 
-type PageOwnProps = {
-
-};
+type PageOwnProps = {};
 
 type PageState = {
   activeTab: number;
   isChooseModelModalShow: boolean;
+  // property: Array<Object>;
+  // skus: Array<Array<Object>>;
+  property: any;
+  skus: any;
 };
 
 type IProps = PageStateProps & PageDispatchProps & PageOwnProps;
@@ -83,7 +89,13 @@ class GoodsDetail extends Component {
 
   state = {
     activeTab: 0,
-    isChooseModelModalShow: false
+    isChooseModelModalShow: false,
+    hasProperty: false,
+    property: [],
+    skus: [],
+    loading: true,
+    isLiked: false,
+    skuPrice: ""
   };
 
   config: Config = {
@@ -92,7 +104,20 @@ class GoodsDetail extends Component {
 
   /********************* 生命周期函数 **********************/
   componentWillReceiveProps(nextProps) {
-    console.log(this.props, nextProps);
+    // console.log(this.props, nextProps);
+
+    // TODO： 这个有可能需要修改！！！ 每次都setState肯定有问题
+    // 组件每次接收数据都判断一下是否含有property，有property就显示选择规格，没有就显示加入购物车
+    let { property, skus } = nextProps.goodsDetail;
+    // console.log("property", property);
+    // 容错防止property传过来null
+    if (!property) {
+      property = [];
+    }
+    // 判断property数组是否为空
+    if (property.length > 0) {
+      this.setState({ hasProperty: true, skus, property });
+    }
   }
 
   componentWillUnmount() {
@@ -188,18 +213,27 @@ class GoodsDetail extends Component {
     console.log("进入客服");
   };
 
+  modalCloseHandler = () => {
+    this.setState({ isChooseModelModalShow: false });
+  };
+
   /********************* 渲染页面的方法 *********************/
   /********************* 页面render方法 ********************/
   render() {
     console.log("this.props", this.props);
+    const { skus, property } = this.state;
     const {
       images,
       name,
       price,
-      contentImages,
-      property
+      contentImages
+      // property,
+      // skus
     } = this.props.goodsDetail;
     let share = this.$router.params.share; //获取分享进来的参数share
+
+    console.log("property", property);
+    console.log("property.length", property.length);
     return (
       <View className="detail-page">
         {/* 顶部tabBar */}
@@ -261,16 +295,77 @@ class GoodsDetail extends Component {
             // className={currentChooseId == "" ? "join join-disabled" : "join"}
             className="join"
             // onClick={property.length > 0 ? this.chooseModel : this.addToCart}
-            onClick={ this.chooseModel}
+            onClick={this.chooseModel}
           >
             {property.length > 0 ? "选择规格" : "加入聚宝盆"}
           </View>
         </View>
-        {/* <AtActionSheet isOpened={this.state.isChooseModelModalShow}>
-          {property.map((item, index) => {
-            
+
+        <AtFloatLayout
+          isOpened={this.state.isChooseModelModalShow}
+          // title="这是个标题"
+          onClose={this.modalCloseHandler}
+        >
+          {/* <View>商品图片，名称</View>
+          <View>颜色</View>
+          <View>
+            <AtTag>红</AtTag>
+            <AtTag>黄</AtTag>
+            <AtTag>蓝</AtTag>
+          </View>
+          <View>尺码</View>
+          <View>
+            <AtTag>36</AtTag>
+            <AtTag>37</AtTag>
+            <AtTag>38</AtTag>
+            <AtTag>39</AtTag>
+            <AtTag>40</AtTag>
+          </View>
+          <AtButton>加入购物车</AtButton> */}
+          {property.map((itemProperty, index) => {
+            const { key, values } = itemProperty;
+
+            // 在itemKey下增加一个selectIndex对象来判断用户选择的选项
+            if (index === 0) {
+              // 第一个属性默认选中第一个值
+              itemProperty.selectedIndex == null &&
+                (itemProperty.selectedIndex = 0);
+            } else {
+              // 非第一个属性默认不选中任何值
+              itemProperty.selectedIndex == null &&
+                (itemProperty.selectedIndex = -1);
+            }
+
+            return (
+              // 遍历输出tags的分类名称，如 颜色、尺码
+              <View key={`${itemProperty}${index}`}>
+                {key}
+                <View>
+                  {values.map((itemPropertyValue, indexValue) => {
+                    return (
+                      <AtTag
+                        key={`${itemPropertyValue}${indexValue}`}
+                        active={indexValue == itemProperty.selectedIndex}
+                        // 设置是否disable
+                        // 如果第一行没有选中任何节点，则第二行都是有效状态
+                        // 如果是第一行，则都是有效状态
+                        // 如果是第二行，则对应的sku不是空才有效
+                        disabled={
+                          property[0].selectedIndex == -1 || index == 0
+                            ? false
+                            : skus[property[0].selectedIndex][indexValue] ==
+                              null
+                        }
+                      >
+                        {itemPropertyValue}
+                      </AtTag>
+                    );
+                  })}
+                </View>
+              </View>
+            );
           })}
-        </AtActionSheet> */}
+        </AtFloatLayout>
       </View>
     );
   }
