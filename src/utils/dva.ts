@@ -1,8 +1,8 @@
 /*
  * @Author: Hank 
  * @Date: 2019-02-07 10:10:52 
- * @Last Modified by:   Hank 
- * @Last Modified time: 2019-02-07 10:10:52 
+ * @Last Modified by: Hank
+ * @Last Modified time: 2019-02-15 10:49:44
  */
 import { create } from "dva-core";
 import { createLogger } from "redux-logger";
@@ -15,7 +15,7 @@ let registered;
 
 function createApp(opt) {
   // redux日志
-  opt.onAction = [createLogger()];
+  // opt.onAction = [createLogger()];
   app = create(opt);
   app.use(createLoading({}));
 

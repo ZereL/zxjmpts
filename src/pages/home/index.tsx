@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:07:40
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-13 15:04:22
+ * @Last Modified time: 2019-02-14 17:36:24
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -107,6 +107,16 @@ class Home extends Component {
     Taro.navigateTo({ url: "/pages/notLoginShopkeeper/index" });
   };
 
+  getCode = async () => {
+    const result = await Taro.login();
+    console.log("result", result);
+  };
+
+  getUserInfo = async () => {
+    const result = await Taro.getUserInfo();
+    console.log("result", result);
+  };
+
   // goGoodsDetailHandler = () => {
   //   Taro.navigateTo({
   //     url: `/pages/goodsDetail/index?id=1271`
@@ -163,6 +173,12 @@ class Home extends Component {
         {/* <Button className="add_btn" onClick={this.add}>
           +
         </Button> */}
+        <Button className="add_btn" onClick={this.getCode}>
+          getCode
+        </Button>
+        <Button className="add_btn" onClick={this.getUserInfo}>
+          getUserInfo
+        </Button>
         {/* <Button className="add_btn" onClick={this.loginHandler}>
           登录
         </Button> */}

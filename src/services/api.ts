@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:10:06
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-12 09:45:09
+ * @Last Modified time: 2019-02-15 11:41:42
  */
 import Taro from "@tarojs/taro";
 // import qs from "qs";
@@ -34,7 +34,7 @@ function checkHttpStatus(response: API.Response) {
  * @param data
  * @returns {*}
  */
-function checkSuccess(data: any, resolve) {
+function checkSuccess(data: any, resolve, reject) {
   // TODO： 不懂ArrayBuffer是什么。
   if (data instanceof ArrayBuffer && typeof data === "string") {
     return data;
@@ -49,10 +49,32 @@ function checkSuccess(data: any, resolve) {
     return resolve(data);
   }
 
+  // just for 张博金 的接口，明天改了接口就改回去
+  if (typeof data.resultCode === "number" && data.resultCode === 100) {
+    return resolve(data);
+  }
+
+  // 原来的返回错误代码，但是DVA捕捉不到错误
   const error: any = new Error(data.message || "服务端返回异常");
   error.data = data;
   throw error;
+
+  // const error: any = new Error(data.message || "服务端返回异常");
+  // error.errMsg = data;
+  // throwResultCodeError(error, reject);
 }
+
+// /**
+//  * 请求错误处理
+//  * @param error
+//  * @param reject
+//  */
+// function throwResultCodeError(error, reject) {
+//   Taro.hideNavigationBarLoading();
+//   if (error.errMsg) {
+//     reject("服务器正在维护中!");
+//   }
+// }
 
 /**
  * 请求错误处理
@@ -72,7 +94,7 @@ export default {
   request(options: any, method?: string) {
     const { url } = options;
     // 拿到登录token
-    const authToken = getGlobalData("token")
+    const authToken = getGlobalData("token");
     return new Promise((resolve, reject) => {
       Taro.showNavigationBarLoading();
       Taro.request({
@@ -89,7 +111,7 @@ export default {
         .then(checkHttpStatus)
         .then(res => {
           //   console.log("result", res);
-          checkSuccess(res, resolve);
+          checkSuccess(res, resolve, reject);
         })
         .catch(error => {
           throwError(error, reject);

@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:08:38
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-12 11:53:33
+ * @Last Modified time: 2019-02-14 14:24:31
  */
 import {
   ADD,
@@ -12,7 +12,9 @@ import {
   FETCH_MOREPAGEDATA,
   FETCH_USERTOKEN,
   FETCH_USERINFO,
-  REQUEST_UPDATECART
+  REQUEST_UPDATECART,
+  REQUEST_REGISTERUID,
+  REQUEST_REGISTERWECHAT
 } from "../constants/index";
 import Action from "./actions";
 
@@ -47,3 +49,11 @@ export const login = (namespace: string, payload?: any) =>
 // cart页面action
 export const requestUpdateCart = (namespace: string, payload?: any) =>
   Action(`${namespace}/${REQUEST_UPDATECART}`, payload);
+
+// 未登录金主页面action
+export const requestRegisterUid = (namespace: string, payload?: any) =>
+  Action(`${namespace}/${REQUEST_REGISTERUID}`, payload);
+
+// 未登录金主页面action
+export const requestRegisterWechat = (namespace: string, payload?: any) =>
+  Action(`${namespace}/${REQUEST_REGISTERWECHAT}`, payload);

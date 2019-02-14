@@ -2,7 +2,7 @@
  * @Author: Hank 
  * @Date: 2019-02-08 15:12:31 
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-13 11:54:29
+ * @Last Modified time: 2019-02-14 15:57:57
  */
 
 @import "../../styles/mixin";
@@ -15,11 +15,13 @@
     .avatar-image {
       float: left;
       margin: 10px;
+      width: 10%
     }
     .shared-data {
       float: left;
       margin: 20px;
       color: #ffffff;
+      width: 75%
     }
   }
   .bottom-view {

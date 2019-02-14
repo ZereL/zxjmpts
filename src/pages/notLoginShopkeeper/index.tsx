@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-08 15:12:23
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-13 15:34:16
+ * @Last Modified time: 2019-02-15 11:34:17
  */
 
 import { ComponentClass } from "react";
@@ -11,9 +11,15 @@ import { View, Image, ScrollView, Text } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 
 import "./index.scss";
-import { fetchPageData, fetchMorePageData, fetchUserInfo } from "../../actions";
+import {
+  fetchPageData,
+  fetchMorePageData,
+  fetchUserInfo,
+  requestRegisterUid,
+  requestRegisterWechat
+} from "../../actions";
 import ZXJGoodsList from "../../components/ZXJGoodsList/index";
-import { getGlobalData } from "../../utils/common";
+import { getGlobalData, setGlobalData } from "../../utils/common";
 import { AtTabBar, AtButton, AtNoticebar, AtAvatar, AtModal } from "taro-ui";
 
 type PageStateProps = {};
@@ -22,6 +28,8 @@ type PageDispatchProps = {
   fetchPageData: (namespace: string, payload?: any) => any;
   fetchMorePageData: (namespace: string, payload?: any) => any;
   fetchUserInfo: (namespace: string, payload?: any) => any;
+  requestRegisterUid: (namespace: string, payload?: any) => any;
+  requestRegisterWechat: (namespace: string, payload?: any) => any;
 };
 
 type PageOwnProps = {
@@ -50,12 +58,15 @@ interface NotLoginShopkeeper {
   {
     fetchPageData: fetchPageData,
     fetchMorePageData: fetchMorePageData,
-    fetchUserInfo: fetchUserInfo
+    fetchUserInfo: fetchUserInfo,
+    requestRegisterUid: requestRegisterUid,
+    requestRegisterWechat: requestRegisterWechat
   }
 )
 
 // TODO: 研究代替switch case遍历homeItems数组的办法
 // TODO: 分页加载的时候显示加载中
+// TODO: 已经是金主的话底部按钮什么也不显示
 class NotLoginShopkeeper extends Component {
   config: Config = {
     navigationBarTitleText: "臻享家"
@@ -137,7 +148,6 @@ class NotLoginShopkeeper extends Component {
 
   //这个分享的函数必须写在入口中，写在子组件中不生效
   onShareAppMessage() {
-
     // 目前我不是金主，所以没从user页面的model中取数据
     // TODO: 思考如果不是金主想分享怎么办？是直接不传邀请码还是怎么样。
     const goodsId = 128;
@@ -165,6 +175,61 @@ class NotLoginShopkeeper extends Component {
     Taro.navigateTo({ url: "/pages/becomeShopkeeper/index" });
   };
 
+  onClickRegister = async () => {
+    try {
+      let { goodId, code, hash, name, avatarImage } = this.$router.params; //获取分享进来的参数share
+      const loginResult = await Taro.login();
+      console.log(loginResult);
+      const { userInfo, encryptedData, iv } = await Taro.getUserInfo();
+      const registerResult = await this.props.requestRegisterUid(
+        "notLoginShopkeeper",
+        {
+          wechatCode: loginResult.code,
+          encryptedData: encryptedData,
+          iv: iv
+        }
+      );
+      console.log("registerResult", registerResult);
+
+      // 需要注册
+      const { unionId } = registerResult.data;
+      if (unionId) {
+        // this._goWechatInvitation(uid);
+        // this._goWechatInvitation(uid);
+        const registerWechat = await this.props.requestRegisterWechat(
+          "notLoginShopkeeper",
+          {
+            // invatationCode: code,
+            invatationCode: "Emily", // TODO: 这个要改！！！
+            // UserIP: payload.UserIP,
+            notLogin: false,
+            uid: unionId
+          }
+        );
+        console.log("registerWechat注册成功", registerWechat);
+        // 存入数据库
+        setGlobalData("token", registerWechat.data.token);
+        // 存入本地缓存
+        Taro.setStorageSync("token", registerWechat.data.token);
+        Taro.showToast({ title: `注册成功`, duration: 2000 });
+      } else {
+        Taro.showToast({
+          title: `服务器没有返回UID`,
+          icon: "none",
+          duration: 2000
+        });
+        // console.log("已经注册过");
+        // Taro.showToast({ title: `注册成功`, duration: 2000 });
+      }
+    } catch (error) {
+      Taro.showToast({
+        title: `注册出错，${error}`,
+        icon: "none",
+        duration: 2000
+      });
+    }
+  };
+
   /********************* 渲染页面的方法 *********************/
 
   /********************* 页面render方法 ********************/
@@ -174,7 +239,7 @@ class NotLoginShopkeeper extends Component {
     const { id } = this.props.user;
     let share = this.$router.params.share; //获取分享进来的参数share
     let { goodId, code, hash, name, avatarImage } = this.$router.params; //获取分享进来的参数share
-    console.log("params", this.$router.params);
+    console.log("打印params", this.$router.params);
     // let {share} = this.$router.params.share; //获取分享进来的参数share
     console.log("avatarImage", avatarImage);
     return (
@@ -193,8 +258,8 @@ class NotLoginShopkeeper extends Component {
               className="avatar-image"
             />
             <View className="shared-data">
-              臻享家用户 {name}, 分享给您本页面。邀请码为： {code}{" "}
-              {id && "您已经是臻享家用户，不能再次接受邀请。"}
+              臻享家用户 {name}, 邀请您加入臻享家。邀请码为： {code}{" "}
+              {id && "您已经接受过邀请。请点击“成为金主”获取更多收益"}
             </View>
           </View>
         ) : null}
@@ -226,17 +291,37 @@ class NotLoginShopkeeper extends Component {
           />
           <ZXJGoodsList list={items} />
         </ScrollView>
-        <View className="bottom-view">
-          <View className="bottom-view-text">
-            更多商品请点击“成为金主”后查看
+        {/* 
+            TODO：需要优化逻辑
+            情况1：是金主，通过分享进入
+            情况2：是金主，不通过分享进入
+            情况3：是小主，通过分享进入
+            情况4：是小主，不通过分享进入
+            情况5：是游客，通过分享进入
+            情况6：是游客，不通过分享进入 
+        */}
+        {id && share ? (
+          <View className="bottom-view">
+            <View className="bottom-view-text">
+              更多商品请点击“成为金主”后查看
+            </View>
+            <AtButton
+              className="bottom-button"
+              onClick={this.goBecomeShopkeeperHandler}
+            >
+              成为金主
+            </AtButton>
           </View>
-          <AtButton
-            className="bottom-button"
-            onClick={this.goBecomeShopkeeperHandler}
-          >
-            成为金主
-          </AtButton>
-        </View>
+        ) : (
+          <View className="bottom-view">
+            <View className="bottom-view-text">
+              加入臻享家，点击“一键注册”，查看全球各国好物。
+            </View>
+            <AtButton className="bottom-button" onClick={this.onClickRegister}>
+              一键注册
+            </AtButton>
+          </View>
+        )}
       </View>
 
       // <ScrollView

@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:58
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-13 14:12:23
+ * @Last Modified time: 2019-02-15 11:34:19
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -70,7 +70,7 @@ interface User {
 )
 class User extends Component {
   state = {
-    isOpened: false,
+    isOpened: true,
     avatarUrl: "",
     nickName: ""
   };
