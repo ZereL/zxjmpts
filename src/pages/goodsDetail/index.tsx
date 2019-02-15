@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:36
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-14 11:15:51
+ * @Last Modified time: 2019-02-15 17:13:54
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -28,6 +28,7 @@ import {
   AtTag
 } from "taro-ui";
 import { IMAGE_URL, cdnMediumSuffix, cdnSmallSuffix } from "../../config";
+import { getGlobalData } from "../../utils/common";
 
 type PageStateProps = {
   goodsDetail: {
@@ -40,6 +41,7 @@ type PageStateProps = {
     // skus: Array<Array<Object>>;
     property: any;
     skus: any;
+    image: any;
   };
 };
 
@@ -81,6 +83,8 @@ interface GoodsDetail {
     requestUpdateCart: requestUpdateCart
   }
 )
+
+// TODO: 现在和APP一样，不管库存是多少，status是怎样，都可以下单。可能以后要改
 class GoodsDetail extends Component {
   // static defaultProps = {
   //   goodsDetail: {
@@ -99,7 +103,9 @@ class GoodsDetail extends Component {
     skus: [],
     loading: true,
     isLiked: false,
-    skuPrice: ""
+    skuPrice: "",
+    firstRowIndex: 0,
+    secondRowIndex: -1
   };
 
   config: Config = {
@@ -160,11 +166,11 @@ class GoodsDetail extends Component {
 
   /********************* 事件handler **********************/
   fetchPageData = async () => {
-    // const { id } = this.$router.params;
-    // console.log("id", id);
-    // console.log("this.$router", this.$router);
+    const { id } = this.$router.params;
+    console.log("id", id);
+    console.log("this.$router", this.$router);
 
-    const id = 717;
+    // const id = 717;
 
     try {
       const result = await this.props.fetchPageData(GOODSDETAIL, { id: id });
@@ -234,22 +240,31 @@ class GoodsDetail extends Component {
     skus,
     { name, active }
   ) {
+    const { firstRowIndex, secondRowIndex } = this.state;
     console.log(name, itemProperty, indexValue, index, property, skus);
     console.log("indexValue", indexValue);
     let selectedSku;
-    if (name && active) {
-      itemProperty.selectedIndex = indexValue; // 点击时给itemProperty下面的selectedIndex赋值保存用户的选项（之前是分别存在两个state里）
-      if (index == 0 && property.length > 1) {
-        // 切换第一列时重置第二列
-        skus[indexValue][property[1].selectedIndex] == null &&
-          (property[1].selectedIndex = -1);
-      }
+    console.log("name", name, "active", active);
+    console.log("index", index, "indexValue", indexValue);
+    console.log("skus", skus);
+    // this.setState({ firstRowIndex: indexValue, secondRowIndex: index });
+    index == 0 && this.setState({ firstRowIndex: indexValue });
+    index == 1 && this.setState({ secondRowIndex: indexValue });
+
+    // 注释掉这里看看行不行
+    if (index == 0 && property.length > 1) {
+      // 切换第一列时重置第二列
+      skus[indexValue][secondRowIndex] == null &&
+        this.setState({ secondRowIndex: -1 });
+    }
+    if (!active) {
       // 如果第一行被选中，而且有property的第二维有数据， 29/10考虑只有一维数组有数据情况
       if (index == 0 && property[1]) {
         // 如果选的是第一行，而且第二行已经选中，点击之后查询对应SKUPrice
-        if (index == 0 && property[1].selectedIndex !== -1) {
-          selectedSku =
-            skus[property[0].selectedIndex][property[1].selectedIndex];
+        if (index == 0 && secondRowIndex !== -1) {
+          console.log("firstRowIndex", firstRowIndex);
+          console.log("secondRowIndex", secondRowIndex);
+          selectedSku = skus[firstRowIndex][secondRowIndex];
           console.log("selectedSku", selectedSku);
           if (selectedSku.useSkuPrice) {
             // 如果需要使用SKUPrice，设置skuPrice
@@ -265,32 +280,20 @@ class GoodsDetail extends Component {
         } else {
           // 如果第二行没有选中， 什么都不做
         }
-
-        // index == 0 && property[1].selectedIndex !== -1
-        // selectedSku =
-        //   skus[property[0].selectedIndex][
-        //     property[1].selectedIndex
-        //   ];
-        // console.log(selectedSku);
-        // if (selectedSku.useSkuPrice) {
-        //   // 如果需要使用SKUPrice，设置skuPrice
-        //   this.setState({
-        //     skuPrice: selectedSku.price
-        //   });
-        // } else {
-        //   // 如果不需要使用，清空skuPrice
-        //   this.setState({
-        //     skuPrice: ""
-        //   });
-        // }
       } else if (
         // 如果选的是第二行，且第一行也选中，点击之后查询对应SKUPrice
         index == 1 &&
-        property[0].selectedIndex !== -1
+        firstRowIndex !== -1
       ) {
-        selectedSku =
-          skus[property[0].selectedIndex][property[1].selectedIndex];
-        console.log(selectedSku);
+        console.log(
+          "firstRowIndex",
+          firstRowIndex,
+          "secondRowIndex",
+          secondRowIndex
+        );
+        // selectedSku = skus[firstRowIndex][secondRowIndex]; // secondRowIndex不行，可能因为setState是异步的
+        selectedSku = skus[firstRowIndex][indexValue];
+        console.log("selectedSku", selectedSku);
         if (selectedSku.useSkuPrice) {
           // 如果需要使用SKUPrice，设置skuPrice
           this.setState({
@@ -310,28 +313,88 @@ class GoodsDetail extends Component {
       }
     } else {
       // 取消选中时重置当前列
-      itemProperty.selectedIndex = -1;
+      index == 0 && this.setState({ firstRowIndex: -1 });
+      index == 1 && this.setState({ secondRowIndex: -1 });
     }
     this.setState({
       property: property
     });
-    this.forceUpdate();
   }
+
+  modalAddToCartHandler = () => {
+    const { skus } = this.props.goodsDetail;
+    const { property, firstRowIndex, secondRowIndex } = this.state;
+
+    this.setState({
+      isChooseModelModalShow: false
+    });
+
+    if (getGlobalData("token")) {
+      Taro.showToast({ title: "正在加入购物车", icon: "loading" });
+
+      // modal下，如果用户没有选择规格直接下单，防止崩溃
+      if (firstRowIndex == -1 || secondRowIndex == -1) {
+        Taro.showToast({ title: "请选择规格", icon: "none", duration: 2000 });
+        return null;
+      }
+
+      // property 有1个元素或者2个元素对应sku不同
+      const selectedSku =
+        property.length == 1
+          ? skus[0][firstRowIndex]
+          : skus[firstRowIndex][secondRowIndex];
+
+      console.log("selectedSku", selectedSku);
+
+      this.props.requestUpdateCart(GOODSDETAIL, {
+        skuId: selectedSku.id,
+        qty: 1
+      });
+    } else {
+      console.log("请登录");
+    }
+  };
 
   /********************* 渲染页面的方法 *********************/
   /********************* 页面render方法 ********************/
   render() {
     console.log("this.props", this.props);
-    const { skus, property, skuPrice } = this.state;
+    const {
+      skus,
+      property,
+      skuPrice,
+      firstRowIndex,
+      secondRowIndex
+    } = this.state;
     const {
       images,
       name,
       price,
-      contentImages
+      contentImages,
+      image
       // property,
       // skus
     } = this.props.goodsDetail;
     let share = this.$router.params.share; //获取分享进来的参数share
+
+    console.log("images", images);
+
+    // SKU的图片
+    let skuImage = "";
+    let foundImage = false;
+    property.forEach((itemProperty, index) => {
+      if (!foundImage && firstRowIndex != -1) {
+        const value = itemProperty.values[firstRowIndex];
+        const filteredImages = images.filter(image => image.property == value);
+        if (filteredImages.length > 0) {
+          skuImage = filteredImages[0];
+          foundImage = true;
+        }
+      }
+    });
+
+    skuImage == "" && (skuImage = { image: image });
+    skuImage == "" && (skuImage = images[0]);
 
     console.log("property", property);
     console.log("property.length", property.length);
@@ -392,75 +455,77 @@ class GoodsDetail extends Component {
               <View className="zan-badge__count">{items.length}</View>
             )} */}
           </View>
-          <View
-            // className={currentChooseId == "" ? "join join-disabled" : "join"}
-            className="join"
-            // onClick={property.length > 0 ? this.chooseModel : this.addToCart}
-            onClick={this.chooseModel}
-          >
-            {property.length > 0 ? "选择规格" : "加入聚宝盆"}
-          </View>
+          {this.state.hasProperty ? (
+            <View
+              // className={currentChooseId == "" ? "join join-disabled" : "join"}
+              className="join"
+              // onClick={property.length > 0 ? this.chooseModel : this.addToCart}
+              onClick={this.chooseModel}
+            >
+              选择规格
+            </View>
+          ) : (
+            <View
+              // className={currentChooseId == "" ? "join join-disabled" : "join"}
+              className="join"
+              // onClick={property.length > 0 ? this.chooseModel : this.addToCart}
+              onClick={this.addToCart}
+            >
+              加入聚宝盆
+            </View>
+          )}
         </View>
 
         <AtFloatLayout
           isOpened={this.state.isChooseModelModalShow}
           // title="这是个标题"
+          className="float-layout"
           onClose={this.modalCloseHandler}
         >
-          {/* <View>商品图片，名称</View>
-          <View>颜色</View>
-          <View>
-            <AtTag>红</AtTag>
-            <AtTag>黄</AtTag>
-            <AtTag>蓝</AtTag>
+          <View
+            // className="float-layout-topinfo"
+            style={`width: ${
+              getGlobalData("systemInfo").screenWidth
+            }px; height:150px;`}
+          >
+            <Image
+              mode="aspectFit"
+              className="image-box"
+              src={`${IMAGE_URL}${skuImage.image}`}
+            />
+            <View className="price-box">
+              ￥{skuPrice ? skuPrice : price.price}
+            </View>
           </View>
-          <View>尺码</View>
-          <View>
-            <AtTag>36</AtTag>
-            <AtTag>37</AtTag>
-            <AtTag>38</AtTag>
-            <AtTag>39</AtTag>
-            <AtTag>40</AtTag>
-          </View>
-          <AtButton>加入购物车</AtButton> */}
           {property.map((itemProperty, index) => {
             const { key, values } = itemProperty;
 
-            // // 在itemKey下增加一个selectIndex对象来判断用户选择的选项
-            // if (index === 0) {
-            //   // 第一个属性默认选中第一个值
-            //   itemProperty.selectedIndex == null &&
-            //     (itemProperty.selectedIndex = 0);
-            // } else {
-            //   // 非第一个属性默认不选中任何值
-            //   itemProperty.selectedIndex == null &&
-            //     (itemProperty.selectedIndex = -1);
-            // }
-
             return (
               // 遍历输出tags的分类名称，如 颜色、尺码
-              <View key={`${itemProperty}${index}`}>
+              <View
+                key={`${itemProperty}${index}`}
+                style={`width: ${getGlobalData("systemInfo").screenWidth}px;`}
+              >
                 {key}
                 <View>
                   {values.map((itemPropertyValue, indexValue) => {
-                    console.log(
-                      "itemProperty.selectedIndex",
-                      itemProperty.selectedIndex
-                    );
                     return (
                       <AtTag
                         name={`${indexValue}`}
                         key={`${itemPropertyValue}${indexValue}`}
-                        active={indexValue == itemProperty.selectedIndex}
+                        active={
+                          index == 0
+                            ? indexValue == firstRowIndex
+                            : indexValue == secondRowIndex
+                        }
                         // 设置是否disable
                         // 如果第一行没有选中任何节点，则第二行都是有效状态
                         // 如果是第一行，则都是有效状态
                         // 如果是第二行，则对应的sku不是空才有效
                         disabled={
-                          property[0].selectedIndex == -1 || index == 0
+                          firstRowIndex == -1 || index == 0
                             ? false
-                            : skus[property[0].selectedIndex][indexValue] ==
-                              null
+                            : skus[firstRowIndex][indexValue] == null
                         }
                         onClick={this.tagClickHandler.bind(
                           this,
@@ -568,6 +633,7 @@ class GoodsDetail extends Component {
               </View>
             );
           })}
+          <AtButton onClick={this.modalAddToCartHandler}>加入购物车</AtButton>
         </AtFloatLayout>
       </View>
     );

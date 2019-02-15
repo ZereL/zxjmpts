@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:08:02
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-12 13:00:26
+ * @Last Modified time: 2019-02-15 16:39:57
  */
 import {
   GOODSDETAIL,
@@ -22,7 +22,8 @@ export default {
     image: [],
     contentImages: [],
     name: "",
-    price: ""
+    price: "",
+    images: []
   },
   reducers: {
     [SET_PAGEDATA](state, { payload }) {
@@ -38,7 +39,8 @@ export default {
         image: [],
         contentImages: [],
         name: "",
-        price: ""
+        price: "",
+        images: []
       };
     }
   },
