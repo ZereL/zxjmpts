@@ -4,7 +4,7 @@ import api from "./api";
  * @Author: Hank
  * @Date: 2019-02-12 11:22:55
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-12 13:01:53
+ * @Last Modified time: 2019-02-15 17:23:26
  */
 
 /**
@@ -22,6 +22,24 @@ export function updateCart(payload) {
       qty: payload.qty,
       selected: true,
       resultType: "SkuList"
+    }
+  });
+}
+
+/**
+ * 请求购物车列表数据
+ * BoolType = RESULT_TYPE_BOOL,
+ * SkuList = RESULT_TYPE_SKULIST,
+ * Summary = RESULT_TYPE_SUMMARY,
+ */
+export function fetchCartData(payload) {
+  return api.post({
+    url: "/cartService/cart/get",
+    payload: {
+      resultType:
+        payload == null || payload.resultType == null
+          ? "SkuList"
+          : payload.resultType
     }
   });
 }

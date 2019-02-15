@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:17
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-07 10:33:04
+ * @Last Modified time: 2019-02-15 17:32:26
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -10,8 +10,9 @@ import { View, Button, Text } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 
 import "./index.scss";
-import { add, login } from "../../actions";
+import { add, login, fetchPageData } from "../../actions";
 import { CART } from "../../constants";
+import { getGlobalData } from "../../utils/common";
 
 type PageStateProps = {
   cart: {
@@ -22,6 +23,7 @@ type PageStateProps = {
 type PageDispatchProps = {
   add: (namespace: string, payload?: any) => any;
   login: (namespace: string, payload?: any) => any;
+  fetchPageData: (namespace: string, payload?: any) => any;
 };
 
 type PageOwnProps = {};
@@ -40,7 +42,8 @@ interface Cart {
   }),
   {
     add: add,
-    login: login
+    login: login,
+    fetchPageData: fetchPageData
   }
 )
 class Cart extends Component {
@@ -55,11 +58,25 @@ class Cart extends Component {
 
   componentWillUnmount() {}
 
-  componentDidShow() {}
+  componentDidShow() {
+    if (getGlobalData("token")) {
+      this.fetchPageData();
+    }
+  }
 
   componentDidHide() {}
 
   /********************* 事件handler **********************/
+
+  fetchPageData = async () => {
+    try {
+      const result = await this.props.fetchPageData("cart");
+      console.log("请求成功", result);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
   add = async () => {
     try {
       const result = await this.props.add(CART);
@@ -71,13 +88,14 @@ class Cart extends Component {
 
   goHome = () => {
     Taro.switchTab({
-      url: '/pages/home/index',
-    })
+      url: "/pages/home/index"
+    });
   };
 
   /********************* 渲染页面的方法 *********************/
   /********************* 页面render方法 ********************/
   render() {
+    console.log("this.props", this.props);
     return (
       <View className="cart-page">
         <View className="empty">
