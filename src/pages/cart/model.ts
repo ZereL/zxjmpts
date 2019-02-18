@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:21
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-19 11:43:40
+ * @Last Modified time: 2019-02-19 12:57:02
  */
 import {
   CART,
@@ -13,10 +13,15 @@ import {
   REQUEST_LOGIN,
   ADD,
   FETCH_PAGEDATA,
-  SET_PAGEDATA
+  SET_PAGEDATA,
+  REMOVE_FROM_CART
 } from "./../../constants/index";
 import Taro from "@tarojs/taro";
-import { fetchCartData, modifyCart } from "../../services/cartService";
+import {
+  fetchCartData,
+  modifyCart,
+  removeFromCart
+} from "../../services/cartService";
 import { delay } from "redux-saga";
 
 export default {
@@ -126,6 +131,17 @@ export default {
       console.log("收到请求", payload);
       Taro.login().then(result => {
         console.log("result请求", result);
+      });
+    },
+    *[REMOVE_FROM_CART]({ payload }, { call, put, select }) {
+      // TODO： 我去！！！ 上下换下位置就行了？？？
+      console.log("进入删除");
+      const result = yield call(removeFromCart, payload);
+      console.log("result", result);
+      const resultData = result.data;
+      yield put({
+        type: SET_PAGEDATA,
+        payload: resultData
       });
     },
     // 这个方法使用takeLatest作为effect触发规则，所以仅会执行最后一次，之前的effect均会被取消

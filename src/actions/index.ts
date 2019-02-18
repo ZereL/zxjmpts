@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:08:38
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-18 14:24:12
+ * @Last Modified time: 2019-02-19 12:00:19
  */
 import {
   ADD,
@@ -15,7 +15,8 @@ import {
   REQUEST_UPDATECART,
   REQUEST_REGISTERUID,
   REQUEST_REGISTERWECHAT,
-  MODIFY_TEMP_CART_THEN_UPDATE
+  MODIFY_TEMP_CART_THEN_UPDATE,
+  REMOVE_FROM_CART
 } from "../constants/index";
 import Action from "./actions";
 
@@ -53,6 +54,9 @@ export const requestUpdateCart = (namespace: string, payload?: any) =>
 
 export const modifyCart = (namespace: string, payload?: any) =>
   Action(`${namespace}/${MODIFY_TEMP_CART_THEN_UPDATE}`, payload);
+  
+export const removeFromCart = (namespace: string, payload?: any) =>
+  Action(`${namespace}/${REMOVE_FROM_CART}`, payload);
 
 // 未登录金主页面action
 export const requestRegisterUid = (namespace: string, payload?: any) =>

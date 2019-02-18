@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:07:32
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-19 10:37:47
+ * @Last Modified time: 2019-02-19 12:31:16
  */
 import { ComponentClass } from "react";
 import Taro, { Component } from "@tarojs/taro";
@@ -81,6 +81,17 @@ class CartItem extends Component {
     return this.state.itemQty;
   };
 
+  deleteHandler() {
+    console.log("delete");
+    console.log("this", this);
+
+    console.log("onDeleteGoods", this.props.onDeleteGoods);
+
+    this.props.onDeleteGoods("cart", {
+      id: this.props.goods.skuId
+    });
+  }
+
   render() {
     const { goods, onDeleteGoods } = this.props;
     return (
@@ -122,7 +133,8 @@ class CartItem extends Component {
               <View
                 className="iconfont icon-delete"
                 data-id={goods.goodsId}
-                onClick={onDeleteGoods}
+                // onClick={onDeleteGoods}
+                onClick={this.deleteHandler.bind(this)}
               />
             </View>
           </View>

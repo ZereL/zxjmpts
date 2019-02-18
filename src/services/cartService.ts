@@ -4,7 +4,7 @@ import api from "./api";
  * @Author: Hank
  * @Date: 2019-02-12 11:22:55
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-19 10:17:05
+ * @Last Modified time: 2019-02-19 12:53:36
  */
 
 /**
@@ -62,18 +62,33 @@ export function modifyCart(payload) {
   });
 }
 
+/**
+ *
+ * @param {id(SKU ID)} payload
+ * 从购物车移除商品
+ */
+export function removeFromCart(payload) {
+  console.log("removeFromCart", payload);
+  return api.post({
+    url: "/cartService/cart/RemoveItem",
+    payload: {
+      // 商品SKUID
+      skuId: payload.id,
+      resultType: "SkuList"
+    }
+  });
+}
+
 // /**
 //  *
-//  * @param {id(SKU ID), qty?, selected?} payload
-//  * 更新购物车商品数量及选中状态
-//  * 区别于updateCart方法，此方法的数量会覆盖服务端的数量
-//  * qty数量和selected选中状态均为可选参数，未传则不更新
+//  * @param {id(SKU ID)} payload
+//  * 从购物车移除商品
 //  */
-// export const modifyCart = async payload => {
-//   const url = "cartService/cart/ModifyItem";
-//   let body = {
-//     // item的数组
-//     items: payload,
+// export const removeFromCart = async payload => {
+//   const url = "cartService/cart/RemoveItem";
+//   const body = {
+//     // 商品SKUID
+//     id: payload.id,
 //     resultType: RESULT_TYPE_SKULIST
 //   };
 

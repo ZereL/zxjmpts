@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:17
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-19 10:51:44
+ * @Last Modified time: 2019-02-19 12:29:00
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -10,11 +10,16 @@ import { View, Button, Text } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 
 import "./index.scss";
-import { add, login, fetchPageData, modifyCart } from "../../actions";
+import {
+  add,
+  login,
+  fetchPageData,
+  modifyCart,
+  removeFromCart
+} from "../../actions";
 import { CART } from "../../constants";
 import { getGlobalData } from "../../utils/common";
 import CartItem from "../../components/CartItem";
-
 type PageStateProps = {
   cart: {
     warehouses: any;
@@ -26,6 +31,7 @@ type PageDispatchProps = {
   login: (namespace: string, payload?: any) => any;
   fetchPageData: (namespace: string, payload?: any) => any;
   modifyCart: (namespace: string, payload?: any) => any;
+  removeFromCart: (namespace: string, payload?: any) => any;
 };
 
 type PageOwnProps = {};
@@ -46,7 +52,8 @@ interface Cart {
     add: add,
     login: login,
     fetchPageData: fetchPageData,
-    modifyCart: modifyCart
+    modifyCart: modifyCart,
+    removeFromCart: removeFromCart
   }
 )
 class Cart extends Component {
@@ -148,7 +155,7 @@ class Cart extends Component {
                         <CartItem
                           key={index}
                           goods={goodsItem}
-                          onDeleteGoods={this.deleteGoodsHandler}
+                          onDeleteGoods={this.props.removeFromCart.bind(this)}
                           onChangeGoodsQty={this.props.modifyCart.bind(this)}
                           // onChangeGoodsQty={this.changeGoodsQtyHandler.bind(
                           //   this,
