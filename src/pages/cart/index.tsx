@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:17
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-15 17:32:26
+ * @Last Modified time: 2019-02-18 13:57:12
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -13,10 +13,11 @@ import "./index.scss";
 import { add, login, fetchPageData } from "../../actions";
 import { CART } from "../../constants";
 import { getGlobalData } from "../../utils/common";
+import CartItem from "../../components/CartItem";
 
 type PageStateProps = {
   cart: {
-    num: number;
+    warehouses: any;
   };
 };
 
@@ -61,6 +62,8 @@ class Cart extends Component {
   componentDidShow() {
     if (getGlobalData("token")) {
       this.fetchPageData();
+    } else {
+      Taro.showToast({ title: "尚未登录", icon: "none", duration: 2000 });
     }
   }
 
@@ -92,18 +95,49 @@ class Cart extends Component {
     });
   };
 
+  deleteGoodsHandler = () => {};
+
   /********************* 渲染页面的方法 *********************/
   /********************* 页面render方法 ********************/
   render() {
     console.log("this.props", this.props);
+    const { warehouses } = this.props.cart;
+    console.log("warehouses", warehouses);
     return (
       <View className="cart-page">
-        <View className="empty">
-          <View style="margin-top: 250px">购物车为空</View>
-          <Button type="primary" className="am-button" onClick={this.goHome}>
-            立即去框框
-          </Button>
-        </View>
+        {/* 购物车为空 */}
+        {warehouses.length == 0 && (
+          <View className="empty">
+            <View style="margin-top: 250px">购物车为空</View>
+            <Button type="primary" className="am-button" onClick={this.goHome}>
+              立即去框框
+            </Button>
+          </View>
+        )}
+
+        {/* 购物车不为空 */}
+        {warehouses.length != 0 && (
+          <View className="isLogin">
+            {warehouses.map((item, index) => {
+              const { name, data } = item;
+              return (
+                <View>
+                  <View>{name}</View>
+                  <View>
+                    <CartItem
+                      goods={data}
+                      onDeleteGoods={this.deleteGoodsHandler}
+                    />
+                  </View>
+                </View>
+              );
+            })}
+            {/* <CartItem
+              goods={cateItemDetails}
+              onDeleteGoods={this.deleteGoodsHandler}
+            /> */}
+          </View>
+        )}
       </View>
     );
   }

@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:21
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-15 17:27:20
+ * @Last Modified time: 2019-02-18 13:45:35
  */
 import { CART } from "../../constants";
 import {
@@ -17,14 +17,38 @@ import { fetchCartData } from "../../services/cartService";
 export default {
   namespace: CART,
   state: {
-    num: 1
+    warehouses: []
   },
   reducers: {
     SetAdd(state, { payload }) {
       return { ...state, ...payload };
     },
-    [SET_PAGEDATA](state, { payload }) {
-      return { ...state, ...payload };
+    // [SET_PAGEDATA](state, { payload }) {
+    //   return { ...state, ...payload };
+    // }
+    [SET_PAGEDATA](state, { payload: payload }) {
+      const data = payload.cateItemDetails || [];
+      const warehouses = payload.warehouses || [];
+
+      console.log("data", data, "warehouses", warehouses);
+
+      // 初始化返回数据，临时状态
+      data.forEach(item => {
+        item.tmpQty = item.qty;
+        item.tmpSelected = item.selected;
+      });
+
+      // 商品按照仓库号加入对应仓库
+      warehouses.forEach(warehouse => {
+        warehouse.data = data.filter(item => item.warehouseId == warehouse.id);
+        warehouse.tmpTotalQty = warehouse.totalQty;
+      });
+      return {
+        ...state,
+        warehouses: warehouses,
+        totalPriceWithoutTax: payload.totalPriceWithoutTax || 0,
+        totalTax: payload.totalTax || 0
+      };
     }
   },
   effects: {
