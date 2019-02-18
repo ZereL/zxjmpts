@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:07:32
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-18 13:56:17
+ * @Last Modified time: 2019-02-19 10:37:47
  */
 import { ComponentClass } from "react";
 import Taro, { Component } from "@tarojs/taro";
@@ -10,6 +10,7 @@ import { Image, View } from "@tarojs/components";
 import { AtInputNumber } from "taro-ui";
 import "./index.scss";
 import { IMAGE_URL, cdnSmallSuffix, cdnMediumSuffix } from "../../config";
+import { MODIFY_TEMP_CART_THEN_UPDATE } from "../../constants/index";
 
 type PageStateProps = {};
 
@@ -18,6 +19,7 @@ type PageDispatchProps = {};
 type PageOwnProps = {
   goods: any;
   onDeleteGoods: any;
+  onChangeGoodsQty: any;
 };
 
 type PageState = {
@@ -39,62 +41,94 @@ class CartItem extends Component {
     console.log("进入这个组件");
   }
 
+  // itemQtyChangeHandler(value, goods) {
+  //   // this.setState({ itemQty: value });
+  //   console.log("value", value);
+  //   this.props.onChangeGoodsQty({
+  //     type: `cart/${MODIFY_TEMP_CART_THEN_UPDATE}`,
+  //     payload: {
+  //       warehouseId: goods.warehouseId,
+  //       id: goods.skuId,
+  //       qty: value,
+  //       selected: true
+  //     }
+  //   });
+  // }
+
+  // warehouseId: this.props.goods.warehouseId,
+  // id: this.props.goods.skuId,
+  // qty: value,
+  // selected: true
+
   itemQtyChangeHandler(value) {
-    this.setState({ itemQty: value });
+    console.log("value", value);
+    console.log("parseInt(value)", parseInt(value));
+    console.log("this", this);
+
+    this.props.onChangeGoodsQty("cart", {
+      warehouseId: this.props.goods.warehouseId,
+      id: this.props.goods.skuId,
+      qty: parseInt(value),
+      selected: true
+    });
   }
 
   itemQtyBlurHandler(event) {
     console.log("event", event);
   }
+
+  getCount = () => {
+    return this.state.itemQty;
+  };
+
   render() {
     const { goods, onDeleteGoods } = this.props;
     return (
       <View className="ClothingsItem-page">
         <View className="WhiteSpace" />
         <View className="hr" />
-        {goods.map(item => (
-          <View key={item.goodsId}>
-            <View className="WhiteSpace" />
-            <View className="clothing">
-              <View className="shop-img">
-                <Image
-                  mode="widthFix"
-                  src={`${IMAGE_URL}${item.image}${cdnSmallSuffix}`}
+        <View key={goods.goodsId}>
+          <View className="WhiteSpace" />
+          <View className="clothing">
+            <View className="shop-img">
+              <Image
+                mode="widthFix"
+                src={`${IMAGE_URL}${goods.image}${cdnSmallSuffix}`}
+              />
+            </View>
+            <View className="content">
+              <View className="info p">{goods.name}</View>
+              {/* <View className="title p">{item.brand}</View> */}
+              <View className="title p">
+                ￥ {goods.price} {goods.hasStock ? "有货" : "无货"}{" "}
+                <AtInputNumber
+                  type="number"
+                  min={0}
+                  max={10}
+                  step={1}
+                  value={goods.tmpQty}
+                  // value={this.state.itemQty}
+                  onChange={this.itemQtyChangeHandler.bind(this)} // 这个onChange是直接把value取到的值+1或者-1
+                  onBlur={this.itemQtyBlurHandler.bind(this)}
                 />
               </View>
-              <View className="content">
-                <View className="info p">{item.name}</View>
-                {/* <View className="title p">{item.brand}</View> */}
-                <View className="title p">
-                  ￥ {item.price} {item.hasStock ? "有货" : "无货"}{" "}
-                  <AtInputNumber
-                    type="number"
-                    min={0}
-                    max={10}
-                    step={1}
-                    value={this.state.itemQty}
-                    onChange={this.itemQtyChangeHandler.bind(this)}
-                    onBlur={this.itemQtyBlurHandler.bind(this)}
-                  />
-                </View>
 
-                {/* <View className="size p">
+              {/* <View className="size p">
                   {`${item.spu} | ${item.specification || "均码"}`}
                 </View> */}
-                {/* <View className="size p" ></View> */}
-              </View>
-              <View className="edit">
-                <View
-                  className="iconfont icon-delete"
-                  data-id={item.goodsId}
-                  onClick={onDeleteGoods}
-                />
-              </View>
+              {/* <View className="size p" ></View> */}
             </View>
-            <View className="WhiteSpace" />
-            <View className="hr" />
+            <View className="edit">
+              <View
+                className="iconfont icon-delete"
+                data-id={goods.goodsId}
+                onClick={onDeleteGoods}
+              />
+            </View>
           </View>
-        ))}
+          <View className="WhiteSpace" />
+          <View className="hr" />
+        </View>
       </View>
     );
   }

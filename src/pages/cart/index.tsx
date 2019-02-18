@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:17
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-18 13:57:12
+ * @Last Modified time: 2019-02-19 10:51:44
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -10,7 +10,7 @@ import { View, Button, Text } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 
 import "./index.scss";
-import { add, login, fetchPageData } from "../../actions";
+import { add, login, fetchPageData, modifyCart } from "../../actions";
 import { CART } from "../../constants";
 import { getGlobalData } from "../../utils/common";
 import CartItem from "../../components/CartItem";
@@ -25,6 +25,7 @@ type PageDispatchProps = {
   add: (namespace: string, payload?: any) => any;
   login: (namespace: string, payload?: any) => any;
   fetchPageData: (namespace: string, payload?: any) => any;
+  modifyCart: (namespace: string, payload?: any) => any;
 };
 
 type PageOwnProps = {};
@@ -44,7 +45,8 @@ interface Cart {
   {
     add: add,
     login: login,
-    fetchPageData: fetchPageData
+    fetchPageData: fetchPageData,
+    modifyCart: modifyCart
   }
 )
 class Cart extends Component {
@@ -96,6 +98,23 @@ class Cart extends Component {
   };
 
   deleteGoodsHandler = () => {};
+  // changeGoodsQtyHandler = (goodsItem) => {
+  //   console.log("数量改变", goodsItem);
+  // };
+
+  // changeGoodsQtyHandler(goodsItem) {
+  //   // console.log("数量改变", goodsItem);
+  //   // const newQty = this.refs.CartItem.getCount;
+  //   // console.log("newQty", newQty);
+  //   this.props.modifyCart(CART, {
+  //     payload: {
+  //       warehouseId: goodsItem.warehouseId,
+  //       id: goodsItem.skuId,
+  //       qty: goodsItem.tmpQty + 1,
+  //       selected: true
+  //     }
+  //   });
+  // }
 
   /********************* 渲染页面的方法 *********************/
   /********************* 页面render方法 ********************/
@@ -121,13 +140,23 @@ class Cart extends Component {
             {warehouses.map((item, index) => {
               const { name, data } = item;
               return (
-                <View>
+                <View key={`${name}${index}`}>
                   <View>{name}</View>
                   <View>
-                    <CartItem
-                      goods={data}
-                      onDeleteGoods={this.deleteGoodsHandler}
-                    />
+                    {data.map((goodsItem, index) => {
+                      return (
+                        <CartItem
+                          key={index}
+                          goods={goodsItem}
+                          onDeleteGoods={this.deleteGoodsHandler}
+                          onChangeGoodsQty={this.props.modifyCart.bind(this)}
+                          // onChangeGoodsQty={this.changeGoodsQtyHandler.bind(
+                          //   this,
+                          //   goodsItem
+                          // )}
+                        />
+                      );
+                    })}
                   </View>
                 </View>
               );
