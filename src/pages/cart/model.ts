@@ -2,25 +2,32 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:21
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-19 12:57:02
+ * @Last Modified time: 2019-02-19 15:59:44
  */
 import {
   CART,
   MODIFY_TEMP_CART_THEN_UPDATE,
-  SET_CART_TEMP_DATA
+  SET_CART_TEMP_DATA,
+  SET_CART_LOCATION,
+  FETCH_PAYMENTMETHODS,
+  SET_FETCH_PAYMENTMETHODS
 } from "../../constants";
 import {
   REQUEST_LOGIN,
   ADD,
   FETCH_PAGEDATA,
   SET_PAGEDATA,
-  REMOVE_FROM_CART
+  REMOVE_FROM_CART,
+  FETCH_CARTSUMMARY,
+  SET_CARTSUMMARY
 } from "./../../constants/index";
 import Taro from "@tarojs/taro";
 import {
   fetchCartData,
   modifyCart,
-  removeFromCart
+  removeFromCart,
+  setLocationCode,
+  getPaymentMethods
 } from "../../services/cartService";
 import { delay } from "redux-saga";
 
@@ -40,6 +47,7 @@ export default {
       const data = payload.cateItemDetails || [];
       const warehouses = payload.warehouses || [];
 
+      console.log("payload", payload);
       console.log("data", data, "warehouses", warehouses);
 
       // 初始化返回数据，临时状态
@@ -57,9 +65,11 @@ export default {
         ...state,
         warehouses: warehouses,
         totalPriceWithoutTax: payload.totalPriceWithoutTax || 0,
-        totalTax: payload.totalTax || 0
+        totalTax: payload.totalTax || 0,
+        totalPrice: payload.totalPrice || 0
       };
     },
+    // TODO: 这里需要修改
     [SET_CART_TEMP_DATA](state, { payload }) {
       let newState = state;
       console.log("payload", payload);
@@ -96,6 +106,17 @@ export default {
       return {
         state,
         ...newState
+      };
+    },
+    [SET_FETCH_PAYMENTMETHODS](state, { payload }) {
+      payload.forEach(method => (method.selected = false));
+      // 默认选中第一种支付方式
+      if (payload.length > 0) {
+        payload[0].selected = true;
+      }
+      return {
+        ...state,
+        paymentMethods: payload
       };
     }
   },
@@ -143,6 +164,41 @@ export default {
         type: SET_PAGEDATA,
         payload: resultData
       });
+    },
+    *[FETCH_CARTSUMMARY]({ payload }, { call, put, select }) {
+      console.log("进入删除");
+      const result = yield call(removeFromCart, payload);
+      console.log("result", result);
+      const resultData = result.data;
+      yield put({
+        type: SET_CARTSUMMARY,
+        payload: resultData
+      });
+    },
+    *[SET_CART_LOCATION]({ payload }, { call, put, select }) {
+      console.log("进入删除");
+      const result = yield call(setLocationCode, payload);
+      console.log("请求完成", result);
+      const resultData = result.data;
+      return resultData;
+      // const resultData = result.data;
+      // yield put({
+      //   type: SET_CARTSUMMARY,
+      //   payload: resultData
+      // });
+
+      // return yield select(state => state.cartsummary.data);
+    },
+    *[FETCH_PAYMENTMETHODS]({ payload }, { call, put, select }) {
+      const result = yield call(getPaymentMethods, payload);
+      const resultData = result.data;
+      console.log("resultData", resultData);
+      yield put({
+        type: SET_FETCH_PAYMENTMETHODS,
+        payload: resultData
+      });
+
+      return yield select(state => state.cart.paymentMethods);
     },
     // 这个方法使用takeLatest作为effect触发规则，所以仅会执行最后一次，之前的effect均会被取消
     [MODIFY_TEMP_CART_THEN_UPDATE]: [

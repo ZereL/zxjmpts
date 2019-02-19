@@ -4,7 +4,7 @@ import api from "./api";
  * @Author: Hank
  * @Date: 2019-02-12 11:22:55
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-19 12:53:36
+ * @Last Modified time: 2019-02-19 15:31:32
  */
 
 /**
@@ -78,6 +78,40 @@ export function removeFromCart(payload) {
     }
   });
 }
+
+/**
+ * 设置新的购物车地址enCode
+ */
+export function setLocationCode(payload) {
+  console.log("setLocationCode", payload);
+  return api.post({
+    url: "/cartService/cart/setLocationCode",
+    payload: {}
+  });
+}
+
+/**
+ *
+ * @param {Price} payload
+ * 获取付款方式
+ */
+export function getPaymentMethods(payload) {
+  console.log("getPaymentMethods", payload);
+  return api.post({
+    url: "/paymentService/payment/List",
+    payload: { ...payload, Fun: "Order" }
+  });
+}
+
+// /**
+//  * 设置新的购物车地址enCode
+//  */
+// export const setLocationCode = payload => {
+//   const url = "cartService/cart/setLocationCode";
+
+//   //开始请求数据
+//   return fetchAPIWithFalseAsError(url, payload);
+// };
 
 // /**
 //  *

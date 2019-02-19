@@ -2,11 +2,11 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:17
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-19 12:29:00
+ * @Last Modified time: 2019-02-19 14:32:06
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
-import { View, Button, Text } from "@tarojs/components";
+import { View, Button, Text, ScrollView } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 
 import "./index.scss";
@@ -23,6 +23,7 @@ import CartItem from "../../components/CartItem";
 type PageStateProps = {
   cart: {
     warehouses: any;
+    totalPrice: number;
   };
 };
 
@@ -123,11 +124,16 @@ class Cart extends Component {
   //   });
   // }
 
+  checkOutHandler = () => {
+    // console.log("合计");
+    Taro.navigateTo({ url: "/pages/cart/cartSummary" });
+  };
+
   /********************* 渲染页面的方法 *********************/
   /********************* 页面render方法 ********************/
   render() {
     console.log("this.props", this.props);
-    const { warehouses } = this.props.cart;
+    const { warehouses, totalPrice } = this.props.cart;
     console.log("warehouses", warehouses);
     return (
       <View className="cart-page">
@@ -144,34 +150,63 @@ class Cart extends Component {
         {/* 购物车不为空 */}
         {warehouses.length != 0 && (
           <View className="isLogin">
-            {warehouses.map((item, index) => {
-              const { name, data } = item;
-              return (
-                <View key={`${name}${index}`}>
-                  <View>{name}</View>
-                  <View>
-                    {data.map((goodsItem, index) => {
-                      return (
-                        <CartItem
-                          key={index}
-                          goods={goodsItem}
-                          onDeleteGoods={this.props.removeFromCart.bind(this)}
-                          onChangeGoodsQty={this.props.modifyCart.bind(this)}
-                          // onChangeGoodsQty={this.changeGoodsQtyHandler.bind(
-                          //   this,
-                          //   goodsItem
-                          // )}
-                        />
-                      );
-                    })}
+            <ScrollView
+              style={`height: ${getGlobalData("systemInfo").windowHeight -
+                100}px`}
+              scrollY
+              scrollWithAnimation
+            >
+              {warehouses.map((item, index) => {
+                const { name, data } = item;
+                return (
+                  <View key={`${name}${index}`}>
+                    <View>{name}</View>
+                    <View>
+                      {data.map((goodsItem, index) => {
+                        return (
+                          <CartItem
+                            key={index}
+                            goods={goodsItem}
+                            onDeleteGoods={this.props.removeFromCart.bind(this)}
+                            onChangeGoodsQty={this.props.modifyCart.bind(this)}
+                            // onChangeGoodsQty={this.changeGoodsQtyHandler.bind(
+                            //   this,
+                            //   goodsItem
+                            // )}
+                          />
+                        );
+                      })}
+                    </View>
                   </View>
-                </View>
-              );
-            })}
-            {/* <CartItem
+                );
+              })}
+              {/* <CartItem
               goods={cateItemDetails}
               onDeleteGoods={this.deleteGoodsHandler}
             /> */}
+            </ScrollView>
+            <View className="bottom-count" style={"bottom:0;"}>
+              <View className="fj">
+                <View>
+                  合计：
+                  <Text
+                    className={!warehouses.length ? "disabled price" : "price"}
+                  >
+                    {totalPrice}
+                  </Text>
+                </View>
+                <Button
+                  className="cart-btn"
+                  onClick={this.checkOutHandler}
+                  disabled={!warehouses.length}
+                >
+                  结算
+                </Button>
+                {/* <View className="info">
+                  不含运费
+                </View> */}
+              </View>
+            </View>
           </View>
         )}
       </View>

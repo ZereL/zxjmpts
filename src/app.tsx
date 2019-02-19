@@ -33,6 +33,7 @@ class App extends Component {
     pages: [
       "pages/home/index",
       "pages/cart/index",
+      "pages/cart/cartSummary",
       "pages/user/index",
       "pages/goodsDetail/index",
       "pages/search/index",

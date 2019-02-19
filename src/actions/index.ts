@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:08:38
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-19 12:00:19
+ * @Last Modified time: 2019-02-19 15:22:28
  */
 import {
   ADD,
@@ -16,7 +16,10 @@ import {
   REQUEST_REGISTERUID,
   REQUEST_REGISTERWECHAT,
   MODIFY_TEMP_CART_THEN_UPDATE,
-  REMOVE_FROM_CART
+  REMOVE_FROM_CART,
+  FETCH_CARTSUMMARY,
+  SET_CART_LOCATION,
+  FETCH_PAYMENTMETHODS
 } from "../constants/index";
 import Action from "./actions";
 
@@ -54,9 +57,18 @@ export const requestUpdateCart = (namespace: string, payload?: any) =>
 
 export const modifyCart = (namespace: string, payload?: any) =>
   Action(`${namespace}/${MODIFY_TEMP_CART_THEN_UPDATE}`, payload);
-  
+
 export const removeFromCart = (namespace: string, payload?: any) =>
   Action(`${namespace}/${REMOVE_FROM_CART}`, payload);
+
+export const fetchCartSummary = (namespace: string, payload?: any) =>
+  Action(`${namespace}/${FETCH_CARTSUMMARY}`, payload);
+
+export const setCartLocation = (namespace: string, payload?: any) =>
+  Action(`${namespace}/${SET_CART_LOCATION}`, payload);
+
+export const fetchPaymentMethod = (namespace: string, payload?: any) =>
+  Action(`${namespace}/${FETCH_PAYMENTMETHODS}`, payload);
 
 // 未登录金主页面action
 export const requestRegisterUid = (namespace: string, payload?: any) =>

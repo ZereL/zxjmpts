@@ -2,7 +2,7 @@
  * @Author: Hank 
  * @Date: 2019-02-07 10:09:14 
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-07 11:11:56
+ * @Last Modified time: 2019-02-19 17:09:41
  */
 
 @import "../../styles/mixin";
@@ -35,6 +35,34 @@
   .isLogin {
     padding-top: 20px;
     padding-bottom: 150px;
+  }
+  .address {
+    @include wh(100%, 100px);
+    text-align: center;
+  }
+  .goods-row {
+    @include wh(100%, 150px);
+    @include fj(flex-start);
+  }
+  .goods {
+    @include wh(80%, 150px);
+    @include fj(flex-start);
+    overflow: hidden;
+  }
+  .totolNum {
+    @include wh(150px, 150px);
+    @include fj(center);
+    align-items: center;
+  }
+  .total-price {
+    @include wh(100%, 150px);
+    @include fj(space-between);
+    align-items: center;
+  }
+  .courier-price {
+    @include wh(100%, 150px);
+    @include fj(space-between);
+    align-items: center;
   }
   .bottom-count {
     position: fixed;

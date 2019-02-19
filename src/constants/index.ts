@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:00
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-19 12:00:37
+ * @Last Modified time: 2019-02-19 15:28:27
  */
 export const ADD = "ADD";
 export const REQUEST_LOGIN = "REQUEST_LOGIN";
@@ -23,6 +23,11 @@ export const REQUEST_REGISTERWECHAT = "REQUEST_REGISTERWECHAT";
 export const MODIFY_TEMP_CART_THEN_UPDATE = "MODIFY_TEMP_CART_THEN_UPDATE";
 export const SET_CART_TEMP_DATA = "SET_CART_TEMP_DATA";
 export const REMOVE_FROM_CART = "REMOVE_FROM_CART";
+export const FETCH_CARTSUMMARY = "FETCH_CARTSUMMARY";
+export const SET_CARTSUMMARY = "SET_CARTSUMMARY";
+export const SET_CART_LOCATION = "SET_CART_LOCATION";
+export const FETCH_PAYMENTMETHODS = "FETCH_PAYMENTMETHODS";
+export const SET_FETCH_PAYMENTMETHODS = "SET_FETCH_PAYMENTMETHODS";
 
 export const HOME = "home"; // 命名空间
 export const CART = "cart"; // 命名空间
