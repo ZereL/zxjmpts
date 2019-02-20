@@ -51,8 +51,9 @@ class AddressPicker extends Component {
       // 将选择的城市信息显示到输入框
       const tempAreaInfo =
         provinces[value[0]].name +
-        "" +
+        " " +
         citys[value[1]].name +
+        " " +
         areas[value[2]].name;
       this.setState(
         {

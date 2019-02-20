@@ -1,14 +1,39 @@
+import { ComponentClass } from "react";
 import Taro, { Component } from "@tarojs/taro";
 import { View, Input, Image, Text, Picker } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 import "./index.scss";
 import locations from "../../assets/locations.js";
 import AddressPicker from "../../components/AddressPicker";
+import { requestAddAddress } from "../../actions/index";
 
-@connect(({ address }) => ({
-  ...address
-}))
-export default class Addressupdate extends Component {
+type PageStateProps = {};
+
+type PageDispatchProps = {
+  requestAddAddress: (namespace: string, payload?: any) => any;
+};
+
+type PageOwnProps = {
+  address: {};
+};
+
+type PageState = {};
+
+type IProps = PageStateProps & PageDispatchProps & PageOwnProps;
+
+interface AddressUpdate {
+  props: IProps;
+}
+
+@connect(
+  ({ address }) => ({
+    address
+  }),
+  {
+    requestAddAddress: requestAddAddress
+  }
+)
+class AddressUpdate extends Component {
   config = {
     navigationBarTitleText: "编辑收件人"
   };
@@ -58,7 +83,46 @@ export default class Addressupdate extends Component {
   };
 
   // 保存提交
-  submit = () => {};
+  submit = () => {
+    const { name, cityInfo, detailInfo, mobile, id } = this.state;
+    if (!name || !cityInfo || !detailInfo || !mobile || !id) {
+      Taro.showToast({
+        title: "请您完整填写表单",
+        icon: "none",
+        duration: 2000
+      });
+      return;
+    }
+    if (mobile.length != 11) {
+      Taro.showToast({
+        title: "请您填写正确的电话号码",
+        icon: "none",
+        duration: 2000
+      });
+      return;
+    }
+    if (id.length != 18) {
+      Taro.showToast({
+        title: "请您填写正确的身份证号码",
+        icon: "none",
+        duration: 2000
+      });
+      return;
+    }
+
+    const cityInfoArray = cityInfo.split(" ");
+    this.props.requestAddAddress("address", {
+      enCode: "CN11010200",
+      name: name,
+      province: cityInfoArray[0],
+      city: cityInfoArray[1],
+      area: cityInfoArray[2],
+      phoneNum: mobile,
+      detailAddress: detailInfo,
+      idNum: id,
+      isDefaultAddress: true
+    });
+  };
 
   onToggleAddressPicker = (info, params) => {
     console.log("点击", this);
@@ -93,8 +157,7 @@ export default class Addressupdate extends Component {
           />
           <View onClick={this.cityInputHandler}>
             <Input
-              type="number"
-              maxLength={11}
+              type="text"
               placeholder="省市区"
               id="address_city"
               value={this.state.cityInfo}
@@ -116,8 +179,8 @@ export default class Addressupdate extends Component {
             onInput={this.updateMobile}
           />
           <Input
-            type="number"
-            maxLength={11}
+            type="idcard"
+            maxLength={18}
             placeholder="身份证"
             id="contact_ID"
             value={this.state.id}
@@ -130,7 +193,7 @@ export default class Addressupdate extends Component {
               mode="widthFix"
               src={require("../../images/icon/check.png")}
             />
-            <Text>保存</Text> d
+            <Text>保存</Text>
           </View>
         </View>
         <AddressPicker
@@ -141,3 +204,5 @@ export default class Addressupdate extends Component {
     );
   }
 }
+
+export default AddressUpdate as ComponentClass<PageOwnProps, PageState>;

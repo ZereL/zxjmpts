@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-19 14:33:17
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-20 11:28:54
+ * @Last Modified time: 2019-02-20 16:04:38
  */
 
 import { ComponentClass } from "react";
@@ -19,7 +19,8 @@ import {
   removeFromCart,
   fetchCartSummary,
   setCartLocation,
-  fetchPaymentMethod
+  fetchPaymentMethod,
+  fetchCartAddress
 } from "../../actions";
 import { CART } from "../../constants";
 import { getGlobalData } from "../../utils/common";
@@ -31,6 +32,7 @@ type PageStateProps = {
     warehouses: any;
     totalPrice: number;
   };
+  address: {};
 };
 
 type PageDispatchProps = {
@@ -42,6 +44,7 @@ type PageDispatchProps = {
   fetchCartSummary: (namespace: string, payload?: any) => any;
   setCartLocation: (namespace: string, payload?: any) => any;
   fetchPaymentMethod: (namespace: string, payload?: any) => any;
+  fetchCartAddress: (namespace: string, payload?: any) => any;
 };
 
 type PageOwnProps = {};
@@ -57,8 +60,9 @@ interface CartSummary {
 }
 
 @connect(
-  ({ cart }) => ({
-    cart
+  ({ cart, address }) => ({
+    cart,
+    address
   }),
   {
     add: add,
@@ -68,7 +72,8 @@ interface CartSummary {
     removeFromCart: removeFromCart,
     fetchCartSummary: fetchCartSummary,
     setCartLocation: setCartLocation,
-    fetchPaymentMethod: fetchPaymentMethod
+    fetchPaymentMethod: fetchPaymentMethod,
+    fetchCartAddress: fetchCartAddress
   }
 )
 class CartSummary extends Component {
@@ -143,6 +148,8 @@ class CartSummary extends Component {
     const { status, warehouses, items } = await this.props.setCartLocation(
       "cart"
     ); // 可能需要 写 "CN11010200"
+    const result = await this.props.fetchCartAddress("address");
+    console.log("defaultAddress", result);
     status == "Valid" && this.props.fetchPaymentMethod("cart");
     // 商品按照仓库号加入对应仓库
     warehouses.forEach(warehouse => {
@@ -195,12 +202,18 @@ class CartSummary extends Component {
     // Taro.navigateTo({ url: "/pages/address/index" });
     Taro.navigateTo({ url: "/pages/addressUpdate/index" });
   };
+  addressListHandler = () => {
+    // Taro.navigateTo({ url: "/pages/address/index" });
+    // Taro.navigateTo({ url: "/pages/addressUpdate/index" });
+    console.log('AddressList');
+  };
 
   /********************* 渲染页面的方法 *********************/
   /********************* 页面render方法 ********************/
   render() {
     console.log("this.props", this.props);
-    const { warehouses, totalPrice, delivery } = this.props.cart;
+    const { warehouses, totalPrice, delivery } = this.props.cart; // delivery后台已经返回了没存到redux里
+    const { defaultAddress } = this.props.address;
     console.log("warehouses", warehouses);
 
     const goodsList =
@@ -218,9 +231,15 @@ class CartSummary extends Component {
           scrollY
           scrollWithAnimation
         >
-          <View className="address" onClick={this.addAddressHandler}>
-            请添加地址
-          </View>
+          {defaultAddress ? (
+            <View className="address" onClick={this.addressListHandler}>
+              {defaultAddress.area} {defaultAddress.city} {defaultAddress.detailAddress}
+            </View>
+          ) : (
+            <View className="address" onClick={this.addAddressHandler}>
+              请添加地址
+            </View>
+          )}
           <View className="goods-row">
             {goodsList.map((item, index) => {
               return (

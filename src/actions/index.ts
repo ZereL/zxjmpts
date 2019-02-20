@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:08:38
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-19 15:22:28
+ * @Last Modified time: 2019-02-20 15:33:30
  */
 import {
   ADD,
@@ -19,7 +19,9 @@ import {
   REMOVE_FROM_CART,
   FETCH_CARTSUMMARY,
   SET_CART_LOCATION,
-  FETCH_PAYMENTMETHODS
+  FETCH_PAYMENTMETHODS,
+  REQUEST_ADDADDRESS,
+  FETCH_CARTADDRESS
 } from "../constants/index";
 import Action from "./actions";
 
@@ -77,3 +79,12 @@ export const requestRegisterUid = (namespace: string, payload?: any) =>
 // 未登录金主页面action
 export const requestRegisterWechat = (namespace: string, payload?: any) =>
   Action(`${namespace}/${REQUEST_REGISTERWECHAT}`, payload);
+
+// 地址页面
+export const requestAddAddress = (namespace: string, payload?: any) =>
+  Action(`${namespace}/${REQUEST_ADDADDRESS}`, payload);
+  
+export const fetchCartAddress = (namespace: string, payload?: any) =>
+  Action(`${namespace}/${FETCH_CARTADDRESS}`, payload);
+
+

@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:21
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-19 15:59:44
+ * @Last Modified time: 2019-02-20 16:19:29
  */
 import {
   CART,
@@ -118,6 +118,12 @@ export default {
         ...state,
         paymentMethods: payload
       };
+    },
+    [SET_CARTSUMMARY](state, { payload }) {
+      return {
+        ...state,
+        ...payload
+      };
     }
   },
   effects: {
@@ -180,13 +186,12 @@ export default {
       const result = yield call(setLocationCode, payload);
       console.log("请求完成", result);
       const resultData = result.data;
-      return resultData;
-      // const resultData = result.data;
-      // yield put({
-      //   type: SET_CARTSUMMARY,
-      //   payload: resultData
-      // });
+      yield put({
+        type: SET_CARTSUMMARY,
+        payload: resultData
+      });
 
+      return resultData;
       // return yield select(state => state.cartsummary.data);
     },
     *[FETCH_PAYMENTMETHODS]({ payload }, { call, put, select }) {
