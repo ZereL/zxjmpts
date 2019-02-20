@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-19 14:33:17
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-19 17:19:23
+ * @Last Modified time: 2019-02-20 11:28:54
  */
 
 import { ComponentClass } from "react";
@@ -191,6 +191,11 @@ class CartSummary extends Component {
     console.log("合计");
   };
 
+  addAddressHandler = () => {
+    // Taro.navigateTo({ url: "/pages/address/index" });
+    Taro.navigateTo({ url: "/pages/addressUpdate/index" });
+  };
+
   /********************* 渲染页面的方法 *********************/
   /********************* 页面render方法 ********************/
   render() {
@@ -213,7 +218,9 @@ class CartSummary extends Component {
           scrollY
           scrollWithAnimation
         >
-          <View className="address">请添加地址</View>
+          <View className="address" onClick={this.addAddressHandler}>
+            请添加地址
+          </View>
           <View className="goods-row">
             {goodsList.map((item, index) => {
               return (

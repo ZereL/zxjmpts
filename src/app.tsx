@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:11:03
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-13 15:11:53
+ * @Last Modified time: 2019-02-20 11:28:15
  */
 
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -34,6 +34,8 @@ class App extends Component {
       "pages/home/index",
       "pages/cart/index",
       "pages/cart/cartSummary",
+      "pages/address/index",
+      "pages/addressUpdate/index",
       "pages/user/index",
       "pages/goodsDetail/index",
       "pages/search/index",
