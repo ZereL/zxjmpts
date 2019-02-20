@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-19 14:33:17
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-20 16:04:38
+ * @Last Modified time: 2019-02-20 17:08:29
  */
 
 import { ComponentClass } from "react";
@@ -20,7 +20,8 @@ import {
   fetchCartSummary,
   setCartLocation,
   fetchPaymentMethod,
-  fetchCartAddress
+  fetchCartAddress,
+  requestCreateOrder
 } from "../../actions";
 import { CART } from "../../constants";
 import { getGlobalData } from "../../utils/common";
@@ -45,6 +46,7 @@ type PageDispatchProps = {
   setCartLocation: (namespace: string, payload?: any) => any;
   fetchPaymentMethod: (namespace: string, payload?: any) => any;
   fetchCartAddress: (namespace: string, payload?: any) => any;
+  requestCreateOrder: (namespace: string, payload?: any) => any;
 };
 
 type PageOwnProps = {};
@@ -73,7 +75,8 @@ interface CartSummary {
     fetchCartSummary: fetchCartSummary,
     setCartLocation: setCartLocation,
     fetchPaymentMethod: fetchPaymentMethod,
-    fetchCartAddress: fetchCartAddress
+    fetchCartAddress: fetchCartAddress,
+    requestCreateOrder: requestCreateOrder
   }
 )
 class CartSummary extends Component {
@@ -195,7 +198,43 @@ class CartSummary extends Component {
   // }
 
   checkOutHandler = () => {
-    console.log("合计");
+    const { totalPrice, } = this.props.cart
+    const { defaultAddress } = this.props.address
+    const { } = this.state
+    this.props.requestCreateOrder("order", {
+      totalPrice: totalPrice,
+      remark: "",
+      country: "CN",
+      province: defaultAddress.province,
+      city: defaultAddress.city,
+      area: defaultAddress.area,
+      detailAddress: defaultAddress.detailAddress,
+      name: defaultAddress.name,
+      phoneNum: defaultAddress.phoneNum,
+      idNum: defaultAddress.idNum,
+      enCode: defaultAddress.enCode,
+      addressId: defaultAddress.id,
+      channel: 1, // 现在先用1
+      // sender: {
+      //   id: 0,
+      //   name: "string",
+      //   phoneNum: "string"
+      // }
+    });
+
+    // TotalPrice: data.totalPrice, // TODO: 暂时使用购物车总价，实际需要使用支付方式接口返回的总价
+    // Remark: "", // 备注字段
+    // Country: "CN",
+    // Province: cartReceiver.province,
+    // City: cartReceiver.city,
+    // Area: cartReceiver.area,
+    // DetailAddress: cartReceiver.detailAddress,
+    // Name: cartReceiver.name,
+    // PhoneNum: cartReceiver.phoneNum,
+    // IdNum: cartReceiver.idNum,
+    // EnCode: cartReceiver.enCode,
+    // AddressId: cartReceiver.id,
+    // channel: Platform.OS === "ios" ? 1 : 2 // 后端Android写成了Adnro
   };
 
   addAddressHandler = () => {
@@ -205,14 +244,19 @@ class CartSummary extends Component {
   addressListHandler = () => {
     // Taro.navigateTo({ url: "/pages/address/index" });
     // Taro.navigateTo({ url: "/pages/addressUpdate/index" });
-    console.log('AddressList');
+    console.log("AddressList");
   };
 
   /********************* 渲染页面的方法 *********************/
   /********************* 页面render方法 ********************/
   render() {
     console.log("this.props", this.props);
-    const { warehouses, totalPrice, delivery } = this.props.cart; // delivery后台已经返回了没存到redux里
+    const {
+      warehouses,
+      totalPrice,
+      delivery,
+      totalPriceWithoutDelivery
+    } = this.props.cart;
     const { defaultAddress } = this.props.address;
     console.log("warehouses", warehouses);
 
@@ -233,7 +277,8 @@ class CartSummary extends Component {
         >
           {defaultAddress ? (
             <View className="address" onClick={this.addressListHandler}>
-              {defaultAddress.area} {defaultAddress.city} {defaultAddress.detailAddress}
+              {defaultAddress.area} {defaultAddress.city}{" "}
+              {defaultAddress.detailAddress}
             </View>
           ) : (
             <View className="address" onClick={this.addAddressHandler}>
@@ -271,7 +316,7 @@ class CartSummary extends Component {
           />
           <View className="total-price">
             <View>商品金额</View>
-            <View>{totalPrice}</View>
+            <View>{totalPriceWithoutDelivery}</View>
           </View>
           <View className="courier-price">
             <View>运费</View>

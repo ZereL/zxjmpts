@@ -2,8 +2,10 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:08:38
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-20 15:33:30
+ * @Last Modified time: 2019-02-20 16:45:15
  */
+
+ // TODO: 这些Action需要整理复用。
 import {
   ADD,
   REQUEST_LOGIN,
@@ -21,7 +23,8 @@ import {
   SET_CART_LOCATION,
   FETCH_PAYMENTMETHODS,
   REQUEST_ADDADDRESS,
-  FETCH_CARTADDRESS
+  FETCH_CARTADDRESS,
+  REQUEST_CREATEORDER
 } from "../constants/index";
 import Action from "./actions";
 
@@ -71,6 +74,9 @@ export const setCartLocation = (namespace: string, payload?: any) =>
 
 export const fetchPaymentMethod = (namespace: string, payload?: any) =>
   Action(`${namespace}/${FETCH_PAYMENTMETHODS}`, payload);
+
+export const requestCreateOrder = (namespace: string, payload?: any) =>
+  Action(`${namespace}/${REQUEST_CREATEORDER}`, payload);
 
 // 未登录金主页面action
 export const requestRegisterUid = (namespace: string, payload?: any) =>
