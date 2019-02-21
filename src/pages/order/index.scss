@@ -1,0 +1,18 @@
+/*
+ * @Author: Hank 
+ * @Date: 2019-02-21 09:53:33 
+ * @Last Modified by: Hank
+ * @Last Modified time: 2019-02-21 14:02:04
+ */
+
+@import "../../styles/mixin";
+
+.order-page {
+  @include wh(100%, 100%);
+  .top-tags {
+    @include wh(100%, 10%);
+    @include fj(flex-start);
+    .tags {
+    }
+  }
+}

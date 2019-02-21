@@ -1,0 +1,42 @@
+/*
+ * @Author: Hank 
+ * @Date: 2019-02-21 12:02:30 
+ * @Last Modified by: Hank
+ * @Last Modified time: 2019-02-21 13:47:45
+ */
+
+@import "../../../styles/mixin";
+
+.card {
+  width: 100%;
+  margin: 0px 0px 40px 0px;
+  .card-title {
+    width: 100%;
+    @include fj(space-between);
+  }
+  .card-top {
+    width: 100%;
+    flex-direction: column;
+    @include fj(flex-start);
+    .card-item {
+      @include wh(100%, 150px);
+      @include fj(flex-start);
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+      .item-detail {
+        @include wh(10%, 10%);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+      }
+    }
+  }
+  .card-bottom {
+    width: 100%;
+    @include fj(center);
+    align-items: center;
+    text-align: center;
+  }
+}

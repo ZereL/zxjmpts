@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:11:03
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-20 11:28:15
+ * @Last Modified time: 2019-02-21 11:05:52
  */
 
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -13,8 +13,9 @@ import dva from "./utils/dva";
 import models from "./models";
 // import { setGlobalData } from "./utils/common";
 import "./app.scss";
-import "taro-ui/dist/style/index.scss";
+// import "taro-ui/dist/style/index.scss";
 import { setGlobalData } from "./utils/common";
+import "./config/taroUIVariables.scss";
 
 // 如果需要在 h5 环境中开启 React Devtools
 // 取消以下注释：
@@ -41,7 +42,8 @@ class App extends Component {
       "pages/search/index",
       "pages/goodsList/index",
       "pages/notLoginShopkeeper/index",
-      "pages/becomeShopkeeper/index"
+      "pages/becomeShopkeeper/index",
+      "pages/order/index"
     ],
     window: {
       backgroundTextStyle: "light",

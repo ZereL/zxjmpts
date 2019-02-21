@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:58
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-15 11:34:19
+ * @Last Modified time: 2019-02-21 09:59:06
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -163,6 +163,10 @@ class User extends Component {
 
   handleConfirm = () => {};
 
+  goOrderListHandler = () => {
+    Taro.navigateTo({ url: "/pages/order/index" });
+  };
+
   /********************* 渲染页面的方法 *********************/
   /********************* 页面render方法 ********************/
   render() {
@@ -201,7 +205,7 @@ class User extends Component {
             </View>
           </View>
           <View className="list">
-            <View className="item">
+            <View className="item" onClick={this.goOrderListHandler}>
               <Image mode="widthFix" src={pendingPayIcon} />
               <Text>待支付</Text>
               {/* {item.num > 0 && <Icon className="num">{item.num}</Icon>} */}

@@ -1,0 +1,13 @@
+/**
+ * Default variables
+ */
+
+ 
+ /* The Color of ZXJ Brand */
+ $color-brand: #e94e41 !default;
+ $color-brand-light: #e94e41 !default;
+ $color-brand-dark: #e94e41 !default;
+
+ /* 引入 Taro UI 默认样式 */
+@import "~taro-ui/dist/style/index.scss";
+ 

@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-20 16:33:05
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-20 17:16:11
+ * @Last Modified time: 2019-02-21 09:38:42
  */
 
 import {
@@ -10,7 +10,7 @@ import {
   SET_PAGEDATA,
   REQUEST_CREATEORDER
 } from "./../../constants/index";
-import { requestCreateOrder } from "../../services/orderService";
+import { requestCreateOrder, fetchOrderList } from "../../services/orderService";
 
 export default {
   namespace: "order",
@@ -22,14 +22,14 @@ export default {
   },
   effects: {
     *[FETCH_PAGEDATA]({ payload }, { select, put, call }) {
-      // const requestResult = yield call(fetchHomeData, payload);
-      // console.log("requestResult", requestResult);
-      // const requestResultData = requestResult.data;
-      // yield put({
-      //   type: SET_PAGEDATA,
-      //   payload: requestResultData
-      // });
-      // return requestResult;
+      const requestResult = yield call(fetchOrderList, payload);
+      console.log("requestResult", requestResult);
+      const requestResultData = requestResult.data;
+      yield put({
+        type: SET_PAGEDATA,
+        payload: requestResultData
+      });
+      return requestResult;
     },
     *[REQUEST_CREATEORDER]({ payload }, { call, put, select }) {
       console.log("收到请求创建订单", payload);
