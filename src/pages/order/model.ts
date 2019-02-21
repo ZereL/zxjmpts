@@ -2,18 +2,20 @@
  * @Author: Hank
  * @Date: 2019-02-20 16:33:05
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-21 16:44:39
+ * @Last Modified time: 2019-02-22 10:20:11
  */
 
 import {
   FETCH_PAGEDATA,
   SET_PAGEDATA,
-  REQUEST_CREATEORDER
+  REQUEST_CREATEORDER,
+  REQUEST_PAYORDER
 } from "./../../constants/index";
 import {
   requestCreateOrder,
   fetchOrderList
 } from "../../services/orderService";
+import { payOrderByDeposit } from "../../services/paymentService";
 
 export default {
   namespace: "order",
@@ -40,6 +42,20 @@ export default {
       console.log("收到请求创建订单", payload);
 
       const requestResult = yield call(requestCreateOrder, payload);
+      const requestResultData = requestResult.data;
+      console.log("REQUEST_CREATEORDER", requestResultData);
+      return requestResultData;
+
+      // yield put({
+      //   type: SET_CREATE_ORDER,
+      //   payload: result
+      // });
+      // return yield select(state => state.orders.createResult);
+    },
+    *[REQUEST_PAYORDER]({ payload }, { call, put, select }) {
+      console.log("收到请支付订单", payload);
+
+      const requestResult = yield call(payOrderByDeposit, payload);
       const requestResultData = requestResult.data;
       console.log("REQUEST_CREATEORDER", requestResultData);
       return requestResultData;

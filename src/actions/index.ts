@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:08:38
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-20 16:45:15
+ * @Last Modified time: 2019-02-22 11:08:22
  */
 
  // TODO: 这些Action需要整理复用。
@@ -24,7 +24,8 @@ import {
   FETCH_PAYMENTMETHODS,
   REQUEST_ADDADDRESS,
   FETCH_CARTADDRESS,
-  REQUEST_CREATEORDER
+  REQUEST_CREATEORDER,
+  REQUEST_PAYORDER
 } from "../constants/index";
 import Action from "./actions";
 
@@ -92,5 +93,10 @@ export const requestAddAddress = (namespace: string, payload?: any) =>
   
 export const fetchCartAddress = (namespace: string, payload?: any) =>
   Action(`${namespace}/${FETCH_CARTADDRESS}`, payload);
+
+  // order页面
+export const requestPayOrder = (namespace: string, payload?: any) =>
+  Action(`${namespace}/${REQUEST_PAYORDER}`, payload);
+
 
 

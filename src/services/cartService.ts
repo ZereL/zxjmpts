@@ -4,7 +4,7 @@ import api from "./api";
  * @Author: Hank
  * @Date: 2019-02-12 11:22:55
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-19 15:31:32
+ * @Last Modified time: 2019-02-22 10:30:55
  */
 
 /**
@@ -95,6 +95,25 @@ export function setLocationCode(payload) {
  * @param {Price} payload
  * 获取付款方式
  */
+// {
+//   "balance": 1217,
+//   "id": 1,
+//   "name": "臻金",
+//   "money": 0,
+//   "code": "Balance"
+// },
+// {
+//   "id": 2,
+//   "name": "支付宝",
+//   "money": 0,
+//   "code": "AlipaySupay"
+// },
+// {
+//   "id": 3,
+//   "name": "微信支付",
+//   "money": 0,
+//   "code": "WechatSupay"
+// }
 export function getPaymentMethods(payload) {
   console.log("getPaymentMethods", payload);
   return api.post({

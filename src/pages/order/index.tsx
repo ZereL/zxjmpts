@@ -2,16 +2,16 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:07:40
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-21 17:03:32
+ * @Last Modified time: 2019-02-22 11:27:55
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
 import { View, Image, Button, ScrollView } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
-import { AtTag } from "taro-ui";
+import { AtTag, AtFloatLayout, AtRadio, AtButton } from "taro-ui";
 
 import "./index.scss";
-import { fetchPageData, fetchUserInfo } from "../../actions";
+import { fetchPageData, fetchUserInfo, requestPayOrder } from "../../actions";
 import { getGlobalData } from "../../utils/common";
 import Card from "./Card";
 // import Card from "../order/Card";
@@ -20,6 +20,7 @@ type PageStateProps = {};
 
 type PageDispatchProps = {
   fetchPageData: (namespace: string, payload?: any) => any;
+  requestPayOrder: (namespace: string, payload?: any) => any;
 };
 
 type PageOwnProps = {
@@ -39,7 +40,8 @@ interface Order {
     order
   }),
   {
-    fetchPageData: fetchPageData
+    fetchPageData: fetchPageData,
+    requestPayOrder: requestPayOrder
   }
 )
 
@@ -56,7 +58,10 @@ class Order extends Component {
       { title: "待收货", onClick: () => {} },
       { title: "已收货", onClick: () => {} }
     ],
-    activeTagIndex: 0
+    activeTagIndex: 0,
+    isFloatLayoutShow: false,
+    orderId: "",
+    paymentMethod: "1"
   };
 
   /********************* 生命周期函数 **********************/
@@ -112,10 +117,43 @@ class Order extends Component {
     this.setState({ activeTagIndex: index });
   }
 
-  requestPayOrder() {
-    // console.log("id", id);
-    // this.props.requestPayOrder('order', {
-    // })
+  // async requestPayOrder() {
+  //   const { orderId, paymentMethod } = this.state;
+  //   const payResult = await this.props.requestPayOrder("order", {
+  //     // memberId: 0,
+  //     orderId: orderId,
+  //     paymentConfigId: paymentMethod
+  //     // wechatCode: "string",
+  //     // joinedPay: true
+  //   });
+  // }
+
+  requestPayOrder = async (id) => {
+    // const { orderId, paymentMethod } = this.state;
+    const payResult = await this.props.requestPayOrder("order", {
+      // memberId: 0,
+      orderId: id,
+      paymentConfigId: 1
+      // wechatCode: "string",
+      // joinedPay: true
+    });
+  }
+
+  // showFloatLayout(id) {
+  //   console.log("id", id);
+  //   // this.setState({ orderId: id, isFloatLayoutShow: true });
+  //   // console.log("this.state", this.state);
+  // }
+  // showFloatLayout = id => {
+  //   console.log("id", id);
+  // };
+
+  floatLayoutCloseHandler = () => {
+    this.setState({ isFloatLayoutShow: false });
+  };
+
+  changePaymentMethodHandler(paymentMethod) {
+    this.setState({ paymentMethod });
   }
 
   /********************* 渲染页面的方法 *********************/
@@ -152,12 +190,26 @@ class Order extends Component {
                 <Card
                   key={index}
                   item={item}
-                  requestPayOrder={this.requestPayOrder.bind(this)}
+                  onRequestPayOrder={this.requestPayOrder}
                 />
               );
             })}
           </ScrollView>
         </View>
+        <AtFloatLayout
+          isOpened={this.state.isFloatLayoutShow}
+          onClose={this.floatLayoutCloseHandler}
+        >
+          <AtRadio
+            options={[
+              { label: "臻金", value: "1" },
+              { label: "微信", value: "3" }
+            ]}
+            value={this.state.paymentMethod}
+            onClick={this.changePaymentMethodHandler.bind(this)}
+          />
+          <AtButton onClick={this.requestPayOrder}>支付</AtButton>
+        </AtFloatLayout>
       </View>
     );
   }

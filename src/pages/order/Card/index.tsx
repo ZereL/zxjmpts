@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:07:40
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-21 17:17:14
+ * @Last Modified time: 2019-02-22 11:29:03
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -18,7 +18,7 @@ type PageDispatchProps = {};
 
 type PageOwnProps = {
   item: any;
-  requestPayOrder: any;
+  onRequestPayOrder: any;
 };
 
 type PageState = {};
@@ -46,7 +46,7 @@ class Card extends Component {
   payOrderHandler(id) {
     console.log("订单Id", id);
     console.log("this.props", this.props);
-    // this.props.requestPayOrder();
+    this.props.onRequestPayOrder(id);
     // return id;
   }
   /********************* 渲染页面的方法 *********************/
@@ -93,7 +93,7 @@ class Card extends Component {
         <View className="card-bottom">
           <View>应付款{price.total}</View>
           <View>（含运费：{price.delivery}）</View>
-          <View>付款</View>
+          <View onClick={this.payOrderHandler.bind(this, id)}>付款</View>
         </View>
         <AtDivider content="" customStyle="height:5px" />
       </View>
