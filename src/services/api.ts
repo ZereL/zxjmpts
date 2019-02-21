@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:10:06
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-15 11:41:42
+ * @Last Modified time: 2019-02-22 12:26:02
  */
 import Taro from "@tarojs/taro";
 // import qs from "qs";
@@ -54,14 +54,17 @@ function checkSuccess(data: any, resolve, reject) {
     return resolve(data);
   }
 
-  // 原来的返回错误代码，但是DVA捕捉不到错误
-  const error: any = new Error(data.message || "服务端返回异常");
-  error.data = data;
-  throw error;
-
+  // // 之前的抛错方式，但是DVA捕捉不到错误
   // const error: any = new Error(data.message || "服务端返回异常");
-  // error.errMsg = data;
-  // throwResultCodeError(error, reject);
+  // error.data = data;
+  // throw error;
+
+  console.log("API中的Data", data);
+  // 修改过的返回代码， 使dva框架可以捕捉到错误
+  const error: any = new Error(data.message || "服务端返回异常");
+  error.errMsg = data;
+  console.log("errorAPI", error);
+  throwResultCodeError(error, reject);
 }
 
 // /**
@@ -69,26 +72,39 @@ function checkSuccess(data: any, resolve, reject) {
 //  * @param error
 //  * @param reject
 //  */
-// function throwResultCodeError(error, reject) {
-//   Taro.hideNavigationBarLoading();
-//   if (error.errMsg) {
-//     reject("服务器正在维护中!");
-//   }
-// }
+function throwResultCodeError(error, reject) {
+  Taro.hideNavigationBarLoading();
+  // console.log("api.ts报错", error.errMsg);
+  // 如果error里有errMsg那么就是业务层面的报错， 显示错误信息
+  if (error.errMsg) {
+    reject(error);
+  }
+}
 
-/**
- * 请求错误处理
- * @param error
- * @param reject
- */
 function throwError(error, reject) {
   Taro.hideNavigationBarLoading();
   if (error.errMsg) {
+    //
     reject("服务器正在维护中!");
-    throw new Error("服务器正在维护中!");
+    // throw new Error("服务器正在维护中!");
   }
-  throw error;
+  throw error; //
 }
+
+// 之前的抛错方式
+// /**
+//  * 请求错误处理
+//  * @param error
+//  * @param reject
+//  */
+// function throwError(error, reject) {
+//   Taro.hideNavigationBarLoading();
+//   if (error.errMsg) {
+//     reject("服务器正在维护中!");
+//     throw new Error("服务器正在维护中!");
+//   }
+//   throw error;
+// }
 
 export default {
   request(options: any, method?: string) {

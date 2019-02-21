@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:07:40
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-22 11:27:55
+ * @Last Modified time: 2019-02-22 12:26:23
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -117,36 +117,27 @@ class Order extends Component {
     this.setState({ activeTagIndex: index });
   }
 
-  // async requestPayOrder() {
-  //   const { orderId, paymentMethod } = this.state;
-  //   const payResult = await this.props.requestPayOrder("order", {
-  //     // memberId: 0,
-  //     orderId: orderId,
-  //     paymentConfigId: paymentMethod
-  //     // wechatCode: "string",
-  //     // joinedPay: true
-  //   });
-  // }
-
-  requestPayOrder = async (id) => {
-    // const { orderId, paymentMethod } = this.state;
-    const payResult = await this.props.requestPayOrder("order", {
-      // memberId: 0,
-      orderId: id,
-      paymentConfigId: 1
-      // wechatCode: "string",
-      // joinedPay: true
-    });
+  async requestPayOrder() {
+    const { orderId, paymentMethod } = this.state;
+    try {
+      const payResult = await this.props.requestPayOrder("order", {
+        // memberId: 0,
+        orderId: orderId,
+        paymentConfigId: paymentMethod
+        // wechatCode: "string",
+        // joinedPay: true
+      });
+    } catch (error) {
+      console.log("error", error);
+      console.log("error.message", error.message);
+      Taro.showToast({ title: error.message, icon: "none", duration: 2000 });
+    }
   }
 
-  // showFloatLayout(id) {
-  //   console.log("id", id);
-  //   // this.setState({ orderId: id, isFloatLayoutShow: true });
-  //   // console.log("this.state", this.state);
-  // }
-  // showFloatLayout = id => {
-  //   console.log("id", id);
-  // };
+  showFloatLayout(id) {
+    this.setState({ orderId: id, isFloatLayoutShow: true });
+    console.log("this.state", this.state);
+  }
 
   floatLayoutCloseHandler = () => {
     this.setState({ isFloatLayoutShow: false });
@@ -190,7 +181,7 @@ class Order extends Component {
                 <Card
                   key={index}
                   item={item}
-                  onRequestPayOrder={this.requestPayOrder}
+                  onRequestPayOrder={this.showFloatLayout}
                 />
               );
             })}
