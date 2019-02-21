@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:07:40
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-21 16:25:56
+ * @Last Modified time: 2019-02-21 17:17:14
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -31,10 +31,6 @@ interface Card {
 
 // TODO: 研究代替switch case遍历homeItems数组的办法
 class Card extends Component {
-  config: Config = {
-    navigationBarTitleText: "我的订单"
-  };
-
   /********************* 生命周期函数 **********************/
   componentWillReceiveProps(nextProps) {
     console.log(this.props, nextProps);
@@ -58,9 +54,9 @@ class Card extends Component {
   /********************* 页面render方法 ********************/
   render() {
     const { createTime, id, items, price, statusSummary } = this.props.item;
-    console.log("this.props.item", this.props.item);
-    console.log("this.props", this.props);
-    console.log("this", this);
+    // console.log("this.props.item", this.props.item);
+    // console.log("this.props", this.props);
+    // console.log("this", this);
     return (
       <View className="card">
         <View className="card-title">
@@ -95,9 +91,9 @@ class Card extends Component {
         </View>
         <AtDivider content="" />
         <View className="card-bottom">
-          <View>应付款{price.total}</View>{" "}
+          <View>应付款{price.total}</View>
           <View>（含运费：{price.delivery}）</View>
-          <View onClick={this.payOrderHandler.bind(this, id)}>付款</View>
+          <View>付款</View>
         </View>
         <AtDivider content="" customStyle="height:5px" />
       </View>

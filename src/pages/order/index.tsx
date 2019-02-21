@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:07:40
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-21 16:33:45
+ * @Last Modified time: 2019-02-21 17:03:32
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -14,6 +14,7 @@ import "./index.scss";
 import { fetchPageData, fetchUserInfo } from "../../actions";
 import { getGlobalData } from "../../utils/common";
 import Card from "./Card";
+// import Card from "../order/Card";
 
 type PageStateProps = {};
 
@@ -111,10 +112,9 @@ class Order extends Component {
     this.setState({ activeTagIndex: index });
   }
 
-  requestPayOrder(id) {
-    console.log("id", id);
+  requestPayOrder() {
+    // console.log("id", id);
     // this.props.requestPayOrder('order', {
-
     // })
   }
 
@@ -146,16 +146,15 @@ class Order extends Component {
           </View>
           <ScrollView>
             {items.map((item, index) => {
-              console.log("item", item);
+              // console.log("item", item);
+              // return <View>123</View>;
               return (
-                <View>123</View>
-              )
-              // return (
-              //   <Card
-              //     item={item}
-              //     requestPayOrder={this.requestPayOrder.bind(this)}
-              //   />
-              // );
+                <Card
+                  key={index}
+                  item={item}
+                  requestPayOrder={this.requestPayOrder.bind(this)}
+                />
+              );
             })}
           </ScrollView>
         </View>

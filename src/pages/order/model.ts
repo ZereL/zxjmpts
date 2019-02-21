@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-20 16:33:05
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-21 09:38:42
+ * @Last Modified time: 2019-02-21 16:44:39
  */
 
 import {
@@ -10,11 +10,16 @@ import {
   SET_PAGEDATA,
   REQUEST_CREATEORDER
 } from "./../../constants/index";
-import { requestCreateOrder, fetchOrderList } from "../../services/orderService";
+import {
+  requestCreateOrder,
+  fetchOrderList
+} from "../../services/orderService";
 
 export default {
   namespace: "order",
-  state: {},
+  state: {
+    items: []
+  },
   reducers: {
     [SET_PAGEDATA](state, { payload }) {
       return { ...state, ...payload };
