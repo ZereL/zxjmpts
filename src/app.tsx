@@ -43,6 +43,7 @@ class App extends Component {
       "pages/goodsList/index",
       "pages/notLoginShopkeeper/index",
       "pages/becomeShopkeeper/index",
+      "pages/shopkeeper/index",
       "pages/order/index"
     ],
     window: {
@@ -60,6 +61,12 @@ class App extends Component {
           selectedIconPath: "./assets/icons/home.png"
         },
         {
+          pagePath: "pages/shopkeeper/index",
+          text: "金主",
+          iconPath: "./assets/icons/home.png",
+          selectedIconPath: "./assets/icons/home.png"
+        },
+        {
           pagePath: "pages/cart/index",
           text: "聚宝盆",
           iconPath: "./assets/icons/home.png",
@@ -67,7 +74,7 @@ class App extends Component {
         },
         {
           pagePath: "pages/user/index",
-          text: "我的",
+          text: "小主",
           iconPath: "./assets/icons/home.png",
           selectedIconPath: "./assets/icons/home.png"
         }

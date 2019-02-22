@@ -11,6 +11,7 @@ import goodsDetail from "../pages/goodsDetail/model";
 import goodsList from "../pages/goodsList/model";
 import notLoginShopkeeper from "../pages/notLoginShopkeeper/model";
 import becomeShopkeeper from "../pages/becomeShopkeeper/model";
+import shopkeeper from "../pages/shopkeeper/model";
 import address from "../pages/address/model";
 import order from "../pages/order/model";
 
@@ -22,6 +23,7 @@ export default [
   goodsList,
   notLoginShopkeeper,
   becomeShopkeeper,
+  shopkeeper,
   address,
   order
 ];

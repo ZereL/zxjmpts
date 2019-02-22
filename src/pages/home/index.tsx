@@ -4,6 +4,7 @@
  * @Last Modified by: Hank
  * @Last Modified time: 2019-02-14 17:36:24
  */
+
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
 import { View, Image, Button } from "@tarojs/components";
@@ -63,6 +64,9 @@ class Home extends Component {
 
   componentWillUnmount() {}
 
+  /**
+   * 页面展示
+   */
   componentDidShow() {
     if (getGlobalData("token")) {
       this.props.fetchUserInfo("user");
@@ -70,18 +74,16 @@ class Home extends Component {
     this.fetchPageData();
   }
 
+  /**
+   * 页面隐藏
+   */
   componentDidHide() {}
 
   /********************* 事件handler **********************/
-  // add = async () => {
-  //   try {
-  //     const result = await this.props.add(HOME);
-  //     console.log("请求成功", result);
-  //   } catch (error) {
-  //     console.log("error", error);
-  //   }
-  // };
 
+  /**
+   * 加载页面数据
+   */
   fetchPageData = async () => {
     try {
       const result = await this.props.fetchPageData(HOME);
@@ -91,10 +93,9 @@ class Home extends Component {
     }
   };
 
-  atSearchBarChangeHandler = () => {
-    console.log("点击搜索");
-  };
-
+  /**
+   * 跳转到搜索页面
+   */
   searchViewClickHandler = () => {
     Taro.navigateTo({ url: "/pages/search/index" });
   };
@@ -116,52 +117,7 @@ class Home extends Component {
     const result = await Taro.getUserInfo();
     console.log("result", result);
   };
-
-  // goGoodsDetailHandler = () => {
-  //   Taro.navigateTo({
-  //     url: `/pages/goodsDetail/index?id=1271`
-  //   });
-  // };
-
   /********************* 渲染页面的方法 *********************/
-  // /**
-  //  * 渲染首页slider
-  //  */
-  // renderSlider = () => {
-  //   const {data} = this.props.home
-  //   return (
-  //     <Slider banner={data.}/>
-  //   )
-  // }
-
-  // /**
-  //  * 渲染首页
-  //  */
-  // renderHome = () => {
-  //   const { homeItems } = this.props.home;
-  //   return homeItems.map((item, index) => {
-  //     switch (item.type) {
-  //       case "SliderImage": {
-  //         return <Slider banner={item.content} />;
-  //       }
-
-  //       default: {
-  //         break;
-  //       }
-  //     }
-  //   });
-  // };
-
-  /**
-   * 渲染首页
-   */
-  // renderHome = homeItems => {
-  //   return homeItems.map((item, index) => {
-  //     if (item.type == "SliderImage") {
-  //       return <Slider banner={item.content} />;
-  //     }
-  //   });
-  // };
 
   /********************* 页面render方法 ********************/
   render() {
@@ -192,14 +148,6 @@ class Home extends Component {
           分享页面
         </Button>
         <View>
-          {/* <Image
-            mode="widthFix"
-            src={`https://cdn2u.com/images/upload/241018-afe6ced15f8b064ad9d91e1d24cf1af9-1242x600.jpg`}
-          /> */}
-          {/* {homeItems.map((item, index) => {
-            return item.type === "SliderImage" && <Text>{item.type}</Text>
-          })} */}
-          {/* <AtSearchBar value={""} onChange={this.atSearchBarChangeHandler} /> */}
           <View className="search-bar">
             <Image
               src={require("../../assets/icon/resource18.png")}
