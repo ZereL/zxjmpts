@@ -139,7 +139,21 @@ class Order extends Component {
           joinedPay: false
         });
         console.log("payResult", payResult);
-        Taro.showToast({ title: "支付成功", icon: "none", duration: 2000 });
+        const { payUrl } = payResult
+        Taro.requestPayment({
+          timeStamp: payUrl.timeStamp,
+          nonceStr: payUrl.nonceStr,
+          package: payUrl.package,
+          signType: payUrl.signType,
+          paySign: payUrl.paySign
+        }).then((res) => {
+          console.log("res", res);
+          Taro.showToast({ title: "支付成功", icon: "none", duration: 2000 });
+        }).catch((res) => {
+          console.log("res", res);
+          Taro.showToast({ title: "支付失败", icon: "none", duration: 2000 });
+        })
+        
       }
     } catch (error) {
       console.log("error", error);
