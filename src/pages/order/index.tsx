@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:07:40
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-22 12:26:23
+ * @Last Modified time: 2019-02-22 12:36:41
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -120,13 +120,26 @@ class Order extends Component {
   async requestPayOrder() {
     const { orderId, paymentMethod } = this.state;
     try {
-      const payResult = await this.props.requestPayOrder("order", {
-        // memberId: 0,
-        orderId: orderId,
-        paymentConfigId: paymentMethod
-        // wechatCode: "string",
-        // joinedPay: true
-      });
+      if (paymentMethod == "1") {
+        const payResult = await this.props.requestPayOrder("order", {
+          // memberId: 0,
+          orderId: orderId,
+          paymentConfigId: paymentMethod
+          // wechatCode: "string",
+          // joinedPay: true
+        });
+        Taro.showToast({ title: "支付成功", icon: "none", duration: 2000 });
+      } else if (paymentMethod == "3") {
+        const wechatCode = await Taro.login();
+        const payResult = await this.props.requestPayOrder("order", {
+          // memberId: 0,
+          orderId: orderId,
+          paymentConfigId: paymentMethod,
+          wechatCode: wechatCode
+          // joinedPay: true
+        });
+        Taro.showToast({ title: "支付成功", icon: "none", duration: 2000 });
+      }
     } catch (error) {
       console.log("error", error);
       console.log("error.message", error.message);
