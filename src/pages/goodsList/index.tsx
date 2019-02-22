@@ -74,18 +74,17 @@ class GoodsList extends Component {
   /********************* 事件handler **********************/
 
   fetchPageData = async () => {
+    let { brandId, cateId, keyword } = this.$router.params; //获取分享进来的参数share
+    console.log("this.$router.params", this.$router.params);
     try {
       const result = await this.props.fetchPageData(GOODSLIST, {
         // pageSize: pageSize,
         // currentPage: currentPage + 1,
-        // brandId: item.brandId ? item.brandId : null,
-        // cateId: item.cateId ? item.cateId : null,
-        // keyword: keyword
+        brandId: brandId ? brandId : null,
+        cateId: cateId ? cateId : null,
+        keyword: keyword,
         pageSize: 14,
-        currentPage: 1,
-        // brandId: item.brandId ? item.brandId : null,
-        // cateId: item.cateId ? item.cateId : null,
-        keyword: "奶粉"
+        currentPage: 1
       });
       console.log("请求成功", result);
     } catch (error) {
@@ -95,20 +94,15 @@ class GoodsList extends Component {
 
   fetchMorePageData = async () => {
     const { currentPage, hasNext, pageSize } = this.props.goodsList;
-
+    let { brandId, cateId, keyword } = this.$router.params; //获取分享进来的参数share
     try {
       if (hasNext) {
         const result = await this.props.fetchMorePageData(GOODSLIST, {
-          // pageSize: pageSize,
-          // currentPage: currentPage + 1,
-          // brandId: item.brandId ? item.brandId : null,
-          // cateId: item.cateId ? item.cateId : null,
-          // keyword: keyword
-          pageSize: pageSize,
-          currentPage: currentPage + 1,
-          // brandId: item.brandId ? item.brandId : null,
-          // cateId: item.cateId ? item.cateId : null,
-          keyword: "奶粉"
+          brandId: brandId ? brandId : null,
+          cateId: cateId ? cateId : null,
+          keyword: keyword,
+          pageSize: 14,
+          currentPage: currentPage + 1
         });
         console.log("请求成功", result);
       } else {
@@ -119,17 +113,18 @@ class GoodsList extends Component {
     }
   };
 
-  onScrollToLower = () => {
-    const { currentPage, hasNext, pageSize } = this.props.goodsList;
-    // console.log('滑到底部');
-    this.props.fetchMorePageData(GOODSLIST, {
-      pageSize: pageSize,
-      currentPage: currentPage + 1,
-      // brandId: item.brandId ? item.brandId : null,
-      // cateId: item.cateId ? item.cateId : null,
-      keyword: "奶粉"
-    });
-  };
+  // onScrollToLower = () => {
+  //   const { currentPage, hasNext, pageSize } = this.props.goodsList;
+  //   // console.log('滑到底部');
+  //   this.props.fetchMorePageData(GOODSLIST, {
+  //     pageSize: pageSize,
+  //     currentPage: currentPage + 1,
+  //     // brandId: item.brandId ? item.brandId : null,
+  //     // cateId: item.cateId ? item.cateId : null,
+  //     keyword: "奶粉"
+  //   });
+  // };
+
   // goGoodsDetailHandler = () => {
   //   Taro.navigateTo({
   //     url: `/pages/goodsDetail/index?id=1271`
@@ -153,7 +148,7 @@ class GoodsList extends Component {
         // upperThreshold="20"
         // onScrolltoupper={this.onScrolltoupper}
         // onScroll={this.onScroll}
-        onScrollToLower={this.onScrollToLower}
+        onScrollToLower={this.fetchMorePageData}
       >
         <ZXJGoodsList list={items} />
       </ScrollView>

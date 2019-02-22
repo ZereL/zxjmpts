@@ -33,7 +33,7 @@ const globalData: object = {};
  */
 export function setGlobalData(key: string, value: any) {
   globalData[key] = value;
-  console.log("globalData", globalData);
+  // console.log("globalData", globalData);
 }
 
 /**
@@ -41,6 +41,6 @@ export function setGlobalData(key: string, value: any) {
  * @param key
  */
 export function getGlobalData(key: string) {
-  console.log("globalData[key]", globalData[key]);
+  // console.log("globalData[key]", globalData[key]);
   return globalData[key];
 }

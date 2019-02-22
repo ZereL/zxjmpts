@@ -19,14 +19,14 @@ export function payOrderByDeposit(payload) {
   });
 }
 
-// /**
-//  *
-//  * @param {OrderId,PaymentMethodId} payload
-//  * 支付订单(wechat)
-//  */
+/**
+ *
+ * @param {OrderId,PaymentMethodId} payload
+ * 支付订单(wechat)
+ */
 export function payOrderByWechatSupay(payload) {
   return api.post({
-    url: "/paymentService/payment/payOrderByWechatMinSupay/",
+    url: "/paymentService/payment/payOrderByWechatMinSupay",
     payload: payload
   });
 }

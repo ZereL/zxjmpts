@@ -135,9 +135,10 @@ class Order extends Component {
           // memberId: 0,
           orderId: orderId,
           paymentConfigId: paymentMethod,
-          wechatCode: wechatCode
-          // joinedPay: true
+          wechatCode: wechatCode.code,
+          joinedPay: false
         });
+        console.log("payResult", payResult);
         Taro.showToast({ title: "支付成功", icon: "none", duration: 2000 });
       }
     } catch (error) {
