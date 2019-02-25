@@ -2,7 +2,7 @@
  * @Author: Hank 
  * @Date: 2019-02-08 15:12:31 
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-14 15:57:57
+ * @Last Modified time: 2019-02-25 13:32:25
  */
 
 @import "../../styles/mixin";
@@ -10,18 +10,18 @@
 .not-login-shopkeeper-page {
   .fixIndex {
     font-size: 24px;
-    height: 100px;
+    height: 120px;
     background-color: #737373;
     .avatar-image {
       float: left;
       margin: 10px;
-      width: 10%
+      width: 10%;
     }
     .shared-data {
       float: left;
-      margin: 20px;
+      margin: 10px 20px 0px 20px;
       color: #ffffff;
-      width: 75%
+      width: 75%;
     }
   }
   .bottom-view {

@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:10:01
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-12 10:26:33
+ * @Last Modified time: 2019-02-25 14:59:55
  */
 import {
   REQUEST_LOGIN,
@@ -11,10 +11,15 @@ import {
   FETCH_USERTOKEN,
   SET_USERTOKEN,
   FETCH_USERINFO,
-  SET_USERINFO
+  SET_USERINFO,
+  FETCH_INVITATIONCODE
 } from "./../../constants/index";
 import { fetchHomeData } from "../../services/homeService";
-import { fetchUserData, fetchUserInfo } from "../../services/memberService";
+import {
+  fetchUserData,
+  fetchUserInfo,
+  fetchInvitationCode
+} from "../../services/memberService";
 import Taro from "@tarojs/taro";
 
 export default {
@@ -68,6 +73,17 @@ export default {
       });
 
       return requestResult;
+    },
+    *[FETCH_INVITATIONCODE]({ payload }, { select, put, call }) {
+      const requestResult = yield call(fetchInvitationCode, payload);
+      console.log("requestResult", requestResult);
+      const requestResultData = requestResult.data;
+      yield put({
+        type: SET_USERINFO,
+        payload: requestResultData
+      });
+
+      return requestResultData;
     },
     *[FETCH_USERINFO]({ payload }, { select, put, call }) {
       const requestResult = yield call(fetchUserInfo, payload);

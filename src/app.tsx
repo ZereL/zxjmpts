@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:11:03
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-21 11:05:52
+ * @Last Modified time: 2019-02-25 13:15:11
  */
 
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -93,6 +93,7 @@ class App extends Component {
     // 如果token为空， globalData中就是空字符串
     setGlobalData("token", token);
     setGlobalData("systemInfo", Taro.getSystemInfoSync());
+    console.log("Taro.getSystemInfoSync()", Taro.getSystemInfoSync());
   }
 
   componentDidShow() {}

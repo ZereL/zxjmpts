@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-08 15:12:23
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-15 11:34:17
+ * @Last Modified time: 2019-02-25 14:55:56
  */
 
 import { ComponentClass } from "react";
@@ -16,7 +16,8 @@ import {
   fetchMorePageData,
   fetchUserInfo,
   requestRegisterUid,
-  requestRegisterWechat
+  requestRegisterWechat,
+  fetchInvitationCode
 } from "../../actions";
 import ZXJGoodsList from "../../components/ZXJGoodsList/index";
 import { getGlobalData, setGlobalData } from "../../utils/common";
@@ -30,6 +31,7 @@ type PageDispatchProps = {
   fetchUserInfo: (namespace: string, payload?: any) => any;
   requestRegisterUid: (namespace: string, payload?: any) => any;
   requestRegisterWechat: (namespace: string, payload?: any) => any;
+  fetchInvitationCode: (namespace: string, payload?: any) => any;
 };
 
 type PageOwnProps = {
@@ -39,7 +41,12 @@ type PageOwnProps = {
     hasNext: boolean;
     pageSize: number;
   };
-  user: any;
+  user: {
+    invatationCode: string;
+    invatationCodeHash: string;
+    name: string;
+    image: string;
+  };
 };
 
 type PageState = {};
@@ -60,7 +67,8 @@ interface NotLoginShopkeeper {
     fetchMorePageData: fetchMorePageData,
     fetchUserInfo: fetchUserInfo,
     requestRegisterUid: requestRegisterUid,
-    requestRegisterWechat: requestRegisterWechat
+    requestRegisterWechat: requestRegisterWechat,
+    fetchInvitationCode: fetchInvitationCode
   }
 )
 
@@ -83,11 +91,36 @@ class NotLoginShopkeeper extends Component {
 
   componentWillUnmount() {}
 
-  componentDidShow() {
+  async componentDidShow() {
     // 判断用户是否之前登录过
     console.log('getGlobalData("token")', getGlobalData("token"));
     if (getGlobalData("token")) {
-      this.props.fetchUserInfo("user");
+      // const {
+      //   invatationCode,
+      //   invatationCodeHash,
+      //   isCommissionAvailable
+      // } = await this.props.fetchUserInfo("user");
+      const { data } = await this.props.fetchUserInfo("user");
+
+      console.log("data", data);
+      const {
+        invatationCode,
+        invatationCodeHash,
+        isCommissionAvailable
+      } = data;
+      console.log(
+        "invatationCode",
+        invatationCode,
+        "isCommissionAvailable",
+        isCommissionAvailable
+      );
+      if (!invatationCode && isCommissionAvailable) {
+        console.log("刚升级成金主，需要发送请求获取邀请码");
+        // 如果没有邀请码并且已经成为金主， 发请求获取邀请码
+        this.props.fetchInvitationCode("user");
+      } else {
+        console.log("已经是金主，也有邀请码");
+      }
     }
 
     this.fetchPageData();
@@ -150,15 +183,23 @@ class NotLoginShopkeeper extends Component {
   onShareAppMessage() {
     // 目前我不是金主，所以没从user页面的model中取数据
     // TODO: 思考如果不是金主想分享怎么办？是直接不传邀请码还是怎么样。
-    const goodsId = 128;
-    const code = `FSI005`;
-    const hash = `570AD6F305EC6EA60DCA5DCFAE67AE09`;
-    const name = `漠然`;
-    const avatarImage =
-      "https://cdn2u.com/images/upload/2141-1bec8a1242511c99891f6e80b9c5ebfe-132x132.jpg";
+    const { invatationCode, invatationCodeHash, name, image } = this.props.user;
+
+    if (!invatationCode) {
+      Taro.showToast({
+        title: "您还没有邀请码，请您成为金主以后，再分享本页",
+        icon: "none",
+        duration: 2000
+      });
+    }
+    // const code = `FSI005`;
+    // const hash = `570AD6F305EC6EA60DCA5DCFAE67AE09`;
+    // const name = `漠然`;
+    // const avatarImage =
+    //   "https://cdn2u.com/images/upload/2141-1bec8a1242511c99891f6e80b9c5ebfe-132x132.jpg";
     return {
       title: "海淘更便宜，分享有收益❤️全球臻选好物等您来👇。",
-      path: `/pages/notLoginShopkeeper/index?goodsId=${goodsId}&code=${code}&hash=${hash}&name=${name}&avatarImage=${avatarImage}&share=true`,
+      path: `/pages/notLoginShopkeeper/index?code=${invatationCode}&hash=${invatationCodeHash}&name=${name}&avatarImage=${image}&share=true`,
       imageUrl: `/src/assets/icon/resource63.png`, // TODO：自定义分享图片目前好像不行
       success: function(res) {
         console.log(res);
@@ -200,7 +241,7 @@ class NotLoginShopkeeper extends Component {
           "notLoginShopkeeper",
           {
             // invatationCode: code,
-            invatationCode: "Emily", // TODO: 这个要改！！！
+            invatationCode: code, // TODO: 这个要改！！！
             // UserIP: payload.UserIP,
             notLogin: false,
             uid: unionId
@@ -242,6 +283,7 @@ class NotLoginShopkeeper extends Component {
     console.log("打印params", this.$router.params);
     // let {share} = this.$router.params.share; //获取分享进来的参数share
     console.log("avatarImage", avatarImage);
+    console.log("userModel", this.props.user);
     return (
       <View className="not-login-shopkeeper-page">
         {/* {share ? (

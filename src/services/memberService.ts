@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-11 15:38:30
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-14 17:17:35
+ * @Last Modified time: 2019-02-25 14:59:39
  */
 import api from "./api";
 
@@ -17,6 +17,16 @@ export function fetchUserData(payload) {
       EncryptedData: payload.encryptedData,
       Iv: payload.iv
     }
+  });
+}
+
+/**
+ * 获取用户邀请码
+ */
+export function fetchInvitationCode(payload) {
+  return api.post({
+    url: "/memberService/member/getInvationCode",
+    payload: payload || {}
   });
 }
 
@@ -41,9 +51,9 @@ export function requestRegisterWeChat(payload) {
   return api.post({
     url: "/memberService/member/registerByWechat",
     payload: {
-      invatationCode : payload.invatationCode,
+      invatationCode: payload.invatationCode,
       uid: payload.uid,
-      notLogin : payload.notLogin,
+      notLogin: payload.notLogin
     }
   });
 }

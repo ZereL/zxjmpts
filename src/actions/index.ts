@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:08:38
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-22 11:08:22
+ * @Last Modified time: 2019-02-25 14:36:21
  */
 
  // TODO: 这些Action需要整理复用。
@@ -25,7 +25,8 @@ import {
   REQUEST_ADDADDRESS,
   FETCH_CARTADDRESS,
   REQUEST_CREATEORDER,
-  REQUEST_PAYORDER
+  REQUEST_PAYORDER,
+  FETCH_INVITATIONCODE
 } from "../constants/index";
 import Action from "./actions";
 
@@ -86,6 +87,9 @@ export const requestRegisterUid = (namespace: string, payload?: any) =>
 // 未登录金主页面action
 export const requestRegisterWechat = (namespace: string, payload?: any) =>
   Action(`${namespace}/${REQUEST_REGISTERWECHAT}`, payload);
+
+export const fetchInvitationCode = (namespace: string, payload?: any) =>
+  Action(`${namespace}/${FETCH_INVITATIONCODE}`, payload);
 
 // 地址页面
 export const requestAddAddress = (namespace: string, payload?: any) =>
