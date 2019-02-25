@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-08 15:12:23
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-25 15:05:15
+ * @Last Modified time: 2019-02-25 17:33:33
  */
 
 import { ComponentClass } from "react";
@@ -22,6 +22,8 @@ import {
 import ZXJGoodsList from "../../components/ZXJGoodsList/index";
 import { getGlobalData, setGlobalData } from "../../utils/common";
 import { AtTabBar, AtButton, AtNoticebar, AtAvatar, AtModal } from "taro-ui";
+import { IMAGE_URL, cdnSmallSuffix } from "../../config";
+import avatar_img from "../../assets/icon/resource23.png";
 
 type PageStateProps = {};
 
@@ -218,6 +220,7 @@ class NotLoginShopkeeper extends Component {
   };
 
   onClickRegister = async () => {
+    // QBF219
     try {
       let { goodId, code, hash, name, avatarImage } = this.$router.params; //获取分享进来的参数share
       const loginResult = await Taro.login();
@@ -242,7 +245,7 @@ class NotLoginShopkeeper extends Component {
           "notLoginShopkeeper",
           {
             // invatationCode: code,
-            invatationCode: code, // TODO: 这个要改！！！
+            invatationCode: "QBF219", // TODO: 这个要改！！！
             // UserIP: payload.UserIP,
             notLogin: false,
             uid: unionId
@@ -264,8 +267,9 @@ class NotLoginShopkeeper extends Component {
         // Taro.showToast({ title: `注册成功`, duration: 2000 });
       }
     } catch (error) {
+      console.log("error", error);
       Taro.showToast({
-        title: `注册出错，${error}`,
+        title: `注册出错，${error.toString()}`,
         icon: "none",
         duration: 2000
       });
@@ -296,7 +300,11 @@ class NotLoginShopkeeper extends Component {
           <View className="fixIndex">
             <AtAvatar
               circle
-              image={avatarImage}
+              image={
+                avatarImage
+                  ? `${IMAGE_URL}${avatarImage}${cdnSmallSuffix}`
+                  : avatar_img
+              }
               size="small"
               className="avatar-image"
             />
@@ -319,7 +327,7 @@ class NotLoginShopkeeper extends Component {
         <ScrollView
           style={
             share
-              ? `height: ${getGlobalData("systemInfo").windowHeight - 100}px`
+              ? `height: ${getGlobalData("systemInfo").windowHeight - 115}px`
               : `height: ${getGlobalData("systemInfo").windowHeight - 50}px`
           }
           scrollY
@@ -360,7 +368,11 @@ class NotLoginShopkeeper extends Component {
             <View className="bottom-view-text">
               加入臻享家，点击“一键注册”，查看全球各国好物。
             </View>
-            <AtButton className="bottom-button" onClick={this.onClickRegister}>
+            <AtButton
+              className="bottom-button"
+              onGetUserInfo={this.onClickRegister}
+              open-type="getUserInfo"
+            >
               一键注册
             </AtButton>
           </View>

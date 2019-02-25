@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:10:06
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-25 15:32:51
+ * @Last Modified time: 2019-02-25 17:30:31
  */
 import Taro from "@tarojs/taro";
 // import qs from "qs";
@@ -83,7 +83,8 @@ function throwResultCodeError(error, reject) {
 
 function throwError(error, reject) {
   Taro.hideNavigationBarLoading();
-  Taro.showToast({ title: error, icon: "none", duration: 2000 }); // TODO: 正式时候需要把这个移除
+  console.log("error", error);
+  // Taro.showToast({ title: error.toString(), icon: "none", duration: 2000 }); // TODO: 正式时候需要把这个移除
   if (error.errMsg) {
     //
     reject("服务器正在维护中!");
