@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:07:40
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-14 17:36:24
+ * @Last Modified time: 2019-02-25 13:08:58
  */
 
 import { ComponentClass } from "react";
@@ -138,18 +138,18 @@ class Home extends Component {
         {/* <Button className="add_btn" onClick={this.add}>
           +
         </Button> */}
-        <Button className="add_btn" onClick={this.getCode}>
+        {/* <Button className="add_btn" onClick={this.getCode}>
           getCode
         </Button>
         <Button className="add_btn" onClick={this.getUserInfo}>
           getUserInfo
-        </Button>
+        </Button> */}
         {/* <Button className="add_btn" onClick={this.loginHandler}>
           登录
         </Button> */}
-        <Button className="add_btn" onClick={this.goGoodsList}>
+        {/* <Button className="add_btn" onClick={this.goGoodsList}>
           商品列表
-        </Button>
+        </Button> */}
         {/* <Button className="add_btn" onClick={this.goGoodsDetailHandler}>
           查看商品详情
         </Button> */}

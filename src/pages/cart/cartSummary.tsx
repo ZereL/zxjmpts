@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-19 14:33:17
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-20 17:08:29
+ * @Last Modified time: 2019-02-25 13:01:20
  */
 
 import { ComponentClass } from "react";
@@ -21,7 +21,8 @@ import {
   setCartLocation,
   fetchPaymentMethod,
   fetchCartAddress,
-  requestCreateOrder
+  requestCreateOrder,
+  requestPayOrder
 } from "../../actions";
 import { CART } from "../../constants";
 import { getGlobalData } from "../../utils/common";
@@ -47,6 +48,7 @@ type PageDispatchProps = {
   fetchPaymentMethod: (namespace: string, payload?: any) => any;
   fetchCartAddress: (namespace: string, payload?: any) => any;
   requestCreateOrder: (namespace: string, payload?: any) => any;
+  requestPayOrder: (namespace: string, payload?: any) => any;
 };
 
 type PageOwnProps = {};
@@ -76,7 +78,8 @@ interface CartSummary {
     setCartLocation: setCartLocation,
     fetchPaymentMethod: fetchPaymentMethod,
     fetchCartAddress: fetchCartAddress,
-    requestCreateOrder: requestCreateOrder
+    requestCreateOrder: requestCreateOrder,
+    requestPayOrder: requestPayOrder
   }
 )
 class CartSummary extends Component {
@@ -86,7 +89,7 @@ class CartSummary extends Component {
 
   state = {
     warehouses: [{ data: {} }],
-    value: "Balance"
+    paymentMethod: "Balance"
   };
 
   /********************* 生命周期函数 **********************/
@@ -165,7 +168,7 @@ class CartSummary extends Component {
 
   handleChange(value) {
     this.setState({
-      value
+      paymentMethod: value
     });
   }
 
@@ -197,11 +200,11 @@ class CartSummary extends Component {
   //   });
   // }
 
-  checkOutHandler = () => {
-    const { totalPrice, } = this.props.cart
-    const { defaultAddress } = this.props.address
-    const { } = this.state
-    this.props.requestCreateOrder("order", {
+  checkOutHandler = async () => {
+    const { totalPrice } = this.props.cart;
+    const { defaultAddress } = this.props.address;
+    const { paymentMethod } = this.state;
+    const orderId = await this.props.requestCreateOrder("order", {
       totalPrice: totalPrice,
       remark: "",
       country: "CN",
@@ -214,13 +217,56 @@ class CartSummary extends Component {
       idNum: defaultAddress.idNum,
       enCode: defaultAddress.enCode,
       addressId: defaultAddress.id,
-      channel: 1, // 现在先用1
+      channel: 1 // 现在先用1
       // sender: {
       //   id: 0,
       //   name: "string",
       //   phoneNum: "string"
       // }
     });
+
+    try {
+      if (paymentMethod == "Balance") {
+        const payResult = await this.props.requestPayOrder("order", {
+          // memberId: 0,
+          orderId: orderId,
+          paymentConfigId: "1"
+          // wechatCode: "string",
+          // joinedPay: true
+        });
+        Taro.showToast({ title: "支付成功", icon: "none", duration: 2000 });
+      } else if (paymentMethod == "WechatSupay") {
+        const wechatCode = await Taro.login();
+        const payResult = await this.props.requestPayOrder("order", {
+          // memberId: 0,
+          orderId: orderId,
+          paymentConfigId: "3",
+          wechatCode: wechatCode.code,
+          joinedPay: false
+        });
+        console.log("payResult", payResult);
+        const { payUrl } = payResult;
+        Taro.requestPayment({
+          timeStamp: payUrl.timeStamp,
+          nonceStr: payUrl.nonceStr,
+          package: payUrl.package,
+          signType: payUrl.signType,
+          paySign: payUrl.paySign
+        })
+          .then(res => {
+            console.log("res", res);
+            Taro.showToast({ title: "支付成功", icon: "none", duration: 2000 });
+          })
+          .catch(res => {
+            console.log("res", res);
+            Taro.showToast({ title: "支付失败", icon: "none", duration: 2000 });
+          });
+      }
+    } catch (error) {
+      console.log("error", error);
+      console.log("error.message", error.message);
+      Taro.showToast({ title: error.message, icon: "none", duration: 2000 });
+    }
 
     // TotalPrice: data.totalPrice, // TODO: 暂时使用购物车总价，实际需要使用支付方式接口返回的总价
     // Remark: "", // 备注字段
@@ -245,6 +291,7 @@ class CartSummary extends Component {
     // Taro.navigateTo({ url: "/pages/address/index" });
     // Taro.navigateTo({ url: "/pages/addressUpdate/index" });
     console.log("AddressList");
+    Taro.showToast({ title: "进入修改地址页面", icon: "none", duration: 2000 });
   };
 
   /********************* 渲染页面的方法 *********************/
@@ -258,6 +305,7 @@ class CartSummary extends Component {
       totalPriceWithoutDelivery
     } = this.props.cart;
     const { defaultAddress } = this.props.address;
+    console.log("defaultAddress", defaultAddress);
     console.log("warehouses", warehouses);
 
     const goodsList =
@@ -277,8 +325,13 @@ class CartSummary extends Component {
         >
           {defaultAddress ? (
             <View className="address" onClick={this.addressListHandler}>
-              {defaultAddress.area} {defaultAddress.city}{" "}
-              {defaultAddress.detailAddress}
+              <View className="address-row">
+                {defaultAddress.name}, {defaultAddress.phoneNum}
+              </View>
+              <View className="address-row">
+                {defaultAddress.area} {defaultAddress.city}{" "}
+                {defaultAddress.detailAddress}
+              </View>
             </View>
           ) : (
             <View className="address" onClick={this.addAddressHandler}>
@@ -311,7 +364,7 @@ class CartSummary extends Component {
               { label: "支付宝", value: "AlipaySupay", disabled: true },
               { label: "微信", value: "WechatSupay" }
             ]}
-            value={this.state.value}
+            value={this.state.paymentMethod}
             onClick={this.handleChange.bind(this)}
           />
           <View className="total-price">

@@ -10,7 +10,7 @@ import { View, Text, Image, Button } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 
 import "./index.scss";
-import { add, login, fetchUserToken, fetchUserInfo } from "../../actions";
+import { login, fetchUserToken, fetchUserInfo } from "../../actions";
 import { USER } from "../../constants";
 
 import messageIcon from "../../assets/icon/resource52.png";
@@ -62,7 +62,6 @@ interface User {
     user
   }),
   {
-    add: add,
     login: login,
     fetchUserToken: fetchUserToken,
     fetchUserInfo: fetchUserInfo
@@ -70,7 +69,7 @@ interface User {
 )
 class User extends Component {
   state = {
-    isOpened: true,
+    isOpened: false,
     avatarUrl: "",
     nickName: ""
   };
@@ -112,14 +111,6 @@ class User extends Component {
   componentDidHide() {}
 
   /********************* 事件handler **********************/
-  add = async () => {
-    try {
-      const result = await this.props.add(USER);
-      console.log("请求成功", result);
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
 
   /**
    * 获取权限同意的modal事件
@@ -141,20 +132,74 @@ class User extends Component {
   loginHandler = async () => {
     // 拿到用户登录凭证
     const { code } = await Taro.login();
-    const { userInfo, encryptedData, iv } = await Taro.getUserInfo();
-    const { data } = await this.props.fetchUserToken(USER, {
-      wechatCode: code,
-      encryptedData: encryptedData,
-      iv: iv
-    });
-    console.log("data", data);
-    console.log("data.token", data.token);
-    // 设置全局变量token
-    setGlobalData("token", data.token);
-    // 存储全局变量，下次进入程序自动登录
-    Taro.setStorage({ key: "token", data: data.token });
-    console.log(data);
-    const result = this.props.fetchUserInfo(USER);
+    console.log("code", code);
+    try {
+      if (code) {
+        const { userInfo, encryptedData, iv } = await Taro.getUserInfo();
+        console.log("userInfo, encryptedData, iv", userInfo, encryptedData, iv);
+
+        if (encryptedData != void 23333 && iv != void 23333) {
+          this.setState({ isOpened: false });
+          const { data } = await this.props.fetchUserToken(USER, {
+            wechatCode: code,
+            encryptedData: encryptedData,
+            iv: iv
+          });
+          console.log("data", data);
+          console.log("data.token", data.token);
+          // 设置全局变量token
+          setGlobalData("token", data.token);
+          // 存储全局变量，下次进入程序自动登录
+          Taro.setStorage({ key: "token", data: data.token });
+          console.log(data);
+          const result = this.props.fetchUserInfo(USER);
+        } else {
+          Taro.showToast({
+            title: "授权失败，请先授权",
+            icon: "none",
+            duration: 2000
+          });
+        }
+      } else {
+        Taro.showToast({
+          title: "授权失败，请先授权",
+          icon: "none",
+          duration: 2000
+        });
+      }
+    } catch (error) {
+      // console.log("error", error);
+      this.setState({ isOpened: true });
+    }
+
+    // Taro.getUserInfo()
+    //   .then((userInfo, encryptedData, iv) => {
+    //     console.log(userInfo, encryptedData, iv, code);
+    //   })
+    //   .catch(errMsg => {});
+    // const { userInfo, encryptedData, iv } = await Taro.getUserInfo();
+
+    // if (encryptedData != void 23333 && iv != void 23333) {
+    //   const { data } = await this.props.fetchUserToken(USER, {
+    //     wechatCode: code,
+    //     encryptedData: encryptedData,
+    //     iv: iv
+    //   });
+    //   console.log("data", data);
+    //   console.log("data.token", data.token);
+    //   // 设置全局变量token
+    //   setGlobalData("token", data.token);
+    //   // 存储全局变量，下次进入程序自动登录
+    //   Taro.setStorage({ key: "token", data: data.token });
+    //   console.log(data);
+    //   const result = this.props.fetchUserInfo(USER);
+    // } else {
+    //   Taro.showToast({
+    //     title: "授权失败，请先授权",
+    //     icon: "none",
+    //     duration: 2000
+    //   });
+    // }
   };
 
   modalCancelHandler = () => {
@@ -176,18 +221,20 @@ class User extends Component {
     console.log("this.props", this.props);
     return (
       <View className="user-page">
-        <Button onClick={this.loginHandler}>登录</Button>
+        {/* <Button onClick={this.loginHandler}>登录</Button> */}
         <View className="not-login">
           <View className="to-login" data-url="/pages/login/index">
             <View className="left">
               <View className={name ? "name black" : "name "}>
-                <Text>
+                <View>
                   {name ? (
                     <Text>{`欢迎您回来，${name}`}</Text>
                   ) : (
-                    "已经是小主？请登录 >"
+                    <Text onClick={this.loginHandler} open-type="getUserInfo">
+                      已经是小主？请登录 >
+                    </Text>
                   )}
-                </Text>
+                </View>
               </View>
               <View>
                 <View className="msg" data-url="/pages/message/index">
@@ -281,16 +328,15 @@ class User extends Component {
             </View>
           </View>
         </View>
-
         <AtModal isOpened={this.state.isOpened}>
           <AtModalHeader>标题</AtModalHeader>
           <AtModalContent>
             <View>
               <Text>申请获取你的公开信息（昵称、头像等）</Text>
-              {/* 这里需要修改 */}
               <Button
                 open-type="getUserInfo"
                 // onGetUserInfo={this.getUserInfoHandler} // TODO: 暂时注释掉
+                onGetUserInfo={this.loginHandler} // TODO: 暂时注释掉
               >
                 微信授权
               </Button>

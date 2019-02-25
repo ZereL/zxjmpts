@@ -74,6 +74,8 @@ class ZXJGoodsList extends Component {
                         </View>
                       )} */}
                 </View>
+                {/* <Text className="dark">{item.brand}</Text> */}
+                <Text>{item.name}</Text>
                 <View className="zan-capsule">
                   {/* {item.type_id == 2 && item.mode_id == 1 && (
                       <View className="zan-capsule__left">VIP</View>
@@ -90,8 +92,6 @@ class ZXJGoodsList extends Component {
                     </View>
                   )}
                 </View>
-                {/* <Text className="dark">{item.brand}</Text> */}
-                <Text>{item.name}</Text>
               </View>
             ))}
           </View>

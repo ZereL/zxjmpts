@@ -14,7 +14,7 @@ type PageStateProps = {};
 
 type PageDispatchProps = {};
 
-type PageOwnProps = { list: any; loading?: any;};
+type PageOwnProps = { list: any; loading?: any };
 
 type PageState = {};
 
@@ -74,6 +74,7 @@ class DynamicList extends Component {
                         </View>
                       )} */}
                 </View>
+                <Text>{item.content.name}</Text>
                 <View className="zan-capsule">
                   {/* {item.type_id == 2 && item.mode_id == 1 && (
                       <View className="zan-capsule__left">VIP</View>
@@ -90,7 +91,6 @@ class DynamicList extends Component {
                   )}
                 </View>
                 {/* <Text className="dark">{item.brand}</Text> */}
-                <Text>{item.content.name}</Text>
               </View>
             ))}
           </View>

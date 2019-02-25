@@ -39,6 +39,9 @@
   .address {
     @include wh(100%, 100px);
     text-align: center;
+    .address-row {
+      @include wh(100%, 40px);
+    }
   }
   .goods-row {
     @include wh(100%, 150px);
