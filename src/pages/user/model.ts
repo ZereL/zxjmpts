@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:10:01
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-25 14:59:55
+ * @Last Modified time: 2019-02-25 16:02:18
  */
 import {
   REQUEST_LOGIN,
@@ -12,7 +12,8 @@ import {
   SET_USERTOKEN,
   FETCH_USERINFO,
   SET_USERINFO,
-  FETCH_INVITATIONCODE
+  FETCH_INVITATIONCODE,
+  CLEAR_PAGEDATA
 } from "./../../constants/index";
 import { fetchHomeData } from "../../services/homeService";
 import {
@@ -38,6 +39,12 @@ export default {
     // 把后台返回的用户完整信息写入redux
     [SET_USERINFO](state, { payload }) {
       return { ...state, ...payload };
+    },
+    [CLEAR_PAGEDATA](state, {}) {
+      console.log("state", state);
+      return {
+        name: "",
+      };
     }
   },
   effects: {

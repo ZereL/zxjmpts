@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:58
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-21 09:59:06
+ * @Last Modified time: 2019-02-25 16:03:27
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -10,7 +10,12 @@ import { View, Text, Image, Button } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 
 import "./index.scss";
-import { login, fetchUserToken, fetchUserInfo } from "../../actions";
+import {
+  login,
+  fetchUserToken,
+  fetchUserInfo,
+  clearPageData
+} from "../../actions";
 import { USER } from "../../constants";
 
 import messageIcon from "../../assets/icon/resource52.png";
@@ -39,6 +44,7 @@ type PageDispatchProps = {
   login: (namespace: string, payload?: any) => any;
   fetchUserToken: (namespace: string, payload?: any) => any;
   fetchUserInfo: (namespace: string, payload?: any) => any;
+  clearPageData: (namespace: string, payload?: any) => any;
 };
 
 type PageOwnProps = {
@@ -64,7 +70,8 @@ interface User {
   {
     login: login,
     fetchUserToken: fetchUserToken,
-    fetchUserInfo: fetchUserInfo
+    fetchUserInfo: fetchUserInfo,
+    clearPageData: clearPageData
   }
 )
 class User extends Component {
@@ -89,6 +96,8 @@ class User extends Component {
     console.log("token", token);
     if (token === "") {
       this.setState({ isOpened: true });
+    } else {
+      const result = this.props.fetchUserInfo(USER);
     }
   }
 
@@ -212,6 +221,13 @@ class User extends Component {
     Taro.navigateTo({ url: "/pages/order/index" });
   };
 
+  logoutHandler = () => {
+    console.log("清除缓存");
+    Taro.clearStorageSync();
+    setGlobalData("token", "");
+    const result = this.props.clearPageData(USER);
+  };
+
   /********************* 渲染页面的方法 *********************/
   /********************* 页面render方法 ********************/
   render() {
@@ -327,9 +343,18 @@ class User extends Component {
               <View className="iconfont icon-more arrow" />
             </View>
           </View>
+          <View className="item" onClick={this.logoutHandler}>
+            <View className="left">
+              <Image className="icon-left" src={zxjLogo} />
+              <Text>登出</Text>
+            </View>
+            <View className="right">
+              <View className="iconfont icon-more arrow" />
+            </View>
+          </View>
         </View>
         <AtModal isOpened={this.state.isOpened}>
-          <AtModalHeader>标题</AtModalHeader>
+          <AtModalHeader>臻享家需要您的授权</AtModalHeader>
           <AtModalContent>
             <View>
               <Text>申请获取你的公开信息（昵称、头像等）</Text>

@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:07:40
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-25 13:27:24
+ * @Last Modified time: 2019-02-25 15:09:51
  */
 
 import { ComponentClass } from "react";
@@ -153,11 +153,12 @@ class Home extends Component {
         {/* <Button className="add_btn" onClick={this.goGoodsDetailHandler}>
           查看商品详情
         </Button> */}
-        <Button className="add_btn" onClick={this.goSharePageHandler}>
+        {/* <Button className="add_btn" onClick={this.goSharePageHandler}>
           分享页面
-        </Button>
+        </Button> */}
         <View className="search-bar">
           <Image
+            mode="aspectFit"
             src={require("../../assets/icon/resource18.png")}
             className="message-icon"
           />
@@ -166,6 +167,7 @@ class Home extends Component {
             onClick={this.searchViewClickHandler}
           >
             <Image
+              mode="aspectFit"
               src={require("../../assets/icon/resource32.png")}
               className="search-icon"
             />

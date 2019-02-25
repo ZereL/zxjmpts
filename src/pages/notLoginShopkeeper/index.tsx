@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-08 15:12:23
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-25 14:55:56
+ * @Last Modified time: 2019-02-25 15:05:15
  */
 
 import { ComponentClass } from "react";
@@ -75,6 +75,7 @@ interface NotLoginShopkeeper {
 // TODO: 研究代替switch case遍历homeItems数组的办法
 // TODO: 分页加载的时候显示加载中
 // TODO: 已经是金主的话底部按钮什么也不显示
+// TODO: 现在有一种极端情况下没做处理， 刚升级成金主，进来还没获得到邀请码， 直接分享， 这时候应该没有邀请码
 class NotLoginShopkeeper extends Component {
   config: Config = {
     navigationBarTitleText: "臻享家"
