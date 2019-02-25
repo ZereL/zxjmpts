@@ -2,12 +2,12 @@
  * @Author: Hank
  * @Date: 2019-02-08 15:12:23
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-25 17:33:33
+ * @Last Modified time: 2019-02-26 11:48:54
  */
 
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
-import { View, Image, ScrollView, Text } from "@tarojs/components";
+import { View, Image, ScrollView, Text, Button } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 
 import "./index.scss";
@@ -21,7 +21,17 @@ import {
 } from "../../actions";
 import ZXJGoodsList from "../../components/ZXJGoodsList/index";
 import { getGlobalData, setGlobalData } from "../../utils/common";
-import { AtTabBar, AtButton, AtNoticebar, AtAvatar, AtModal } from "taro-ui";
+import {
+  AtTabBar,
+  AtButton,
+  AtNoticebar,
+  AtAvatar,
+  AtModal,
+  AtModalHeader,
+  AtModalContent,
+  AtModalAction,
+  AtInput
+} from "taro-ui";
 import { IMAGE_URL, cdnSmallSuffix } from "../../config";
 import avatar_img from "../../assets/icon/resource23.png";
 
@@ -48,6 +58,7 @@ type PageOwnProps = {
     invatationCodeHash: string;
     name: string;
     image: string;
+    isCommissionAvailable: boolean;
   };
 };
 
@@ -84,7 +95,9 @@ class NotLoginShopkeeper extends Component {
   };
 
   state = {
-    isShareModalshow: false
+    isShareModalshow: false,
+    isInvitationCodeModalShow: false,
+    inputInviationCode: ""
   };
 
   /********************* 生命周期函数 **********************/
@@ -95,6 +108,7 @@ class NotLoginShopkeeper extends Component {
   componentWillUnmount() {}
 
   async componentDidShow() {
+    Taro.hideShareMenu();
     // 判断用户是否之前登录过
     console.log('getGlobalData("token")', getGlobalData("token"));
     if (getGlobalData("token")) {
@@ -244,8 +258,8 @@ class NotLoginShopkeeper extends Component {
         const registerWechat = await this.props.requestRegisterWechat(
           "notLoginShopkeeper",
           {
-            // invatationCode: code,
-            invatationCode: "QBF219", // TODO: 这个要改！！！
+            invatationCode: code,
+            // invatationCode: "QBF219", // TODO: 这个要改！！！
             // UserIP: payload.UserIP,
             notLogin: false,
             uid: unionId
@@ -276,16 +290,100 @@ class NotLoginShopkeeper extends Component {
     }
   };
 
+  onModalClickRegister = async () => {
+    // QBF219
+    try {
+      let { goodId, code, hash, name, avatarImage } = this.$router.params; //获取分享进来的参数share
+      const { inputInviationCode } = this.state;
+      if (inputInviationCode == "") {
+        console.log("请您输入邀请码");
+        Taro.showToast({
+          title: "请您输入邀请码",
+          icon: "none",
+          duration: 2000
+        });
+        return null;
+      }
+      const loginResult = await Taro.login();
+      console.log(loginResult);
+      const { userInfo, encryptedData, iv } = await Taro.getUserInfo();
+      const registerResult = await this.props.requestRegisterUid(
+        "notLoginShopkeeper",
+        {
+          wechatCode: loginResult.code,
+          encryptedData: encryptedData,
+          iv: iv
+        }
+      );
+      console.log("registerResult", registerResult);
+
+      // 需要注册
+      const { unionId } = registerResult.data;
+      if (unionId) {
+        // this._goWechatInvitation(uid);
+        // this._goWechatInvitation(uid);
+        const registerWechat = await this.props.requestRegisterWechat(
+          "notLoginShopkeeper",
+          {
+            invatationCode: inputInviationCode,
+            // invatationCode: "QBF219", // TODO: 这个要改！！！
+            // UserIP: payload.UserIP,
+            notLogin: false,
+            uid: unionId
+          }
+        );
+        console.log("registerWechat注册成功", registerWechat);
+        // 存入数据库
+        setGlobalData("token", registerWechat.data.token);
+        // 存入本地缓存
+        Taro.setStorageSync("token", registerWechat.data.token);
+        Taro.showToast({ title: `注册成功`, duration: 2000 });
+      } else {
+        Taro.showToast({
+          title: `您已经注册,服务器没有返回UID `,
+          icon: "none",
+          duration: 2000
+        });
+        // console.log("已经注册过");
+        // Taro.showToast({ title: `注册成功`, duration: 2000 });
+      }
+    } catch (error) {
+      console.log("error", error);
+      Taro.showToast({
+        title: `注册出错，${error.toString()}`,
+        icon: "none",
+        duration: 2000
+      });
+    }
+    this.setState({ isInvitationCodeModalShow: false });
+  };
+
+  onShowRegisterModal = () => {
+    this.setState({ isInvitationCodeModalShow: true });
+  };
+
+  onHideRegisterModal = () => {
+    this.setState({ isInvitationCodeModalShow: false });
+  };
+
+  onInputInviationCodeChange(value) {
+    this.setState({
+      inputInviationCode: value
+    });
+  }
   /********************* 渲染页面的方法 *********************/
 
   /********************* 页面render方法 ********************/
   render() {
     console.log("this.props", this.props);
     const { items } = this.props.notLoginShopkeeper;
-    const { id } = this.props.user;
+    const { id, isCommissionAvailable } = this.props.user;
     let share = this.$router.params.share; //获取分享进来的参数share
+    // let share = true;
     let { goodId, code, hash, name, avatarImage } = this.$router.params; //获取分享进来的参数share
     console.log("打印params", this.$router.params);
+    console.log("isCommissionAvailable", isCommissionAvailable);
+    console.log("id", id);
     // let {share} = this.$router.params.share; //获取分享进来的参数share
     console.log("avatarImage", avatarImage);
     console.log("userModel", this.props.user);
@@ -351,7 +449,7 @@ class NotLoginShopkeeper extends Component {
             情况5：是游客，通过分享进入
             情况6：是游客，不通过分享进入 
         */}
-        {id && share ? (
+        {id && share && isCommissionAvailable == false ? (
           <View className="bottom-view">
             <View className="bottom-view-text">
               更多商品请点击“成为金主”后查看
@@ -363,7 +461,20 @@ class NotLoginShopkeeper extends Component {
               成为金主
             </AtButton>
           </View>
-        ) : (
+        ) : null}
+        {isCommissionAvailable == true ? (
+          <View className="bottom-view">
+            <View className="bottom-view-text">
+              金主您好，点击“一键分享”，分享全球好物
+            </View>
+            <AtButton className="bottom-button" open-type="share">
+              一键分享
+            </AtButton>
+          </View>
+        ) : null}
+        {isCommissionAvailable == void 2333 &&
+        id == void 2333 &&
+        share == true ? (
           <View className="bottom-view">
             <View className="bottom-view-text">
               加入臻享家，点击“一键注册”，查看全球各国好物。
@@ -376,27 +487,42 @@ class NotLoginShopkeeper extends Component {
               一键注册
             </AtButton>
           </View>
-        )}
-      </View>
+        ) : null}
+        {isCommissionAvailable == void 2333 &&
+        id == void 2333 &&
+        share == void 2333 ? (
+          <View className="bottom-view">
+            <View className="bottom-view-text">
+              顾客您好，请您输入邀请码，成为臻享家会员
+            </View>
+            <AtButton
+              className="bottom-button"
+              onGetUserInfo={this.onShowRegisterModal}
+              open-type="getUserInfo"
+            >
+              开始注册
+            </AtButton>
+          </View>
+        ) : null}
 
-      // <ScrollView
-      //   className="scrollview"
-      //   scrollY
-      //   scrollWithAnimation
-      //   // scrollTop="0"
-      //   style="height: 600px"
-      //   lowerThreshold={20}
-      //   // upperThreshold="20"
-      //   // onScrolltoupper={this.onScrolltoupper}
-      //   // onScroll={this.onScroll}
-      //   onScrollToLower={this.onScrollToLower}
-      // >
-      //   <Image
-      //     mode="scaleToFill"
-      //     src={require("../../assets/image/jinzhu.jpg")}
-      //   />
-      //   {/* <ZXJGoodsList list={items} /> */}
-      // </ScrollView>
+        <AtModal isOpened={this.state.isInvitationCodeModalShow}>
+          <AtModalHeader>请输入臻享家邀请码</AtModalHeader>
+          <AtModalContent>
+            <AtInput
+              name="inputInviationCode"
+              title="邀请码："
+              type="text"
+              placeholder=""
+              value={this.state.inputInviationCode}
+              onChange={this.onInputInviationCodeChange.bind(this)}
+            />
+          </AtModalContent>
+          <AtModalAction>
+            <Button onClick={this.onHideRegisterModal}>取消</Button>
+            <Button onClick={this.onModalClickRegister}>注册</Button>
+          </AtModalAction>
+        </AtModal>
+      </View>
     );
   }
 }
