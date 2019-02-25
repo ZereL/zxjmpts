@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-08 15:12:23
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-26 11:48:54
+ * @Last Modified time: 2019-02-26 11:56:44
  */
 
 import { ComponentClass } from "react";
@@ -450,6 +450,20 @@ class NotLoginShopkeeper extends Component {
             情况6：是游客，不通过分享进入 
         */}
         {id && share && isCommissionAvailable == false ? (
+          <View className="bottom-view">
+            <View className="bottom-view-text">
+              更多商品请点击“成为金主”后查看
+            </View>
+            <AtButton
+              className="bottom-button"
+              onClick={this.goBecomeShopkeeperHandler}
+            >
+              成为金主
+            </AtButton>
+          </View>
+        ) : null}
+
+        {id && isCommissionAvailable == false ? (
           <View className="bottom-view">
             <View className="bottom-view-text">
               更多商品请点击“成为金主”后查看
