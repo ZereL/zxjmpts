@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-08 15:12:23
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-26 16:42:04
+ * @Last Modified time: 2019-02-27 11:42:32
  */
 
 import { ComponentClass } from "react";
@@ -20,7 +20,7 @@ import {
   fetchInvitationCode
 } from "../../actions";
 import ZXJGoodsList from "../../components/ZXJGoodsList/index";
-import { getGlobalData, setGlobalData } from "../../utils/common";
+import { getGlobalData, setGlobalData, MD5 } from "../../utils/common";
 import {
   AtTabBar,
   AtButton,
@@ -30,7 +30,8 @@ import {
   AtModalHeader,
   AtModalContent,
   AtModalAction,
-  AtInput
+  AtInput,
+  AtToast
 } from "taro-ui";
 import { IMAGE_URL, cdnSmallSuffix } from "../../config";
 import avatar_img from "../../assets/icon/resource23.png";
@@ -59,6 +60,7 @@ type PageOwnProps = {
     name: string;
     image: string;
     isCommissionAvailable: boolean;
+    id: any;
   };
 };
 
@@ -101,25 +103,46 @@ class NotLoginShopkeeper extends Component {
   };
 
   /********************* 生命周期函数 **********************/
+  /**
+   * 页面获取数据
+   */
   componentWillReceiveProps(nextProps) {
     console.log(this.props, nextProps);
   }
-
+  /**
+   * 页面卸载
+   */
   componentWillUnmount() {}
 
+  /**
+   * 页面获取焦点
+   */
   async componentDidShow() {
     Taro.hideShareMenu();
-    // 判断用户是否之前登录过
-    console.log('getGlobalData("token")', getGlobalData("token"));
-    if (getGlobalData("token")) {
-      // const {
-      //   invatationCode,
-      //   invatationCodeHash,
-      //   isCommissionAvailable
-      // } = await this.props.fetchUserInfo("user");
-      const { data } = await this.props.fetchUserInfo("user");
+    let { code, hash, share } = this.$router.params; //获取分享进来的参数share
 
-      console.log("data", data);
+    // 如果是通过分享进入， 需要计算验证md5
+    if (share == "true") {
+      let MD5Code = MD5(`ZXJ@${code}@InvestCode`);
+      const trimUpperCaseMD5Code = MD5Code.replace("-", "").toUpperCase();
+
+      // 如果hash和code转的hash不一直，直接跳走，不让用户注册
+      if (trimUpperCaseMD5Code != hash) {
+        Taro.showModal({
+          title: "邀请码被篡改",
+          content:
+            "检测到伪造的邀请码，为确保您的安全，您不能使用该用户分享的邀请码注册。"
+        }).then(res => {
+          console.log("res", res);
+          // Taro.navigateTo({ url: "/pages/home/index" });
+          Taro.switchTab({ url: "/pages/home/index" });
+        });
+      }
+    }
+
+    // 用户已经登录
+    if (getGlobalData("token")) {
+      const { data } = await this.props.fetchUserInfo("user");
       const {
         invatationCode,
         invatationCodeHash,
@@ -131,75 +154,31 @@ class NotLoginShopkeeper extends Component {
         "isCommissionAvailable",
         isCommissionAvailable
       );
+
+      // 如果刚成为进入还没有邀请码， 发请求获取邀请码
       if (!invatationCode && isCommissionAvailable) {
-        console.log("刚升级成金主，需要发送请求获取邀请码");
+        // console.log("刚升级成金主，需要发送请求获取邀请码");
         // 如果没有邀请码并且已经成为金主， 发请求获取邀请码
         this.props.fetchInvitationCode("user");
       } else {
-        console.log("已经是金主，也有邀请码");
+        // console.log("已经是金主，也有邀请码");
       }
     }
 
+    // 加载页面数据
     this.fetchPageData();
   }
 
+  /**
+   * 页面失去焦点
+   */
   componentDidHide() {}
 
-  /********************* 事件handler **********************/
-
-  fetchPageData = async () => {
-    try {
-      const result = await this.props.fetchPageData("notLoginShopkeeper", {
-        pageSize: 14,
-        currentPage: 1
-      });
-      console.log("请求成功", result);
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-
-  fetchMorePageData = async () => {
-    const { currentPage, hasNext, pageSize } = this.props.notLoginShopkeeper;
-
-    try {
-      if (hasNext) {
-        const result = await this.props.fetchMorePageData(
-          "notLoginShopkeeper",
-          {
-            pageSize: pageSize,
-            currentPage: currentPage + 1
-          }
-        );
-        console.log("请求成功", result);
-      } else {
-        console.log("没有更多了");
-      }
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-
-  onScrollToLower = () => {
-    const { currentPage, hasNext, pageSize } = this.props.notLoginShopkeeper;
-    // console.log('滑到底部');
-    this.props.fetchMorePageData("notLoginShopkeeper", {
-      pageSize: pageSize,
-      currentPage: currentPage + 1
-    });
-  };
-  // goGoodsDetailHandler = () => {
-  //   Taro.navigateTo({
-  //     url: `/pages/goodsDetail/index?id=1271`
-  //   });
-  // };
-
-  handleClick = () => {};
-
-  //这个分享的函数必须写在入口中，写在子组件中不生效
+  /**
+   * 分享函数入口
+   */
   onShareAppMessage() {
-    // 目前我不是金主，所以没从user页面的model中取数据
-    // TODO: 思考如果不是金主想分享怎么办？是直接不传邀请码还是怎么样。
+    //这个分享的函数必须写在入口中，写在子组件中不生效
     const { invatationCode, invatationCodeHash, name, image } = this.props.user;
 
     if (!invatationCode) {
@@ -229,10 +208,66 @@ class NotLoginShopkeeper extends Component {
     };
   }
 
+  /********************* 事件handler **********************/
+
+  /**
+   * 获取页面展示数据
+   */
+  fetchPageData = async () => {
+    try {
+      const result = await this.props.fetchPageData("notLoginShopkeeper", {
+        pageSize: 14,
+        currentPage: 1
+      });
+      console.log("请求成功", result);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  /**
+   * 加载更多
+   */
+  fetchMorePageData = async () => {
+    const { currentPage, hasNext, pageSize } = this.props.notLoginShopkeeper;
+
+    try {
+      if (hasNext) {
+        const result = await this.props.fetchMorePageData(
+          "notLoginShopkeeper",
+          {
+            pageSize: pageSize,
+            currentPage: currentPage + 1
+          }
+        );
+        console.log("请求成功", result);
+      } else {
+        console.log("没有更多了");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  onScrollToLower = () => {
+    const { currentPage, hasNext, pageSize } = this.props.notLoginShopkeeper;
+    // console.log('滑到底部');
+    this.props.fetchMorePageData("notLoginShopkeeper", {
+      pageSize: pageSize,
+      currentPage: currentPage + 1
+    });
+  };
+
+  /**
+   * 跳转到金主有礼页面
+   */
   goBecomeShopkeeperHandler = () => {
     Taro.navigateTo({ url: "/pages/becomeShopkeeper/index" });
   };
 
+  /**
+   * 用户通过分享进入， 需要从分享链接中拿到邀请码，一键注册
+   */
   onClickRegister = async () => {
     // QBF219
     try {
@@ -241,6 +276,7 @@ class NotLoginShopkeeper extends Component {
       const loginResult = await Taro.login();
       console.log(loginResult);
       const { userInfo, encryptedData, iv } = await Taro.getUserInfo();
+
       const registerResult = await this.props.requestRegisterUid(
         "notLoginShopkeeper",
         {
@@ -254,7 +290,6 @@ class NotLoginShopkeeper extends Component {
       // 需要注册
       const { unionId } = registerResult.data;
       if (unionId) {
-        // this._goWechatInvitation(uid);
         // this._goWechatInvitation(uid);
         const registerWechat = await this.props.requestRegisterWechat(
           "notLoginShopkeeper",
@@ -294,10 +329,12 @@ class NotLoginShopkeeper extends Component {
     }
   };
 
+  /**
+   * 用户不是通过分享进入，直接进入这个页面，在弹出的modal中准备注册
+   */
   onModalClickRegister = async () => {
     // QBF219
     try {
-      let { goodId, code, hash, name, avatarImage } = this.$router.params; //获取分享进来的参数share
       const { inputInviationCode } = this.state;
       if (inputInviationCode == "") {
         console.log("请您输入邀请码");
@@ -312,6 +349,16 @@ class NotLoginShopkeeper extends Component {
       const loginResult = await Taro.login();
       console.log(loginResult);
       const { userInfo, encryptedData, iv } = await Taro.getUserInfo();
+
+      console.log(
+        "encryptedData",
+        encryptedData,
+        "iv",
+        iv,
+        "code",
+        loginResult.code
+      );
+
       const registerResult = await this.props.requestRegisterUid(
         "notLoginShopkeeper",
         {
@@ -325,7 +372,6 @@ class NotLoginShopkeeper extends Component {
       // 需要注册
       const { unionId } = registerResult.data;
       if (unionId) {
-        // this._goWechatInvitation(uid);
         // this._goWechatInvitation(uid);
         const registerWechat = await this.props.requestRegisterWechat(
           "notLoginShopkeeper",
@@ -366,6 +412,8 @@ class NotLoginShopkeeper extends Component {
     this.setState({ isInvitationCodeModalShow: false });
   };
 
+  /********************* 渲染页面的方法 *********************/
+
   onShowRegisterModal = () => {
     this.setState({ isInvitationCodeModalShow: true });
   };
@@ -379,7 +427,6 @@ class NotLoginShopkeeper extends Component {
       inputInviationCode: value
     });
   }
-  /********************* 渲染页面的方法 *********************/
 
   /********************* 页面render方法 ********************/
   render() {
