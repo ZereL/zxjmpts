@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-08 15:12:23
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-11 10:38:31
+ * @Last Modified time: 2019-02-26 13:42:23
  */
 
 import { ComponentClass } from "react";
@@ -55,7 +55,7 @@ interface GoodsList {
 // TODO: 分页加载的时候显示加载中
 class GoodsList extends Component {
   config: Config = {
-    navigationBarTitleText: "首页"
+    navigationBarTitleText: "产品分类"
   };
 
   /********************* 生命周期函数 **********************/

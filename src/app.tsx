@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:11:03
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-25 13:15:11
+ * @Last Modified time: 2019-02-26 13:02:00
  */
 
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -81,7 +81,7 @@ class App extends Component {
       ],
       color: "#333",
       selectedColor: "#333",
-      backgroundColor: "white",
+      backgroundColor: "#FFFFFF",
       borderStyle: "white"
     }
   };

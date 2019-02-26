@@ -2,11 +2,12 @@
  * @Author: Hank 
  * @Date: 2019-02-07 10:09:40 
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-25 15:12:08
+ * @Last Modified time: 2019-02-26 12:03:41
  */
 @import "../../styles/mixin";
 
 .home-page {
+  @include wh(100%, 100%);
   .search-bar {
     background-color: $color-primary;
     width: 100%;

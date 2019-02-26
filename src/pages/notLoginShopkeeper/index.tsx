@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-08 15:12:23
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-26 11:56:44
+ * @Last Modified time: 2019-02-26 13:24:02
  */
 
 import { ComponentClass } from "react";
@@ -449,6 +449,7 @@ class NotLoginShopkeeper extends Component {
             情况5：是游客，通过分享进入
             情况6：是游客，不通过分享进入 
         */}
+        {/* 情况3：是小主，通过分享进入 */}
         {id && share && isCommissionAvailable == false ? (
           <View className="bottom-view">
             <View className="bottom-view-text">
@@ -462,8 +463,8 @@ class NotLoginShopkeeper extends Component {
             </AtButton>
           </View>
         ) : null}
-
-        {id && isCommissionAvailable == false ? (
+        {/* 情况4：是小主，不通过分享进入 */}
+        {id && share == void 2333 && isCommissionAvailable == false ? (
           <View className="bottom-view">
             <View className="bottom-view-text">
               更多商品请点击“成为金主”后查看
@@ -476,7 +477,8 @@ class NotLoginShopkeeper extends Component {
             </AtButton>
           </View>
         ) : null}
-        {isCommissionAvailable == true ? (
+        {/* 情况1：是金主，通过分享进入 */}
+        {id && share && isCommissionAvailable == true ? (
           <View className="bottom-view">
             <View className="bottom-view-text">
               金主您好，点击“一键分享”，分享全球好物
@@ -486,6 +488,18 @@ class NotLoginShopkeeper extends Component {
             </AtButton>
           </View>
         ) : null}
+        {/* 情况2：是金主，不通过分享进入 */}
+        {id && share == void 2333 && isCommissionAvailable == true ? (
+          <View className="bottom-view">
+            <View className="bottom-view-text">
+              金主您好，点击“一键分享”，分享全球好物
+            </View>
+            <AtButton className="bottom-button" open-type="share">
+              一键分享
+            </AtButton>
+          </View>
+        ) : null}
+        {/* 情况5：是游客，通过分享进入 */}
         {isCommissionAvailable == void 2333 &&
         id == void 2333 &&
         share == true ? (
@@ -502,6 +516,7 @@ class NotLoginShopkeeper extends Component {
             </AtButton>
           </View>
         ) : null}
+        {/* 情况6：是游客，不通过分享进入  */}
         {isCommissionAvailable == void 2333 &&
         id == void 2333 &&
         share == void 2333 ? (

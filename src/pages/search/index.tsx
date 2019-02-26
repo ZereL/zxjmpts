@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-08 13:08:53
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-08 14:57:05
+ * @Last Modified time: 2019-02-26 13:45:17
  */
 
 import { ComponentClass } from "react";
@@ -136,6 +136,10 @@ class Search extends Component {
     //   }
     // });
 
+    Taro.navigateTo({
+      url: `/pages/goodsList/index?keyword=${this.state.searchText}`
+    });
+
     // 清空关键字
     this.setState({
       historyKeywords: newHistoryKeywords,
@@ -148,7 +152,8 @@ class Search extends Component {
   }
 
   // 输入完成开始搜索
-  tagClickHandler = name => {
+  tagClickHandler = ({ name }) => {
+    console.log("name", name);
     this.setState({ searchText: name });
   };
 

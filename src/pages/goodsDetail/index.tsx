@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:36
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-15 17:13:54
+ * @Last Modified time: 2019-02-26 12:55:29
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -402,8 +402,8 @@ class GoodsDetail extends Component {
       <View className="detail-page">
         {/* 顶部tabBar */}
         {/* TODO： 如果这个TabBar想有用的话， 那么就得把这页换成scrollview中。 */}
-        <Button open-type="share">分享本页</Button>
-        <Button open-type="share">显示modal</Button>
+        {/* <Button open-type="share">分享本页</Button>
+        <Button open-type="share">显示modal</Button> */}
         {share ? <Text className="fixIndex">通过分享进入页面</Text> : null}
         <AtTabBar
           tabList={[{ title: "商品" }, { title: "相关" }, { title: "详情" }]}
