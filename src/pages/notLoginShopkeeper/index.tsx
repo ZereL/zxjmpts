@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-08 15:12:23
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-26 16:24:35
+ * @Last Modified time: 2019-02-26 16:42:04
  */
 
 import { ComponentClass } from "react";
@@ -433,21 +433,11 @@ class NotLoginShopkeeper extends Component {
             </View>
           </View>
         ) : null}
-
-        {/* <Image
-          mode="scaleToFill"
-          src={require("../../assets/image/jinzhu.jpg")}
-          // style={`width: ${
-          //   getGlobalData("systemInfo").screenWidth
-          // }, height: ${(getGlobalData("systemInfo").screenWidth * 6080) /
-          //   1242}`}
-          style="width: 375px, height:1600px"
-        /> */}
         <ScrollView
           style={
             share
               ? `height: ${getGlobalData("systemInfo").windowHeight - 140}px`
-              : `height: ${getGlobalData("systemInfo").windowHeight - 65}px`
+              : `height: ${getGlobalData("systemInfo").windowHeight - 75}px`
           }
           scrollY
           scrollWithAnimation

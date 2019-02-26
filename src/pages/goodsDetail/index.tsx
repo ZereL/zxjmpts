@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:36
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-26 16:23:37
+ * @Last Modified time: 2019-02-26 17:32:49
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -143,26 +143,26 @@ class GoodsDetail extends Component {
 
   componentDidHide() {}
 
-  //这个分享的函数必须写在入口中，写在子组件中不生效
-  onShareAppMessage() {
-    const { images } = this.props.goodsDetail;
-    const goodsId = 128;
-    const code = `FSI005`;
-    const hash = `570AD6F305EC6EA60DCA5DCFAE67AE09`;
-    return {
-      title: "海淘更便宜，分享有收益❤️全球臻选好物等您来👇。",
-      path: `/pages/goodsDetail/index?id=${goodsId}&code=${code}&hash=${hash}&share=true`,
-      imageUrl: `/src/assets/icon/resource63.png`, // TODO：自定义分享图片目前好像不行
-      success: function(res) {
-        console.log(res);
-        console.log("转发成功:" + JSON.stringify(res));
-      },
-      fail: function(res) {
-        // 转发失败
-        console.log("转发失败:" + JSON.stringify(res));
-      }
-    };
-  }
+  // //这个分享的函数必须写在入口中，写在子组件中不生效
+  // onShareAppMessage() {
+  //   const { images } = this.props.goodsDetail;
+  //   const goodsId = 128;
+  //   const code = `FSI005`;
+  //   const hash = `570AD6F305EC6EA60DCA5DCFAE67AE09`;
+  //   return {
+  //     title: "海淘更便宜，分享有收益❤️全球臻选好物等您来👇。",
+  //     path: `/pages/goodsDetail/index?id=${goodsId}&code=${code}&hash=${hash}&share=true`,
+  //     imageUrl: `/src/assets/icon/resource63.png`, // TODO：自定义分享图片目前好像不行
+  //     success: function(res) {
+  //       console.log(res);
+  //       console.log("转发成功:" + JSON.stringify(res));
+  //     },
+  //     fail: function(res) {
+  //       // 转发失败
+  //       console.log("转发失败:" + JSON.stringify(res));
+  //     }
+  //   };
+  // }
 
   /********************* 事件handler **********************/
   fetchPageData = async () => {
@@ -213,12 +213,14 @@ class GoodsDetail extends Component {
     });
 
     if (addCartResult.success) {
+      Taro.hideLoading();
       Taro.showToast({
         title: "加入购物车成功",
         icon: "success",
         duration: 2000
       });
     } else {
+      Taro.hideLoading();
       Taro.showToast({ title: "加入购物车失败", icon: "none", duration: 2000 });
     }
   };
@@ -424,7 +426,11 @@ class GoodsDetail extends Component {
         {/* 轮播图 */}
         <View className="image-box-wrap">
           <View className="image-box clearfix">
-            <Carousel images={images} />
+            <Carousel
+              images={images}
+              containerStyle={"height: 550px;"}
+              imageStyle={"height: 600px;"}
+            />
           </View>
         </View>
         {/* 商品详情 */}
@@ -449,19 +455,23 @@ class GoodsDetail extends Component {
         </View>
         {/* 底部操作栏 */}
         <View className="detail-bottom-btns">
-          <View className="nav" onClick={this.goCustomerService}>
+          <AtButton
+            className="nav"
+            onClick={this.goCustomerService}
+            open-type="contact"
+          >
             <Image
               className="nav-img"
               src={require("../../assets/icon/resource24.png")}
             />
-            客服
-          </View>
+            {/* 客服 */}
+          </AtButton>
           <View className="nav" onClick={this.goCart}>
             <Image
               className="nav-img"
               src={require("../../assets/icon/resource14.png")}
             />
-            聚宝盆
+            {/* 聚宝盆 */}
             {/* {items.length > 0 && (
               <View className="zan-badge__count">{items.length}</View>
             )} */}

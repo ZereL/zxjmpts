@@ -2,7 +2,7 @@
  * @Author: Hank 
  * @Date: 2019-02-07 10:09:30 
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-15 16:32:43
+ * @Last Modified time: 2019-02-26 17:28:56
  */
 
 @import "../../styles/mixin";
@@ -150,7 +150,7 @@
     .goods-info {
       .chapter-head {
         font-size: 36px;
-        margin: 50px 0 20px 0;
+        // margin: 50px 0 20px 0;
         .icon {
           width: 36px;
           height: 36px;
@@ -292,7 +292,7 @@
   .image-box {
     box-sizing: border-box;
     padding: 0 25px;
-    height: 350px;
+    height: 500px;
     position: relative;
     overflow: hidden;
     .share-btn {

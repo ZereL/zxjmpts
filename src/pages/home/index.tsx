@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:07:40
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-25 15:09:51
+ * @Last Modified time: 2019-02-26 16:48:43
  */
 
 import { ComponentClass } from "react";
@@ -178,7 +178,7 @@ class Home extends Component {
             onClick={this.goSharePageHandler}
           />
         </View>
-        <View className="homeItems">
+        <View className="carousel">
           {homeItems.map((item, index) => {
             return (
               item.type === "SliderImage" && (

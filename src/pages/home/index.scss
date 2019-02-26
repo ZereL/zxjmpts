@@ -2,7 +2,7 @@
  * @Author: Hank 
  * @Date: 2019-02-07 10:09:40 
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-26 12:03:41
+ * @Last Modified time: 2019-02-26 16:48:58
  */
 @import "../../styles/mixin";
 
@@ -45,6 +45,13 @@
     position: relative;
     height: 250px;
     clear: both;
-    margin: 10px 10px 50px 10px;
+    padding: 10px 10px 50px 10px;
+  }
+  .carousel {
+    width: 100%;
+    position: relative;
+    height: 250px;
+    clear: both;
+    padding: 10px 0px 50px 0px;
   }
 }
