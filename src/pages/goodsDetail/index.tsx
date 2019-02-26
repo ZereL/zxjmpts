@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:36
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-26 12:55:29
+ * @Last Modified time: 2019-02-26 16:23:37
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -202,14 +202,25 @@ class GoodsDetail extends Component {
   /**
    * 普通模式下加入购物车
    */
-  addToCart = () => {
+  addToCart = async () => {
+    Taro.showLoading({ title: "加入购物车...", mask: true });
     const { id } = this.$router.params;
     console.log("加入购物车id", id);
     const { skus } = this.props.goodsDetail;
-    this.props.requestUpdateCart(GOODSDETAIL, {
+    const addCartResult = await this.props.requestUpdateCart(GOODSDETAIL, {
       skuId: skus[0][0].id,
       qty: 1
     });
+
+    if (addCartResult.success) {
+      Taro.showToast({
+        title: "加入购物车成功",
+        icon: "success",
+        duration: 2000
+      });
+    } else {
+      Taro.showToast({ title: "加入购物车失败", icon: "none", duration: 2000 });
+    }
   };
 
   /**

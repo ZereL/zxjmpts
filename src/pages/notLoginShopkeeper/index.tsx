@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-08 15:12:23
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-26 13:24:02
+ * @Last Modified time: 2019-02-26 16:24:35
  */
 
 import { ComponentClass } from "react";
@@ -236,6 +236,7 @@ class NotLoginShopkeeper extends Component {
   onClickRegister = async () => {
     // QBF219
     try {
+      Taro.showLoading({ title: "注册中...", mask: true });
       let { goodId, code, hash, name, avatarImage } = this.$router.params; //获取分享进来的参数share
       const loginResult = await Taro.login();
       console.log(loginResult);
@@ -265,6 +266,7 @@ class NotLoginShopkeeper extends Component {
             uid: unionId
           }
         );
+        Taro.hideLoading();
         console.log("registerWechat注册成功", registerWechat);
         // 存入数据库
         setGlobalData("token", registerWechat.data.token);
@@ -272,16 +274,18 @@ class NotLoginShopkeeper extends Component {
         Taro.setStorageSync("token", registerWechat.data.token);
         Taro.showToast({ title: `注册成功`, duration: 2000 });
       } else {
+        Taro.hideLoading();
         Taro.showToast({
-          title: `服务器没有返回UID`,
+          title: `微信号已被使用`,
           icon: "none",
           duration: 2000
         });
-        // console.log("已经注册过");
+        console.log("已经注册过， 没有返回Uid");
         // Taro.showToast({ title: `注册成功`, duration: 2000 });
       }
     } catch (error) {
       console.log("error", error);
+      Taro.hideLoading();
       Taro.showToast({
         title: `注册出错，${error.toString()}`,
         icon: "none",
@@ -304,6 +308,7 @@ class NotLoginShopkeeper extends Component {
         });
         return null;
       }
+      Taro.showLoading({ title: "注册中...", mask: true });
       const loginResult = await Taro.login();
       console.log(loginResult);
       const { userInfo, encryptedData, iv } = await Taro.getUserInfo();
@@ -333,22 +338,25 @@ class NotLoginShopkeeper extends Component {
           }
         );
         console.log("registerWechat注册成功", registerWechat);
+        Taro.hideLoading();
         // 存入数据库
         setGlobalData("token", registerWechat.data.token);
         // 存入本地缓存
         Taro.setStorageSync("token", registerWechat.data.token);
         Taro.showToast({ title: `注册成功`, duration: 2000 });
       } else {
+        Taro.hideLoading();
         Taro.showToast({
-          title: `您已经注册,服务器没有返回UID `,
+          title: `微信号已被使用 `,
           icon: "none",
           duration: 2000
         });
-        // console.log("已经注册过");
+        console.log("已经注册过， 服务器没有返回Uid");
         // Taro.showToast({ title: `注册成功`, duration: 2000 });
       }
     } catch (error) {
       console.log("error", error);
+      Taro.hideLoading();
       Taro.showToast({
         title: `注册出错，${error.toString()}`,
         icon: "none",
@@ -407,8 +415,21 @@ class NotLoginShopkeeper extends Component {
               className="avatar-image"
             />
             <View className="shared-data">
-              臻享家用户 {name}, 邀请您加入臻享家。邀请码为： {code}{" "}
-              {id && "您已经接受过邀请。请点击“成为金主”获取更多收益"}
+              {/* 臻享家用户 {name}, 邀请您加入臻享家。邀请码为： {code}{" "}
+              {id && "您已经接受过邀请。请点击“成为金主”获取更多收益"} */}
+
+              {id && isCommissionAvailable
+                ? `臻享家用户 ${name}, 邀请您加入臻享家。邀请码为： ${code}, 您已经是臻享家 金主。点击“一键分享”分享全球好物`
+                : null}
+              {id && !isCommissionAvailable
+                ? `臻享家用户 ${name}, 邀请您加入臻享家。邀请码为： ${code}, 您已经是臻享家 小主。点击“成为金主”获取更多收益`
+                : null}
+              {!id && isCommissionAvailable
+                ? `臻享家用户 ${name}, 邀请您加入臻享家。邀请码为： ${code}. 点击“一键注册”即可加入，成为臻享家小主`
+                : null}
+              {!id && !isCommissionAvailable
+                ? `臻享家用户 ${name}, 邀请您加入臻享家。邀请码为： ${code}. 点击“一键注册”即可加入，成为臻享家小主`
+                : null}
             </View>
           </View>
         ) : null}
@@ -425,8 +446,8 @@ class NotLoginShopkeeper extends Component {
         <ScrollView
           style={
             share
-              ? `height: ${getGlobalData("systemInfo").windowHeight - 115}px`
-              : `height: ${getGlobalData("systemInfo").windowHeight - 50}px`
+              ? `height: ${getGlobalData("systemInfo").windowHeight - 140}px`
+              : `height: ${getGlobalData("systemInfo").windowHeight - 65}px`
           }
           scrollY
           scrollWithAnimation
@@ -449,6 +470,28 @@ class NotLoginShopkeeper extends Component {
             情况5：是游客，通过分享进入
             情况6：是游客，不通过分享进入 
         */}
+        {/* 情况1：是金主，通过分享进入 */}
+        {id && share && isCommissionAvailable == true ? (
+          <View className="bottom-view">
+            <View className="bottom-view-text">
+              金主您好，点击“一键分享”，分享全球好物
+            </View>
+            <AtButton className="bottom-button" open-type="share">
+              一键分享
+            </AtButton>
+          </View>
+        ) : null}
+        {/* 情况2：是金主，不通过分享进入 */}
+        {id && share == void 2333 && isCommissionAvailable == true ? (
+          <View className="bottom-view">
+            <View className="bottom-view-text">
+              金主您好，点击“一键分享”，分享全球好物
+            </View>
+            <AtButton className="bottom-button" open-type="share">
+              一键分享
+            </AtButton>
+          </View>
+        ) : null}
         {/* 情况3：是小主，通过分享进入 */}
         {id && share && isCommissionAvailable == false ? (
           <View className="bottom-view">
@@ -477,32 +520,10 @@ class NotLoginShopkeeper extends Component {
             </AtButton>
           </View>
         ) : null}
-        {/* 情况1：是金主，通过分享进入 */}
-        {id && share && isCommissionAvailable == true ? (
-          <View className="bottom-view">
-            <View className="bottom-view-text">
-              金主您好，点击“一键分享”，分享全球好物
-            </View>
-            <AtButton className="bottom-button" open-type="share">
-              一键分享
-            </AtButton>
-          </View>
-        ) : null}
-        {/* 情况2：是金主，不通过分享进入 */}
-        {id && share == void 2333 && isCommissionAvailable == true ? (
-          <View className="bottom-view">
-            <View className="bottom-view-text">
-              金主您好，点击“一键分享”，分享全球好物
-            </View>
-            <AtButton className="bottom-button" open-type="share">
-              一键分享
-            </AtButton>
-          </View>
-        ) : null}
         {/* 情况5：是游客，通过分享进入 */}
-        {isCommissionAvailable == void 2333 &&
-        id == void 2333 &&
-        share == true ? (
+        {id == void 2333 &&
+        share == "true" &&
+        isCommissionAvailable == void 2333 ? (
           <View className="bottom-view">
             <View className="bottom-view-text">
               加入臻享家，点击“一键注册”，查看全球各国好物。
@@ -517,9 +538,9 @@ class NotLoginShopkeeper extends Component {
           </View>
         ) : null}
         {/* 情况6：是游客，不通过分享进入  */}
-        {isCommissionAvailable == void 2333 &&
-        id == void 2333 &&
-        share == void 2333 ? (
+        {id == void 2333 &&
+        share == void 2333 &&
+        isCommissionAvailable == void 2333 ? (
           <View className="bottom-view">
             <View className="bottom-view-text">
               顾客您好，请您输入邀请码，成为臻享家会员

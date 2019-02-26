@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:07:40
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-22 12:36:41
+ * @Last Modified time: 2019-02-26 14:17:55
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -48,7 +48,7 @@ interface Order {
 // TODO: 研究代替switch case遍历homeItems数组的办法
 class Order extends Component {
   config: Config = {
-    navigationBarTitleText: "首页"
+    navigationBarTitleText: "我的订单"
   };
   state = {
     topTags: [
@@ -139,21 +139,22 @@ class Order extends Component {
           joinedPay: false
         });
         console.log("payResult", payResult);
-        const { payUrl } = payResult
+        const { payUrl } = payResult;
         Taro.requestPayment({
           timeStamp: payUrl.timeStamp,
           nonceStr: payUrl.nonceStr,
           package: payUrl.package,
           signType: payUrl.signType,
           paySign: payUrl.paySign
-        }).then((res) => {
-          console.log("res", res);
-          Taro.showToast({ title: "支付成功", icon: "none", duration: 2000 });
-        }).catch((res) => {
-          console.log("res", res);
-          Taro.showToast({ title: "支付失败", icon: "none", duration: 2000 });
         })
-        
+          .then(res => {
+            console.log("res", res);
+            Taro.showToast({ title: "支付成功", icon: "none", duration: 2000 });
+          })
+          .catch(res => {
+            console.log("res", res);
+            Taro.showToast({ title: "支付失败", icon: "none", duration: 2000 });
+          });
       }
     } catch (error) {
       console.log("error", error);
