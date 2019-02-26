@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-08 15:12:23
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-27 11:42:32
+ * @Last Modified time: 2019-02-27 11:56:46
  */
 
 import { ComponentClass } from "react";
@@ -188,11 +188,6 @@ class NotLoginShopkeeper extends Component {
         duration: 2000
       });
     }
-    // const code = `FSI005`;
-    // const hash = `570AD6F305EC6EA60DCA5DCFAE67AE09`;
-    // const name = `漠然`;
-    // const avatarImage =
-    //   "https://cdn2u.com/images/upload/2141-1bec8a1242511c99891f6e80b9c5ebfe-132x132.jpg";
     return {
       title: "海淘更便宜，分享有收益❤️全球臻选好物等您来👇。",
       path: `/pages/notLoginShopkeeper/index?code=${invatationCode}&hash=${invatationCodeHash}&name=${name}&avatarImage=${image}&share=true`,
@@ -483,8 +478,8 @@ class NotLoginShopkeeper extends Component {
         <ScrollView
           style={
             share
-              ? `height: ${getGlobalData("systemInfo").windowHeight - 140}px`
-              : `height: ${getGlobalData("systemInfo").windowHeight - 75}px`
+              ? `height: ${getGlobalData("systemInfo").windowHeight - 115}px`
+              : `height: ${getGlobalData("systemInfo").windowHeight - 45}px`
           }
           scrollY
           scrollWithAnimation
