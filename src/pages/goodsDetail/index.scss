@@ -2,7 +2,7 @@
  * @Author: Hank 
  * @Date: 2019-02-07 10:09:30 
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-26 17:28:56
+ * @Last Modified time: 2019-02-27 13:41:39
  */
 
 @import "../../styles/mixin";
@@ -11,8 +11,8 @@
   padding-bottom: 120px;
   background-color: #fff;
   .container {
-    padding: 0 35px;
-    padding-top: 20px;
+    // padding: 0 35px;
+    // padding-top: 20px;
     text-align: left;
     background: #fff;
     .info-business-card {
@@ -174,7 +174,7 @@
           color: #888;
         }
         image {
-          width: auto;
+          // width: auto;
           height: 90px !important;
         }
       }

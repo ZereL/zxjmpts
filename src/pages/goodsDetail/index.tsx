@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:36
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-26 17:32:49
+ * @Last Modified time: 2019-02-27 13:33:42
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -86,15 +86,6 @@ interface GoodsDetail {
 
 // TODO: 现在和APP一样，不管库存是多少，status是怎样，都可以下单。可能以后要改
 class GoodsDetail extends Component {
-  // static defaultProps = {
-  //   goodsDetail: {
-  //     images: [],
-  //     name: "",
-  //     price: "",
-  //     contentImages: []
-  //   }
-  // };
-
   state = {
     activeTab: 0,
     isChooseModelModalShow: false,
@@ -165,12 +156,13 @@ class GoodsDetail extends Component {
   // }
 
   /********************* 事件handler **********************/
+  /**
+   * 获取页面数据
+   */
   fetchPageData = async () => {
     const { id } = this.$router.params;
     console.log("id", id);
     console.log("this.$router", this.$router);
-
-    // const id = 717;
 
     try {
       const result = await this.props.fetchPageData(GOODSDETAIL, { id: id });
@@ -180,12 +172,18 @@ class GoodsDetail extends Component {
     }
   };
 
+  /**
+   * 顶部tabBar的点击事件handler
+   */
   tabBarClickHandler = value => {
     this.setState({
       activeTab: value
     });
   };
 
+  /**
+   * 跳转到购物车
+   */
   goCart = () => {
     // 适配H5
     if (Taro.getEnv() === Taro.ENV_TYPE.WEB) {
@@ -232,19 +230,23 @@ class GoodsDetail extends Component {
     this.setState({ isChooseModelModalShow: true });
   };
 
+  /**
+   * 客服按钮点击事件handler
+   */
   goCustomerService = () => {
     console.log("进入客服");
   };
 
+  /**
+   * 点击隐藏modal事件handler
+   */
   modalCloseHandler = () => {
     this.setState({ isChooseModelModalShow: false });
   };
 
-  // tagClickHandler(num1, num2) {
-  //   console.log("num1", num1);
-  //   console.log("num2", num2);
-  // }
-
+  /**
+   * 点击tag事件handler
+   */
   tagClickHandler(
     itemProperty,
     indexValue,
@@ -334,6 +336,9 @@ class GoodsDetail extends Component {
     });
   }
 
+  /**
+   * 在modal中点击加入购物车事件handler
+   */
   modalAddToCartHandler = () => {
     const { skus } = this.props.goodsDetail;
     const { property, firstRowIndex, secondRowIndex } = this.state;
@@ -444,10 +449,13 @@ class GoodsDetail extends Component {
           <View className="goods-info">
             {/* <Image src={`${IMAGE_URL}${contentImages[0]}${cdnMediumSuffix}`} /> */}
             {contentImages.map((item, index) => {
+              const windowWidth = getGlobalData("systemInfo").windowWidth;
               return (
                 <Image
+                  style={`width: ${windowWidth}`}
                   src={`${IMAGE_URL}${item}${cdnMediumSuffix}`}
                   key={index}
+                  mode={"widthFix"}
                 />
               );
             })}
@@ -556,95 +564,6 @@ class GoodsDetail extends Component {
                           property,
                           skus
                         )}
-                        // // 设置点击事件
-                        // onClick={selected => {
-                        //   let selectedSku;
-                        //   if (selected) {
-                        //     itemProperty.selectedIndex = indexValue; // 点击时给itemProperty下面的selectedIndex赋值保存用户的选项（之前是分别存在两个state里）
-                        //     if (index == 0 && property.length > 1) {
-                        //       // 切换第一列时重置第二列
-                        //       skus[indexValue][property[1].selectedIndex] ==
-                        //         null && (property[1].selectedIndex = -1);
-                        //     }
-                        //     // 如果第一行被选中，而且有property的第二维有数据， 29/10考虑只有一维数组有数据情况
-                        //     if (index == 0 && property[1]) {
-                        //       // 如果选的是第一行，而且第二行已经选中，点击之后查询对应SKUPrice
-                        //       if (
-                        //         index == 0 &&
-                        //         property[1].selectedIndex !== -1
-                        //       ) {
-                        //         selectedSku =
-                        //           skus[property[0].selectedIndex][
-                        //             property[1].selectedIndex
-                        //           ];
-                        //         console.log(selectedSku);
-                        //         if (selectedSku.useSkuPrice) {
-                        //           // 如果需要使用SKUPrice，设置skuPrice
-                        //           this.setState({
-                        //             skuPrice: selectedSku.price
-                        //           });
-                        //         } else {
-                        //           // 如果不需要使用，清空skuPrice
-                        //           this.setState({
-                        //             skuPrice: ""
-                        //           });
-                        //         }
-                        //       } else {
-                        //         // 如果第二行没有选中， 什么都不做
-                        //       }
-
-                        //       // index == 0 && property[1].selectedIndex !== -1
-                        //       // selectedSku =
-                        //       //   skus[property[0].selectedIndex][
-                        //       //     property[1].selectedIndex
-                        //       //   ];
-                        //       // console.log(selectedSku);
-                        //       // if (selectedSku.useSkuPrice) {
-                        //       //   // 如果需要使用SKUPrice，设置skuPrice
-                        //       //   this.setState({
-                        //       //     skuPrice: selectedSku.price
-                        //       //   });
-                        //       // } else {
-                        //       //   // 如果不需要使用，清空skuPrice
-                        //       //   this.setState({
-                        //       //     skuPrice: ""
-                        //       //   });
-                        //       // }
-                        //     } else if (
-                        //       // 如果选的是第二行，且第一行也选中，点击之后查询对应SKUPrice
-                        //       index == 1 &&
-                        //       property[0].selectedIndex !== -1
-                        //     ) {
-                        //       selectedSku =
-                        //         skus[property[0].selectedIndex][
-                        //           property[1].selectedIndex
-                        //         ];
-                        //       console.log(selectedSku);
-                        //       if (selectedSku.useSkuPrice) {
-                        //         // 如果需要使用SKUPrice，设置skuPrice
-                        //         this.setState({
-                        //           skuPrice: selectedSku.price
-                        //         });
-                        //       } else {
-                        //         // 如果不需要使用，清空skuPrice
-                        //         this.setState({
-                        //           skuPrice: ""
-                        //         });
-                        //       }
-                        //     } else {
-                        //       // 如果有一行没有选，清空skuPrice
-                        //       this.setState({
-                        //         skuPrice: ""
-                        //       });
-                        //     }
-                        //   } else {
-                        //     // 取消选中时重置当前列
-                        //     itemProperty.selectedIndex = -1;
-                        //   }
-                        //   this.setState({
-                        //     property: property
-                        //   });
-                        // }}
                       >
                         {itemPropertyValue}
                       </AtTag>
