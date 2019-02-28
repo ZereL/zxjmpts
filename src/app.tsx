@@ -87,13 +87,14 @@ class App extends Component {
   };
 
   async componentDidMount() {
-    // setGlobalData('isLogin', true)
     const token = Taro.getStorageSync("token");
-    console.log("app.ts中的token", token);
+    // console.log("app.ts中的token", token);
+
     // 如果token为空， globalData中就是空字符串
     setGlobalData("token", token);
     setGlobalData("systemInfo", Taro.getSystemInfoSync());
-    console.log("Taro.getSystemInfoSync()", Taro.getSystemInfoSync());
+
+    // console.log("Taro.getSystemInfoSync()", Taro.getSystemInfoSync());
   }
 
   componentDidShow() {}

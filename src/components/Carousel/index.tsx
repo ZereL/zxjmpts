@@ -48,12 +48,13 @@ class Carousel extends Component {
         {images.map((item, index) => (
           <SwiperItem
             key={index}
-            className={containerStyle ? "" : "image"}
+            className={imageStyle ? "" : "image"}
             style={imageStyle}
           >
             <Image
-              mode="scaleToFill"
-              className="img"
+              mode={"widthFix"}
+              className={imageStyle ? "" : "img"}
+              style={imageStyle}
               src={`${IMAGE_URL}${item.image}${cdnMediumSuffix}`}
             />
           </SwiperItem>

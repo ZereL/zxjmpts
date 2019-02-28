@@ -59,7 +59,7 @@ type IProps = PageStateProps & PageDispatchProps & PageOwnProps;
 interface GoodsDetail {
   props: IProps;
 }
-
+const windowWidth = getGlobalData("systemInfo").windowWidth;
 @connect(
   ({ goodsDetail }) => ({
     goodsDetail
@@ -70,7 +70,6 @@ interface GoodsDetail {
     requestUpdateCart: requestUpdateCart
   }
 )
-
 // TODO: 现在和APP一样，不管库存是多少，status是怎样，都可以下单。可能以后要改
 class GoodsDetail extends Component {
   state = {
@@ -417,11 +416,16 @@ class GoodsDetail extends Component {
         />
         {/* 轮播图 */}
         <View className="image-box-wrap">
-          <View className="image-box clearfix">
+          <View
+            className="clearfix"
+            style={`width: ${windowWidth}px;height: ${windowWidth}px`}
+          >
             <Carousel
               images={images}
-              containerStyle={"height: 550px;"}
-              imageStyle={"height: 600px;"}
+              // containerStyle={"height: 550px;"}
+              // imageStyle={"height: 600px;"}
+              containerStyle={`width: ${windowWidth}px;height: ${windowWidth}px`}
+              imageStyle={`width: ${windowWidth}px;height: ${windowWidth}px`}
             />
           </View>
         </View>
