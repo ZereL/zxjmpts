@@ -6,27 +6,14 @@
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
-import { View, Button, Text, Image } from "@tarojs/components";
+import { View, Text, Image } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 
 import "./index.scss";
-import {
-  login,
-  fetchPageData,
-  clearPageData,
-  requestUpdateCart
-} from "../../actions";
-import { GOODSDETAIL, CART } from "../../constants";
+import { fetchPageData, clearPageData, requestUpdateCart } from "../../actions";
+import { GOODSDETAIL } from "../../constants";
 import Carousel from "../../components/Carousel";
-import {
-  AtTabBar,
-  AtDivider,
-  AtButton,
-  AtActionSheet,
-  AtActionSheetItem,
-  AtFloatLayout,
-  AtTag
-} from "taro-ui";
+import { AtTabBar, AtButton, AtFloatLayout, AtTag } from "taro-ui";
 import { IMAGE_URL, cdnMediumSuffix, cdnSmallSuffix } from "../../config";
 import { getGlobalData } from "../../utils/common";
 
@@ -452,7 +439,7 @@ class GoodsDetail extends Component {
               const windowWidth = getGlobalData("systemInfo").windowWidth;
               return (
                 <Image
-                  style={`width: ${windowWidth}`}
+                  style={`width: ${windowWidth}px; display:block`}
                   src={`${IMAGE_URL}${item}${cdnMediumSuffix}`}
                   key={index}
                   mode={"widthFix"}
