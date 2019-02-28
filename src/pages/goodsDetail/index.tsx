@@ -6,7 +6,7 @@
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
-import { View, Text, Image } from "@tarojs/components";
+import { View, Text, Image, Button } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 
 import "./index.scss";
@@ -465,7 +465,7 @@ class GoodsDetail extends Component {
             />
             {/* 客服 */}
           </AtButton>
-          <View className="nav" onClick={this.goCart}>
+          <AtButton className="nav" onClick={this.goCart}>
             <Image
               className="nav-img"
               src={require("../../assets/icon/resource14.png")}
@@ -474,7 +474,7 @@ class GoodsDetail extends Component {
             {/* {items.length > 0 && (
               <View className="zan-badge__count">{items.length}</View>
             )} */}
-          </View>
+          </AtButton>
           {this.state.hasProperty ? (
             <View
               // className={currentChooseId == "" ? "join join-disabled" : "join"}
@@ -524,13 +524,14 @@ class GoodsDetail extends Component {
               // 遍历输出tags的分类名称，如 颜色、尺码
               <View
                 key={`${itemProperty}${index}`}
-                style={`width: ${getGlobalData("systemInfo").screenWidth}px;`}
+                style={`width: ${windowWidth}px; padding: 10px`}
               >
                 {key}
-                <View>
+                <View className={"tags"}>
                   {values.map((itemPropertyValue, indexValue) => {
                     return (
                       <AtTag
+                      className={"tag"}
                         name={`${indexValue}`}
                         key={`${itemPropertyValue}${indexValue}`}
                         active={
