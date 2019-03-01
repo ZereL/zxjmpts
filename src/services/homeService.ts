@@ -12,3 +12,10 @@ export function fetchHomeData() {
     url: "/templateService/page/home"
   });
 }
+
+// 获取数据产品列表tag信息
+export function fetchTagListData() {
+  return api.post({
+    url: "/goodsService/tag/list"
+  });
+}

@@ -1,6 +1,6 @@
 /*
- * @Author: Hank 
- * @Date: 2019-02-07 10:07:53 
+ * @Author: Hank
+ * @Date: 2019-02-07 10:07:53
  * @Last Modified by: Hank
  * @Last Modified time: 2019-02-08 09:23:13
  */
@@ -8,9 +8,10 @@ import { HOME } from "./../../constants/index";
 import {
   ADD,
   FETCH_PAGEDATA,
-  SET_PAGEDATA
+  SET_PAGEDATA,
+  FETCH_TAGLISTDATA
 } from "./../../constants/index";
-import { fetchHomeData } from "../../services/homeService";
+import { fetchHomeData, fetchTagListData } from "../../services/homeService";
 
 export default {
   namespace: HOME,
@@ -37,6 +38,18 @@ export default {
         payload: requestResultData
       });
       return requestResult;
+    },
+
+    *[FETCH_TAGLISTDATA]({ payload }, { select, put, call }) {
+      const requestResult = yield call(fetchTagListData, payload);
+      console.log("fetchTagListData", requestResult);
+      const requestResultData = requestResult.data;
+
+      yield put({
+        type: SET_PAGEDATA,
+        payload: { tagList: requestResultData.items }
+      });
+      return requestResultData;
     },
 
     *[ADD]({ payload }, { select, put, call }) {

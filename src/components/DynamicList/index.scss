@@ -24,9 +24,9 @@
 .zan-capsule__left {
   padding: 0 2px;
   color: #fff;
-  background: #d87182;
+  background: $color-primary;
   border-radius: 2px;
-  border: 1px solid #d87182;
+  border: 1px solid $color-primary;
   margin-right: 4px;
 }
 .zan-capsule__center {
@@ -45,6 +45,18 @@
   color: #999;
   border-radius: 2px;
   border: 2px solid #999;
+}
+
+.zan-capsule__price {
+  padding: 0 5px;
+  color: #999;
+  border-radius: 2px;
+}
+
+.zan-capsule__commission {
+  padding: 0 5px;
+  color: $color-primary;
+  border-radius: 2px;
 }
 
 .zan-capsule--danger .zan-capsule__left {

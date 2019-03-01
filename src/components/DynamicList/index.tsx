@@ -14,7 +14,7 @@ type PageStateProps = {};
 
 type PageDispatchProps = {};
 
-type PageOwnProps = { list: any; loading?: any };
+type PageOwnProps = { list: any; loading?: any; tagList?: any };
 
 type PageState = {};
 
@@ -32,7 +32,9 @@ class DynamicList extends Component {
   };
 
   render() {
-    const { list, loading } = this.props;
+    const { list, loading, tagList } = this.props;
+    console.log("tagList", tagList);
+    console.log("list", list);
     return (
       <View className="goods-list-container">
         {list.length > 0 ? (
@@ -48,7 +50,7 @@ class DynamicList extends Component {
                   <View className="Image-container">
                     <Image
                       mode="aspectFit"
-                      style="width: 172px;height: 250px;background: #fff;" // TODO: 这里为什么使用className就改变不了样式？？？？？？？
+                      style="width: 172px;height: 172px;background: #fff;" // TODO: 这里为什么使用className就改变不了样式？？？？？？？
                       // className="img"
                       src={
                         item.content.image
@@ -84,13 +86,53 @@ class DynamicList extends Component {
                         {item.limit_tag}
                       </View>
                     )} */}
-                  {item.content.price && (
+                  {/* {item.content.price && (
                     <View className="zan-capsule__right">
                       ¥{item.content.price}
+                    </View>
+                  )} */}
+                  {item.content.price && (
+                    <View className="zan-capsule__price">
+                      ¥{item.content.price}
+                    </View>
+                  )}
+                  {item.content.commission && (
+                    <View className="zan-capsule__commission">
+                      （臻金 ¥{item.content.commission}）
                     </View>
                   )}
                 </View>
                 {/* <Text className="dark">{item.brand}</Text> */}
+                {/* tag区块 */}
+                {/* {item.content.tags &&
+                    item.content.tags.map((tagsItem, index) => {
+                      // console.log("tagsItem", tagsItem);
+                      // 从tagList中匹配tags中的ID， 拿到带有tags的信息。
+                      const selectedTag = tagList.filter(tagListItem => {
+                        return tagListItem.tagId == tagsItem;
+                      });
+                      console.log("selectedTag", selectedTag);
+                      return selectedTag.map((selectedTagItem, index) => (
+                        <Text className="dark">1</Text>
+                      ));
+                    })} */}
+                <View className="zan-capsule">
+                  {item.content.tags &&
+                    item.content.tags.map((tagsItem, index) => {
+                      // console.log("tagsItem", tagsItem);
+                      // 从tagList中匹配tags中的ID， 拿到带有tags的信息。
+                      const selectedTag = tagList.filter(tagListItem => {
+                        return tagListItem.tagId == tagsItem;
+                      });
+                      console.log("selectedTag", selectedTag);
+                      return (
+                        <View className="zan-capsule__left">
+                          {selectedTag[0].name}
+                        </View>
+                      );
+                      // 我勒个去，selectTag[0]就能渲染出来，好吧，数据结构想错了？？？
+                    })}
+                </View>
               </View>
             ))}
           </View>

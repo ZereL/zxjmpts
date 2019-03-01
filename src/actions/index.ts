@@ -26,7 +26,8 @@ import {
   FETCH_CARTADDRESS,
   REQUEST_CREATEORDER,
   REQUEST_PAYORDER,
-  FETCH_INVITATIONCODE
+  FETCH_INVITATIONCODE,
+  FETCH_TAGLISTDATA
 } from "../constants/index";
 import Action from "./actions";
 
@@ -57,6 +58,9 @@ export const fetchUserInfo = (namespace: string, payload?: any) =>
 // home页面action
 export const login = (namespace: string, payload?: any) =>
   Action(`${namespace}/${REQUEST_LOGIN}`, payload);
+
+export const fetchTagList = (namespace: string, payload?: any) =>
+  Action(`${namespace}/${FETCH_TAGLISTDATA}`, payload);
 
 // cart页面action
 export const requestUpdateCart = (namespace: string, payload?: any) =>

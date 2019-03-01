@@ -11,7 +11,7 @@ import { View, Image, Button } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 
 import "./index.scss";
-import { fetchPageData, fetchUserInfo } from "../../actions";
+import { fetchPageData, fetchUserInfo, fetchTagList } from "../../actions";
 import { HOME } from "../../constants";
 import ZXJCarousel from "../../components/Carousel/index";
 import DynamicList from "../../components/DynamicList/index";
@@ -25,6 +25,7 @@ type PageDispatchProps = {
   login: (namespace: string, payload?: any) => any;
   fetchPageData: (namespace: string, payload?: any) => any;
   fetchUserInfo: (namespace: string, payload?: any) => any;
+  fetchTagList: (namespace: string, payload?: any) => any;
 };
 
 type PageOwnProps = {
@@ -48,7 +49,8 @@ interface Home {
   {
     // add: add,
     fetchPageData: fetchPageData,
-    fetchUserInfo: fetchUserInfo
+    fetchUserInfo: fetchUserInfo,
+    fetchTagList: fetchTagList
   }
 )
 
@@ -68,11 +70,12 @@ class Home extends Component {
   /**
    * 页面展示
    */
-  componentDidShow() {
+  async componentDidShow() {
     if (getGlobalData("token")) {
-      this.props.fetchUserInfo("user");
+      await this.props.fetchUserInfo("user");
     }
-    this.fetchPageData();
+    await this.props.fetchTagList("home");
+    await this.fetchPageData();
   }
 
   /**
@@ -130,7 +133,7 @@ class Home extends Component {
 
   /********************* 页面render方法 ********************/
   render() {
-    const { homeItems } = this.props.home;
+    const { homeItems, tagList } = this.props.home;
     console.log("homeItems", homeItems);
     return (
       <View className="home-page">
@@ -262,7 +265,11 @@ class Home extends Component {
           {homeItems.map((item, index) => {
             return (
               item.type === "DynamicList" && (
-                <DynamicList list={item.content} key={index} />
+                <DynamicList
+                  list={item.content}
+                  key={index}
+                  tagList={tagList}
+                />
               )
             );
           })}
