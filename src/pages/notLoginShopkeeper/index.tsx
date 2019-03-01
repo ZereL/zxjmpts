@@ -508,9 +508,9 @@ class NotLoginShopkeeper extends Component {
             <View className="bottom-view-text">
               金主您好，点击“一键分享”，分享全球好物
             </View>
-            <AtButton className="bottom-button" open-type="share">
+            <Button className="bottom-button" open-type="share">
               一键分享
-            </AtButton>
+            </Button>
           </View>
         ) : null}
         {/* 情况2：是金主，不通过分享进入 */}
@@ -519,9 +519,9 @@ class NotLoginShopkeeper extends Component {
             <View className="bottom-view-text">
               金主您好，点击“一键分享”，分享全球好物
             </View>
-            <AtButton className="bottom-button" open-type="share">
+            <Button className="bottom-button" open-type="share" >
               一键分享
-            </AtButton>
+            </Button>
           </View>
         ) : null}
         {/* 情况3：是小主，通过分享进入 */}
@@ -530,12 +530,12 @@ class NotLoginShopkeeper extends Component {
             <View className="bottom-view-text">
               更多商品请点击“成为金主”后查看
             </View>
-            <AtButton
+            <Button
               className="bottom-button"
               onClick={this.goBecomeShopkeeperHandler}
             >
               成为金主
-            </AtButton>
+            </Button>
           </View>
         ) : null}
         {/* 情况4：是小主，不通过分享进入 */}
@@ -544,12 +544,12 @@ class NotLoginShopkeeper extends Component {
             <View className="bottom-view-text">
               更多商品请点击“成为金主”后查看
             </View>
-            <AtButton
+            <Button
               className="bottom-button"
               onClick={this.goBecomeShopkeeperHandler}
             >
               成为金主
-            </AtButton>
+            </Button>
           </View>
         ) : null}
         {/* 情况5：是游客，通过分享进入 */}
@@ -560,13 +560,13 @@ class NotLoginShopkeeper extends Component {
             <View className="bottom-view-text">
               加入臻享家，点击“一键注册”，查看全球各国好物。
             </View>
-            <AtButton
+            <Button
               className="bottom-button"
               onGetUserInfo={this.onClickRegister}
               open-type="getUserInfo"
             >
               一键注册
-            </AtButton>
+            </Button>
           </View>
         ) : null}
         {/* 情况6：是游客，不通过分享进入  */}
@@ -577,13 +577,13 @@ class NotLoginShopkeeper extends Component {
             <View className="bottom-view-text">
               顾客您好，请您输入邀请码，成为臻享家会员
             </View>
-            <AtButton
+            <Button
               className="bottom-button"
               onGetUserInfo={this.onShowRegisterModal}
               open-type="getUserInfo"
             >
               开始注册
-            </AtButton>
+            </Button>
           </View>
         ) : null}
 
