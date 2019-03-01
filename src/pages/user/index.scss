@@ -115,18 +115,15 @@
         border-radius: 10px;
         height: 190px;
         &.type0 {
-          background: $color-primary
-            center no-repeat;
+          background: $color-primary center no-repeat;
           background-size: contain;
         }
         &.type1 {
-          background: $color-primary
-            center no-repeat;
+          background: $color-primary center no-repeat;
           background-size: contain;
         }
         &.type2 {
-          background: $color-primary
-            center no-repeat;
+          background: $color-primary center no-repeat;
           background-size: contain;
         }
         .operation {
@@ -169,10 +166,14 @@
     }
     .item {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-start;
       align-items: center;
       height: 100px;
-      border-bottom: 2px solid #eeeeee;
+      // border: none;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      border-bottom: 1px solid #eeeeee;
       .taro-img,
       image {
         width: 40px;

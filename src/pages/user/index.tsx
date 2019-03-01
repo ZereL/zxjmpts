@@ -28,7 +28,13 @@ import pendingDeliveryIcon from "../../assets/icon/resource11.png";
 import pendingReceiveIcon from "../../assets/icon/resource12.png";
 import completeOrderIcon from "../../assets/icon/resource9.png";
 import refundIcon from "../../assets/icon/resource10.png";
-import { AtModal, AtModalHeader, AtModalContent, AtModalAction } from "taro-ui";
+import {
+  AtModal,
+  AtModalHeader,
+  AtModalContent,
+  AtModalAction,
+  AtButton
+} from "taro-ui";
 import { setGlobalData, getGlobalData } from "./../../utils/common";
 import { IMAGE_URL, cdnSmallSuffix } from "../../config";
 
@@ -62,6 +68,8 @@ type IProps = PageStateProps & PageDispatchProps & PageOwnProps;
 interface User {
   props: IProps;
 }
+
+const windowWidth = getGlobalData("systemInfo").windowWidth;
 
 @connect(
   ({ user }) => ({
@@ -180,36 +188,17 @@ class User extends Component {
       // console.log("error", error);
       this.setState({ isOpened: true });
     }
-
-    // Taro.getUserInfo()
-    //   .then((userInfo, encryptedData, iv) => {
-    //     console.log(userInfo, encryptedData, iv, code);
-    //   })
-    //   .catch(errMsg => {});
-    // const { userInfo, encryptedData, iv } = await Taro.getUserInfo();
-
-    // if (encryptedData != void 23333 && iv != void 23333) {
-    //   const { data } = await this.props.fetchUserToken(USER, {
-    //     wechatCode: code,
-    //     encryptedData: encryptedData,
-    //     iv: iv
-    //   });
-    //   console.log("data", data);
-    //   console.log("data.token", data.token);
-    //   // 设置全局变量token
-    //   setGlobalData("token", data.token);
-    //   // 存储全局变量，下次进入程序自动登录
-    //   Taro.setStorage({ key: "token", data: data.token });
-    //   console.log(data);
-    //   const result = this.props.fetchUserInfo(USER);
-    // } else {
-    //   Taro.showToast({
-    //     title: "授权失败，请先授权",
-    //     icon: "none",
-    //     duration: 2000
-    //   });
-    // }
   };
+
+  // 通过点击事件拿到dataset属性
+  // goPage = (e) => {
+  //   if(e.currentTarget.dataset.url == '/pages/login/index' && this.props.access_token) {
+  //     return;
+  //   }
+  //   Taro.navigateTo({
+  //     url: e.currentTarget.dataset.url,
+  //   })
+  // }
 
   modalCancelHandler = () => {
     this.setState({ isOpened: false });
@@ -273,22 +262,22 @@ class User extends Component {
               <Text>待支付</Text>
               {/* {item.num > 0 && <Icon className="num">{item.num}</Icon>} */}
             </View>
-            <View className="item">
+            <View className="item" onClick={this.goOrderListHandler}>
               <Image mode="widthFix" src={pendingDeliveryIcon} />
               <Text>待发货</Text>
               {/* {item.num > 0 && <Icon className="num">{item.num}</Icon>} */}
             </View>
-            <View className="item">
+            <View className="item" onClick={this.goOrderListHandler}>
               <Image mode="widthFix" src={pendingReceiveIcon} />
               <Text>待收货</Text>
               {/* {item.num > 0 && <Icon className="num">{item.num}</Icon>} */}
             </View>
-            <View className="item">
+            <View className="item" onClick={this.goOrderListHandler}>
               <Image mode="widthFix" src={completeOrderIcon} />
               <Text>交易成功</Text>
               {/* {item.num > 0 && <Icon className="num">{item.num}</Icon>} */}
             </View>
-            <View className="item">
+            <View className="item" onClick={this.goOrderListHandler}>
               <Image mode="widthFix" src={refundIcon} />
               <Text>退款售后</Text>
               {/* {item.num > 0 && <Icon className="num">{item.num}</Icon>} */}
@@ -296,26 +285,52 @@ class User extends Component {
           </View>
         </View>
         <View className="login">
-          {/* <View className="card">
-            <View className="type type0">
-              <View className="operation">
-                <View className="txt">
-                  {mobile ? "金主用户" : "您还不是金主"}
-                </View>
-                {!mobile && (
-                  <View
-                    className="btn"
-                    data-url="/pages/login/index"
-                    onClick={this.goPage}
-                  >
-                    成为金主
-                    <View className="iconfont icon-membership_more" />
-                  </View>
-                )}
-              </View>
+          <AtButton className="item" open-type="contact" full={true}>
+            <View className="left">
+              <Image className="icon-left" src={zxjLogo} />
+              <Text>收藏的宝贝</Text>
             </View>
-          </View> */}
-          <View className="item" data-url="/pages/addressList/index">
+            <View className="right">
+              <View className="iconfont icon-more arrow" />
+            </View>
+          </AtButton>
+          <AtButton className="item" full={true}>
+            <View className="left">
+              <Image className="icon-left" src={zxjLogo} />
+              <Text>成为金主</Text>
+            </View>
+            <View className="right">
+              <View className="iconfont icon-more arrow" />
+            </View>
+          </AtButton>
+          <AtButton className="item" full={true}>
+            <View className="left">
+              <Image className="icon-left" src={zxjLogo} />
+              <Text>帮助中心</Text>
+            </View>
+            <View className="right">
+              <View className="iconfont icon-more arrow" />
+            </View>
+          </AtButton>
+          <AtButton className="item" open-type="contact" full={true}>
+            <View className="left">
+              <Image className="icon-left" src={zxjLogo} />
+              <Text>联系客服</Text>
+            </View>
+            <View className="right">
+              <View className="iconfont icon-more arrow" />
+            </View>
+          </AtButton>
+          <AtButton className="item" full={true} onClick={this.logoutHandler}>
+            <View className="left">
+              <Image className="icon-left" src={zxjLogo} />
+              <Text>登出</Text>
+            </View>
+            <View className="right">
+              <View className="iconfont icon-more arrow" />
+            </View>
+          </AtButton>
+          {/* <View className="item" data-url="/pages/addressList/index">
             <View className="left">
               <Image className="icon-left" src={zxjLogo} />
               <Text>收藏的宝贝</Text>
@@ -334,15 +349,18 @@ class User extends Component {
               <Text>帮助中心</Text>
             </View>
           </View>
-          <View className="item" data-url="/pages/about/index">
-            <View className="left">
-              <Image className="icon-left" src={zxjLogo} />
-              <Text>联系客服</Text>
-            </View>
-            <View className="right">
-              <View className="iconfont icon-more arrow" />
-            </View>
+          <View className="item" data-url="/pages/couponList/index">
+            <AtButton className="item-button" open-type="contact" full={true}>
+              <View className="left">
+                <Image className="icon-left" src={zxjLogo} />
+                <Text>联系客服</Text>
+              </View>
+              <View className="right">
+                <View className="iconfont icon-more arrow" />
+              </View>
+            </AtButton>
           </View>
+
           <View className="item" onClick={this.logoutHandler}>
             <View className="left">
               <Image className="icon-left" src={zxjLogo} />
@@ -351,7 +369,7 @@ class User extends Component {
             <View className="right">
               <View className="iconfont icon-more arrow" />
             </View>
-          </View>
+          </View> */}
         </View>
         <AtModal isOpened={this.state.isOpened}>
           <AtModalHeader>臻享家需要您的授权</AtModalHeader>
