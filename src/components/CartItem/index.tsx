@@ -6,7 +6,7 @@
  */
 import { ComponentClass } from "react";
 import Taro, { Component } from "@tarojs/taro";
-import { Image, View } from "@tarojs/components";
+import { Image, View, Checkbox } from "@tarojs/components";
 import { AtInputNumber } from "taro-ui";
 import "./index.scss";
 import { IMAGE_URL, cdnSmallSuffix, cdnMediumSuffix } from "../../config";
