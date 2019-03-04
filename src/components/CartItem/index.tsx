@@ -96,10 +96,10 @@ class CartItem extends Component {
 
   checkboxClickhandler = goods => {
     const { warehouseId, skuId, tmpSelected, tmpQty } = goods;
-    console.log("warehouseId", warehouseId);
-    console.log("skuId", skuId);
-    console.log("tmpSelected", tmpSelected);
-    console.log("tmpQty", tmpQty);
+    // console.log("warehouseId", warehouseId);
+    // console.log("skuId", skuId);
+    // console.log("tmpSelected", tmpSelected);
+    // console.log("tmpQty", tmpQty);
     this.props.onCheckboxClick("cart", {
       warehouseId: warehouseId,
       qty: tmpQty,

@@ -130,11 +130,38 @@ class Cart extends Component {
   };
 
   /********************* 渲染页面的方法 *********************/
+  _estimateTotalPrice = (item, value) => {
+    const { warehouses = [] } = this.props.cart;
+    return warehouses
+      .map(warehouse => {
+        return warehouse.data.reduce((prev, cur) => {
+          let quantity = cur.tmpQty;
+          if (item.skuId === cur.skuId) {
+            quantity = value;
+          }
+          let curPrice = cur.tmpSelected ? quantity * cur.price : 0;
+          return prev + curPrice;
+        }, 0);
+      })
+      .reduce((prev, cur) => prev + cur, 0);
+  };
+
   /********************* 页面render方法 ********************/
   render() {
     console.log("this.props", this.props);
-    const { warehouses, totalPrice } = this.props.cart;
+    const { warehouses } = this.props.cart;
     console.log("warehouses", warehouses);
+    
+    // 计算本地购物车总价
+    const totalPrice = warehouses
+      .map(warehouse => {
+        return warehouse.data.reduce((prev, cur) => {
+          let curPrice = cur.tmpSelected ? cur.tmpQty * cur.price : 0;
+          return prev + curPrice;
+        }, 0);
+      })
+      .reduce((prev, cur) => prev + cur, 0);
+
     return (
       <View className="cart-page">
         {/* 购物车为空 */}
