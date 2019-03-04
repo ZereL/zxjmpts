@@ -94,11 +94,14 @@ export default {
         let warehouse = newState.warehouses.find(
           warehouse => warehouse.id == payload.warehouseId
         );
-        let item = warehouse.data.find(item => item.skuId == payload.id);
+        console.log("warehouse", warehouse);
+        console.log("payload.id", payload.id);
+        // let item = warehouse.data.find(item => item.skuId == payload.id);
+        let item = warehouse.data.find(item => item.goodsId == payload.id);
         console.log("item", item);
         item.tmpQty = payload.qty;
         item.tmpSelected = payload.selected;
-        console.log("item.tmpQty", item.tmpQty);
+        // console.log("item.tmpQty", item.tmpQty);
       }
 
       console.log("newState", newState);
@@ -208,7 +211,7 @@ export default {
     // 这个方法使用takeLatest作为effect触发规则，所以仅会执行最后一次，之前的effect均会被取消
     [MODIFY_TEMP_CART_THEN_UPDATE]: [
       function*({ payload }, { call, put, select }) {
-        console.log("进入payload", payload);
+        console.log("进入MODIFY_TEMP_CART_THEN_UPDATE, payload", payload);
 
         // 更新临时数据，刷新界面
         yield put({

@@ -169,6 +169,7 @@ class Cart extends Component {
                             goods={goodsItem}
                             onDeleteGoods={this.props.removeFromCart.bind(this)}
                             onChangeGoodsQty={this.props.modifyCart.bind(this)}
+                            onCheckboxClick={this.props.modifyCart.bind(this)}
                             // onChangeGoodsQty={this.changeGoodsQtyHandler.bind(
                             //   this,
                             //   goodsItem

@@ -27,7 +27,8 @@ import {
   REQUEST_CREATEORDER,
   REQUEST_PAYORDER,
   FETCH_INVITATIONCODE,
-  FETCH_TAGLISTDATA
+  FETCH_TAGLISTDATA,
+  SET_PAGEDATA
 } from "../constants/index";
 import Action from "./actions";
 
@@ -46,6 +47,10 @@ export const fetchMorePageData = (namespace: string, payload?: any) =>
 // 公用action
 export const clearPageData = (namespace: string, payload?: any) =>
   Action(`${namespace}/${CLEAR_PAGEDATA}`, payload);
+
+// 公用action
+export const setPageData = (namespace: string, payload?: any) =>
+  Action(`${namespace}/${SET_PAGEDATA}`, payload);
 
 // 公用action
 export const fetchUserToken = (namespace: string, payload?: any) =>

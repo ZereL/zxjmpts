@@ -11,6 +11,7 @@ import { AtInputNumber } from "taro-ui";
 import "./index.scss";
 import { IMAGE_URL, cdnSmallSuffix, cdnMediumSuffix } from "../../config";
 import { MODIFY_TEMP_CART_THEN_UPDATE } from "../../constants/index";
+import { any } from "prop-types";
 
 type PageStateProps = {};
 
@@ -20,6 +21,7 @@ type PageOwnProps = {
   goods: any;
   onDeleteGoods: any;
   onChangeGoodsQty: any;
+  onCheckboxClick: any;
 };
 
 type PageState = {
@@ -38,7 +40,7 @@ class CartItem extends Component {
     itemQty: 0
   };
   componentDidShow() {
-    console.log("进入这个组件");
+    // console.log("进入这个组件");
   }
 
   // itemQtyChangeHandler(value, goods) {
@@ -92,8 +94,18 @@ class CartItem extends Component {
     });
   }
 
+  checkboxClickhandler = goodsId => {
+    this.props.onCheckboxClick("cart", {
+      warehouseId: 1,
+      qty: 1,
+      id: goodsId,
+      selected: false
+    });
+  };
+
   render() {
     const { goods, onDeleteGoods } = this.props;
+    console.log("goods", goods);
     return (
       <View className="ClothingsItem-page">
         <View className="WhiteSpace" />
@@ -102,6 +114,17 @@ class CartItem extends Component {
           <View className="WhiteSpace" />
           <View className="clothing">
             <View className="shop-img">
+              <View
+                onClick={this.checkboxClickhandler.bind(this, goods.goodsId)}
+                style="width:50px"
+              >
+                <Checkbox
+                  style="width:50px"
+                  className="checkbox-list__checkbox"
+                  value={goods.goodsId}
+                  checked={goods.tmpSelected}
+                />
+              </View>
               <Image
                 mode="widthFix"
                 src={`${IMAGE_URL}${goods.image}${cdnSmallSuffix}`}
