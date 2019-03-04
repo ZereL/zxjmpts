@@ -94,12 +94,17 @@ class CartItem extends Component {
     });
   }
 
-  checkboxClickhandler = goodsId => {
+  checkboxClickhandler = goods => {
+    const { warehouseId, skuId, tmpSelected, tmpQty } = goods;
+    console.log("warehouseId", warehouseId);
+    console.log("skuId", skuId);
+    console.log("tmpSelected", tmpSelected);
+    console.log("tmpQty", tmpQty);
     this.props.onCheckboxClick("cart", {
-      warehouseId: 1,
-      qty: 1,
-      id: goodsId,
-      selected: false
+      warehouseId: warehouseId,
+      qty: tmpQty,
+      id: skuId,
+      selected: !tmpSelected
     });
   };
 
@@ -115,7 +120,7 @@ class CartItem extends Component {
           <View className="clothing">
             <View className="shop-img">
               <View
-                onClick={this.checkboxClickhandler.bind(this, goods.goodsId)}
+                onClick={this.checkboxClickhandler.bind(this, goods)}
                 style="width:50px"
               >
                 <Checkbox

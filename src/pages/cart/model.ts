@@ -96,8 +96,8 @@ export default {
         );
         console.log("warehouse", warehouse);
         console.log("payload.id", payload.id);
-        // let item = warehouse.data.find(item => item.skuId == payload.id);
-        let item = warehouse.data.find(item => item.goodsId == payload.id);
+        let item = warehouse.data.find(item => item.skuId == payload.id);
+        // let item = warehouse.data.find(item => item.goodsId == payload.id);
         console.log("item", item);
         item.tmpQty = payload.qty;
         item.tmpSelected = payload.selected;
