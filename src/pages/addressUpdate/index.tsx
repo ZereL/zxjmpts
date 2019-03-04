@@ -83,7 +83,7 @@ class AddressUpdate extends Component {
   };
 
   // 保存提交
-  submit = () => {
+  submit = async () => {
     const { name, cityInfo, detailInfo, mobile, id } = this.state;
     if (!name || !cityInfo || !detailInfo || !mobile || !id) {
       Taro.showToast({
@@ -110,8 +110,9 @@ class AddressUpdate extends Component {
       return;
     }
 
+    Taro.showLoading({ title: "保存中...", mask: true });
     const cityInfoArray = cityInfo.split(" ");
-    this.props.requestAddAddress("address", {
+    await this.props.requestAddAddress("address", {
       enCode: "CN11010200",
       name: name,
       province: cityInfoArray[0],
@@ -122,6 +123,8 @@ class AddressUpdate extends Component {
       idNum: id,
       isDefaultAddress: true
     });
+    Taro.hideLoading();
+    Taro.navigateBack(); // 这个没有测试
   };
 
   onToggleAddressPicker = (info, params) => {

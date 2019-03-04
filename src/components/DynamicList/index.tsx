@@ -124,7 +124,7 @@ class DynamicList extends Component {
                       const selectedTag = tagList.filter(tagListItem => {
                         return tagListItem.tagId == tagsItem;
                       });
-                      console.log("selectedTag", selectedTag);
+                      // console.log("selectedTag", selectedTag);
                       return (
                         <View className="zan-capsule__left">
                           {selectedTag[0].name}
