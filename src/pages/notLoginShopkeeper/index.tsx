@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-08 15:12:23
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-05 14:25:39
+ * @Last Modified time: 2019-03-05 16:24:14
  */
 
 import { ComponentClass } from "react";
@@ -62,6 +62,7 @@ type PageOwnProps = {
     isCommissionAvailable: boolean;
     id: any;
   };
+  home: any;
 };
 
 type PageState = {};
@@ -73,9 +74,10 @@ interface NotLoginShopkeeper {
 }
 
 @connect(
-  ({ notLoginShopkeeper, user }) => ({
+  ({ notLoginShopkeeper, user, home }) => ({
     notLoginShopkeeper,
-    user
+    user,
+    home
   }),
   {
     fetchPageData: fetchPageData,
@@ -426,7 +428,8 @@ class NotLoginShopkeeper extends Component {
   /********************* 页面render方法 ********************/
   render() {
     console.log("this.props", this.props);
-    const { items } = this.props.notLoginShopkeeper;
+    const { tagList = [] } = this.props.home;
+    const { items = [] } = this.props.notLoginShopkeeper;
     const { id, isCommissionAvailable } = this.props.user;
     let share = this.$router.params.share; //获取分享进来的参数share
     // let share = true;
@@ -491,7 +494,7 @@ class NotLoginShopkeeper extends Component {
               1242}px;background: #fff;`}
             src={require("../../assets/image/jinzhu.jpg")}
           />
-          <ZXJGoodsList list={items} />
+          <ZXJGoodsList list={items} tagList={tagList} />
         </ScrollView>
         {/* 
             TODO：需要优化逻辑
@@ -519,7 +522,7 @@ class NotLoginShopkeeper extends Component {
             <View className="bottom-view-text">
               金主您好，点击“一键分享”，分享全球好物
             </View>
-            <Button className="bottom-button" open-type="share" >
+            <Button className="bottom-button" open-type="share">
               一键分享
             </Button>
           </View>

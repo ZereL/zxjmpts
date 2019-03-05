@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:07:36
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-12 16:35:45
+ * @Last Modified time: 2019-03-05 16:00:50
  */
 import { ComponentClass } from "react";
 import Taro, { Component } from "@tarojs/taro";
@@ -14,7 +14,7 @@ type PageStateProps = {};
 
 type PageDispatchProps = {};
 
-type PageOwnProps = { list: any; loading?: any };
+type PageOwnProps = { list: any; loading?: any; tagList?: any };
 
 type PageState = {};
 
@@ -32,7 +32,8 @@ class ZXJGoodsList extends Component {
   };
 
   render() {
-    const { list, loading } = this.props;
+    const { list, loading, tagList } = this.props;
+    console.log("list", list);
     return (
       <View className="goods-list-container">
         {list.length > 0 ? (
@@ -48,7 +49,7 @@ class ZXJGoodsList extends Component {
                   <View className="Image-container">
                     <Image
                       mode="aspectFit"
-                      style="width: 172px;height: 250px;background: #fff;" // TODO: 这里为什么使用className就改变不了样式？？？？？？？
+                      style="width: 172px;height: 172px;background: #fff;" // TODO: 这里为什么使用className就改变不了样式？？？？？？？
                       // className="img"
                       src={
                         item.image
@@ -77,20 +78,21 @@ class ZXJGoodsList extends Component {
                 {/* <Text className="dark">{item.brand}</Text> */}
                 <Text>{item.name}</Text>
                 <View className="zan-capsule">
-                  {/* {item.type_id == 2 && item.mode_id == 1 && (
-                      <View className="zan-capsule__left">VIP</View>
-                    )}
-                    {item.limit_tag && item.limit_tag != "" && (
-                      <View className="zan-capsule__center">
-                        {item.limit_tag}
-                      </View>
-                    )} */}
-                  {/* TODO: 兼容未登录金主页面加入。。。需要排查找到最优办法。 */}
-                  {item.price && (
-                    <View className="zan-capsule__right">
-                      ¥{item.price.price}
-                    </View>
-                  )}
+                  {item.tags &&
+                    item.tags.map((tagsItem, index) => {
+                      // console.log("tagsItem", tagsItem);
+                      // 从tagList中匹配tags中的ID， 拿到带有tags的信息。
+                      const selectedTag = tagList.filter(tagListItem => {
+                        return tagListItem.tagId == tagsItem;
+                      });
+                      // console.log("selectedTag", selectedTag);
+                      return (
+                        <View className="zan-capsule__left">
+                          {selectedTag[0].name}
+                        </View>
+                      );
+                      // 我勒个去，selectTag[0]就能渲染出来，好吧，数据结构想错了？？？
+                    })}
                 </View>
               </View>
             ))}

@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-08 15:12:23
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-13 15:27:03
+ * @Last Modified time: 2019-03-05 16:38:08
  */
 
 import { ComponentClass } from "react";
@@ -31,6 +31,7 @@ type PageOwnProps = {
     pageSize: number;
   };
   user: any;
+  home: any;
 };
 
 type PageState = {};
@@ -42,9 +43,10 @@ interface Shopkeeper {
 }
 
 @connect(
-  ({ shopkeeper, user }) => ({
+  ({ shopkeeper, user, home }) => ({
     shopkeeper,
-    user
+    user,
+    home
   }),
   {
     fetchPageData: fetchPageData,
@@ -114,7 +116,8 @@ class Shopkeeper extends Component {
   /********************* 页面render方法 ********************/
   render() {
     console.log("this.props", this.props);
-    const { items } = this.props.shopkeeper;
+    const { items = [] } = this.props.shopkeeper;
+    const { tagList = [] } = this.props.home;
     const { id } = this.props.user;
     let share = this.$router.params.share; //获取分享进来的参数share
     let { goodId, code, hash, name, avatarImage } = this.$router.params; //获取分享进来的参数share
@@ -135,7 +138,7 @@ class Shopkeeper extends Component {
           // onScroll={this.onScroll}
           onScrollToLower={this.fetchMorePageData}
         >
-          <ZXJGoodsList list={items} />
+          <ZXJGoodsList list={items} tagList={tagList} />
         </ScrollView>
       </View>
     );

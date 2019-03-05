@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-08 15:12:23
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-26 13:42:23
+ * @Last Modified time: 2019-03-05 15:56:10
  */
 
 import { ComponentClass } from "react";
@@ -31,6 +31,7 @@ type PageOwnProps = {
     hasNext: boolean;
     pageSize: number;
   };
+  home: { tagList: Array<object> };
 };
 
 type PageState = {};
@@ -42,8 +43,9 @@ interface GoodsList {
 }
 
 @connect(
-  ({ goodsList }) => ({
-    goodsList
+  ({ goodsList, home }) => ({
+    goodsList,
+    home
   }),
   {
     fetchPageData: fetchPageData,
@@ -136,7 +138,11 @@ class GoodsList extends Component {
   /********************* 页面render方法 ********************/
   render() {
     console.log("this.props", this.props);
+    const { tagList } = this.props.home;
+    console.log("tagList@@", tagList);
     const { items } = this.props.goodsList;
+    console.log("items@@", items);
+
     return (
       <ScrollView
         className="scrollview"
@@ -150,7 +156,7 @@ class GoodsList extends Component {
         // onScroll={this.onScroll}
         onScrollToLower={this.fetchMorePageData}
       >
-        <ZXJGoodsList list={items} />
+        <ZXJGoodsList list={items} tagList={tagList} />
       </ScrollView>
       // <View className="goodsList-page">
 
