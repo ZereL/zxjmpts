@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-19 14:33:17
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-04 16:02:23
+ * @Last Modified time: 2019-03-05 09:32:38
  */
 
 import { ComponentClass } from "react";
@@ -298,11 +298,9 @@ class CartSummary extends Component {
     // Taro.navigateTo({ url: "/pages/address/index" });
     Taro.navigateTo({ url: "/pages/addressUpdate/index" });
   };
+
   addressListHandler = () => {
-    // Taro.navigateTo({ url: "/pages/address/index" });
-    // Taro.navigateTo({ url: "/pages/addressUpdate/index" });
-    console.log("AddressList");
-    Taro.showToast({ title: "进入修改地址页面", icon: "none", duration: 2000 });
+    Taro.navigateTo({ url: "/pages/address/index" });
   };
 
   /********************* 渲染页面的方法 *********************/

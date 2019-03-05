@@ -1,16 +1,17 @@
 import { ComponentClass } from "react";
 import Taro, { Component } from "@tarojs/taro";
-import { View, Input, Image, Text, Picker } from "@tarojs/components";
+import { View, Input, Image, Text, Picker, Button } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 import "./index.scss";
 import locations from "../../assets/locations.js";
 import AddressPicker from "../../components/AddressPicker";
-import { requestAddAddress } from "../../actions/index";
+import { requestAddAddress, requestModifyAddress } from "../../actions/index";
 
 type PageStateProps = {};
 
 type PageDispatchProps = {
   requestAddAddress: (namespace: string, payload?: any) => any;
+  requestModifyAddress: (namespace: string, payload?: any) => any;
 };
 
 type PageOwnProps = {
@@ -30,7 +31,8 @@ interface AddressUpdate {
     address
   }),
   {
-    requestAddAddress: requestAddAddress
+    requestAddAddress: requestAddAddress,
+    requestModifyAddress: requestModifyAddress
   }
 )
 class AddressUpdate extends Component {
@@ -54,6 +56,32 @@ class AddressUpdate extends Component {
     //     send_cities: 0,
     //   },
     // });
+  };
+
+  componentDidShow = () => {
+    let {
+      name,
+      phoneNum,
+      enCodeFullName,
+      detailAddress,
+      idNum
+    } = this.$router.params; //获取传入进来的参数
+
+    console.log("name", name);
+    console.log("phoneNum", phoneNum);
+    console.log("enCodeFullName", enCodeFullName);
+    console.log("detailAddress", detailAddress);
+    console.log("idNum", idNum);
+
+    if (name || phoneNum || enCodeFullName || detailAddress || idNum) {
+      this.setState({
+        name: name,
+        cityInfo: enCodeFullName,
+        detailInfo: detailAddress,
+        mobile: phoneNum,
+        id: idNum
+      });
+    }
   };
 
   updateName = event => {
@@ -139,8 +167,62 @@ class AddressUpdate extends Component {
     this.setState({ isPickerShow: true });
   };
 
+  saveChangHandler = async () => {
+    let { addressId } = this.$router.params; //获取传入进来的参数
+    const { name, cityInfo, detailInfo, mobile, id } = this.state;
+    if (!name || !cityInfo || !detailInfo || !mobile || !id) {
+      Taro.showToast({
+        title: "请您完整填写表单",
+        icon: "none",
+        duration: 2000
+      });
+      return;
+    }
+    if (mobile.length != 11) {
+      Taro.showToast({
+        title: "请您填写正确的电话号码",
+        icon: "none",
+        duration: 2000
+      });
+      return;
+    }
+    if (id.length != 18) {
+      Taro.showToast({
+        title: "请您填写正确的身份证号码",
+        icon: "none",
+        duration: 2000
+      });
+      return;
+    }
+
+    Taro.showLoading({ title: "保存中...", mask: true });
+    const cityInfoArray = cityInfo.split(","); // 这里要通过“,”分割
+
+    await this.props.requestModifyAddress("address", {
+      id: addressId,
+      enCode: "CN11010200",
+      country: "CN",
+      name: name,
+      province: cityInfoArray[0],
+      city: cityInfoArray[1],
+      area: cityInfoArray[2],
+      phoneNum: mobile,
+      detailAddress: detailInfo,
+      idNum: id,
+      isDefaultAddress: true
+    });
+    Taro.hideLoading();
+  };
+
   render() {
     const { isPickerShow } = this.state;
+    let {
+      name,
+      phoneNum,
+      enCodeFullName,
+      detailAddress,
+      idNum
+    } = this.$router.params; //获取传入进来的参数
     return (
       <View className="addressUpdate-page">
         {/* <View className="head">{"编辑地址"}</View> */}
@@ -190,15 +272,21 @@ class AddressUpdate extends Component {
             onInput={this.updateId}
           />
         </View>
-        <View className="bottom-btn">
-          <View className="confirm" onClick={this.submit}>
-            <Image
-              mode="widthFix"
-              src={require("../../images/icon/check.png")}
-            />
-            <Text>保存</Text>
+        {idNum && (
+          <View className="bottom-btn">
+            <Button className="confirm" onClick={this.saveChangHandler}>
+              <Text>保存修改并设为默认</Text>
+            </Button>
           </View>
-        </View>
+        )}
+        {!idNum && (
+          <View className="bottom-btn">
+            <Button className="confirm" onClick={this.submit}>
+              <Text>保存</Text>
+            </Button>
+          </View>
+        )}
+
         <AddressPicker
           pickerShow={isPickerShow}
           onHandleToggleShow={this.onToggleAddressPicker.bind(this)}

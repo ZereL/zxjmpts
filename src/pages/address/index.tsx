@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-19 17:37:31
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-20 11:16:37
+ * @Last Modified time: 2019-03-05 12:52:54
  */
 
 import { ComponentClass } from "react";
@@ -11,16 +11,21 @@ import { View, Button, Text, ScrollView, Picker } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 
 import "./index.scss";
-import { fetchPageData } from "../../actions";
-import { CART } from "../../constants";
+import {
+  fetchPageData,
+  fetchMorePageData,
+  requestSetDefaultAddress
+} from "../../actions";
 import { getGlobalData } from "../../utils/common";
 import locations from "../../assets/locations.js";
-import AddressPicker from "../../components/AddressPicker";
+import { AtButton } from "taro-ui";
 
 type PageStateProps = { address: {} };
 
 type PageDispatchProps = {
   fetchPageData: (namespace: string, payload?: any) => any;
+  fetchMorePageData: (namespace: string, payload?: any) => any;
+  requestSetDefaultAddress: (namespace: string, payload?: any) => any;
 };
 
 type PageOwnProps = {};
@@ -33,23 +38,24 @@ interface Address {
   props: IProps;
 }
 
+const windowHeight = getGlobalData("systemInfo").windowHeight;
+
 @connect(
   ({ address }) => ({
     address
   }),
   {
-    fetchPageData: fetchPageData
+    fetchPageData: fetchPageData,
+    fetchMorePageData: fetchMorePageData,
+    requestSetDefaultAddress: requestSetDefaultAddress
   }
 )
 class Address extends Component {
   config: Config = {
-    navigationBarTitleText: "编辑收件人"
+    navigationBarTitleText: "我的收件人"
   };
 
-  state = {
-    selector: [["a", "b"], ["c", "d"]],
-    selectorChecked: "a"
-  };
+  state = {};
 
   /********************* 生命周期函数 **********************/
   componentWillReceiveProps(nextProps) {
@@ -59,40 +65,66 @@ class Address extends Component {
   componentWillUnmount() {}
 
   componentDidShow() {
-    // if (getGlobalData("token")) {
-    //   this.fetchPageData();
-    // } else {
-    //   Taro.showToast({ title: "尚未登录", icon: "none", duration: 2000 });
-    // }
+    if (getGlobalData("token")) {
+      this.fetchPageData();
+    } else {
+      Taro.showToast({ title: "尚未登录", icon: "none", duration: 2000 });
+    }
   }
 
   componentDidHide() {}
 
   /********************* 事件handler **********************/
 
-  onChange = e => {
-    this.setState({
-      selectorChecked: this.state.selector[e.detail.value]
-    });
-  };
-  onTimeChange = e => {
-    this.setState({
-      timeSel: e.detail.value
-    });
-  };
-  onDateChange = e => {
-    this.setState({
-      dateSel: e.detail.value
-    });
-  };
-
   fetchPageData = async () => {
     try {
-      const result = await this.props.fetchPageData("cart");
+      const result = await this.props.fetchPageData("address", {
+        pageSize: 14,
+        currentPage: 1
+      });
       console.log("请求成功", result);
     } catch (error) {
       console.log("error", error);
     }
+  };
+
+  fetchMorePageData = async () => {
+    const { currentPage, hasNext, pageSize } = this.props.address;
+    try {
+      if (hasNext) {
+        const result = await this.props.fetchMorePageData("address", {
+          pageSize: 14,
+          currentPage: currentPage + 1
+        });
+        console.log("请求成功", result);
+      } else {
+        console.log("没有更多了");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  setDefaltHandler = e => {
+    console.log("e.currentTarget.dataset.info", e.currentTarget.dataset.info);
+    console.log("设置默认地址");
+    const {
+      name,
+      phoneNum,
+      enCodeFullName,
+      detailAddress,
+      idNum,
+      id
+    } = e.currentTarget.dataset.info;
+    // this.props.requestSetDefaultAddress("address", {});
+    // let { info } = this.$router.params; //获取分享进来的参数share
+    Taro.navigateTo({
+      url: `/pages/addressUpdate/index?name=${name}&phoneNum=${phoneNum}&enCodeFullName=${enCodeFullName}&detailAddress=${detailAddress}&idNum=${idNum}&addressId=${id}`
+    });
+  };
+
+  addNewAddressHandler = () => {
+    Taro.navigateTo({ url: "/pages/addressUpdate/index" });
   };
 
   goHome = () => {
@@ -101,34 +133,64 @@ class Address extends Component {
     });
   };
 
-  checkOutHandler = () => {
-    // console.log("合计");
-    Taro.navigateTo({ url: "/pages/cart/cartSummary" });
-  };
-  onToggleAddressPicker = info => {
-    console.log("点击", this);
-    console.log("点击", info);
-  };
   /********************* 渲染页面的方法 *********************/
   /********************* 页面render方法 ********************/
   render() {
     console.log("this.props", this.props);
-    // const {} = this.props.address;
+    const { items = [] } = this.props.address;
     console.log("locations", locations);
     return (
-      <View className="cart-page">
-        <View>添加地址</View>
-        {/* <Picker
-          mode="multiSelector"
-          range={this.state.selector}
-          onChange={this.onChange}
+      <View className="address-page">
+        {" "}
+        <ScrollView
+          className="scrollview"
+          scrollY
+          scrollWithAnimation
+          // scrollTop="0"
+          style={`height: ${windowHeight - 30}px`}
+          lowerThreshold={20}
+          // upperThreshold="20"
+          // onScrolltoupper={this.onScrolltoupper}
+          // onScroll={this.onScroll}
+          onScrollToLower={this.fetchMorePageData}
         >
-          <View className="picker">当前选择：{this.state.selectorChecked}</View>
-        </Picker> */}
-        <AddressPicker
-          pickerShow={true}
-          onHandleToggleShow={this.onToggleAddressPicker.bind(this)}
-        />
+          {items.map((item, index) => {
+            const {
+              name,
+              phoneNum,
+              enCodeFullName,
+              detailAddress,
+              idNum,
+              id
+            } = item;
+            return (
+              <View
+                className="goods-row"
+                data-info={{
+                  name,
+                  phoneNum,
+                  enCodeFullName,
+                  detailAddress,
+                  idNum,
+                  id
+                }}
+                onClick={this.setDefaltHandler}
+              >
+                <View className="">
+                  {name}, {phoneNum}
+                </View>
+                <View className="">
+                  {enCodeFullName}, {detailAddress}
+                </View>
+              </View>
+            );
+          })}
+        </ScrollView>
+        <View className="bottom-view">
+          <Button className="bottom-button" onClick={this.addNewAddressHandler}>
+            添加新地址
+          </Button>
+        </View>
       </View>
     );
   }

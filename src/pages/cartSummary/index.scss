@@ -2,7 +2,7 @@
  * @Author: Hank 
  * @Date: 2019-02-07 10:09:14 
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-19 17:09:41
+ * @Last Modified time: 2019-03-05 11:37:20
  */
 
 @import "../../styles/mixin";
@@ -44,7 +44,7 @@
     }
   }
   .goods-row {
-    @include wh(100%, 150px);
+    @include wh(100%, 200px);
     @include fj(flex-start);
   }
   .goods {
@@ -61,11 +61,13 @@
     @include wh(100%, 150px);
     @include fj(space-between);
     align-items: center;
+    padding: 20px;
   }
   .courier-price {
     @include wh(100%, 150px);
     @include fj(space-between);
     align-items: center;
+    padding: 20px;
   }
   .bottom-count {
     position: fixed;

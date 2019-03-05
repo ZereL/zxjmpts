@@ -3,7 +3,7 @@ import { defaultGoodsImage } from "./../../config/index";
  * @Author: Hank
  * @Date: 2019-02-07 10:09:21
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-20 15:59:26
+ * @Last Modified time: 2019-03-05 12:56:34
  */
 
 import {
@@ -11,13 +11,16 @@ import {
   FETCH_PAGEDATA,
   SET_PAGEDATA,
   REQUEST_ADDADDRESS,
-  FETCH_CARTADDRESS
+  FETCH_CARTADDRESS,
+  FETCH_MOREPAGEDATA,
+  REQUEST_MODIFY_ADDRESS
 } from "./../../constants/index";
 import Taro from "@tarojs/taro";
-import { fetchCartData } from "../../services/cartService";
 import {
   requestAddAddress,
-  fetchCartAddress
+  fetchCartAddress,
+  fetchAddressList,
+  modifyAddress
 } from "../../services/addressService";
 
 export default {
@@ -30,13 +33,40 @@ export default {
   },
   effects: {
     *[FETCH_PAGEDATA]({ payload }, { select, put, call }) {
-      const requestResult = yield call(fetchCartData, payload);
+      const requestResult = yield call(fetchAddressList, payload);
       console.log("requestResult", requestResult);
       const requestResultData = requestResult.data;
 
       yield put({
         type: SET_PAGEDATA,
         payload: requestResultData
+      });
+      return requestResult;
+    },
+    *[FETCH_MOREPAGEDATA]({ payload }, { select, put, call }) {
+      // 当前列表数据
+      const currentState = yield select(state => state.goodsList);
+      // console.log("currentState", currentState);
+      const currentList = currentState.items;
+
+      // 请求返回所有数据
+      const requestResult = yield call(fetchAddressList, payload);
+      console.log("requestResult", requestResult);
+      // 请求返回的data
+      const requestResultData = requestResult.data;
+      // 请求返回的产品列表
+      const fetchlist = requestResult.data.items;
+      // 新的产品列表数据
+      const newList = currentList.concat(fetchlist);
+      console.log("newList", newList);
+
+      yield put({
+        type: SET_PAGEDATA,
+        payload: {
+          ...currentState,
+          ...requestResultData,
+          items: newList
+        }
       });
       return requestResult;
     },
@@ -49,6 +79,14 @@ export default {
     *[REQUEST_ADDADDRESS]({ payload }, { call }) {
       console.log("收到请求", payload);
       const requestResult = yield call(requestAddAddress, payload);
+      console.log("requestResult", requestResult);
+      const requestResultData = requestResult.data;
+
+      return requestResultData;
+    },
+    *[REQUEST_MODIFY_ADDRESS]({ payload }, { call }) {
+      console.log("收到请求", payload);
+      const requestResult = yield call(modifyAddress, payload);
       console.log("requestResult", requestResult);
       const requestResultData = requestResult.data;
 

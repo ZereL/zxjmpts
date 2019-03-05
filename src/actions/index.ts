@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:08:38
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-25 14:36:21
+ * @Last Modified time: 2019-03-05 12:46:03
  */
 
  // TODO: 这些Action需要整理复用。
@@ -28,7 +28,8 @@ import {
   REQUEST_PAYORDER,
   FETCH_INVITATIONCODE,
   FETCH_TAGLISTDATA,
-  SET_PAGEDATA
+  SET_PAGEDATA,
+  REQUEST_MODIFY_ADDRESS
 } from "../constants/index";
 import Action from "./actions";
 
@@ -106,6 +107,9 @@ export const requestAddAddress = (namespace: string, payload?: any) =>
   
 export const fetchCartAddress = (namespace: string, payload?: any) =>
   Action(`${namespace}/${FETCH_CARTADDRESS}`, payload);
+  
+export const requestModifyAddress = (namespace: string, payload?: any) =>
+  Action(`${namespace}/${REQUEST_MODIFY_ADDRESS}`, payload);
 
   // order页面
 export const requestPayOrder = (namespace: string, payload?: any) =>
