@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:58
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-05 14:25:00
+ * @Last Modified time: 2019-03-05 17:10:10
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -216,6 +216,10 @@ class User extends Component {
     const result = this.props.clearPageData(USER);
   };
 
+  goLikeGoods = () => {
+    Taro.navigateTo({ url: "/pages/goodsList/index?isFavorite=true" });
+  };
+
   /********************* 渲染页面的方法 *********************/
   /********************* 页面render方法 ********************/
   render() {
@@ -284,9 +288,8 @@ class User extends Component {
           </View>
         </View>
         <View className="login">
-          <AtButton className="item" open-type="contact" full={true}>
+          <AtButton className="item" full={true} onClick={this.goLikeGoods}>
             <View className="left">
-
               <Text>收藏的宝贝</Text>
             </View>
             <View className="right">
@@ -295,7 +298,6 @@ class User extends Component {
           </AtButton>
           <AtButton className="item" full={true}>
             <View className="left">
-
               <Text>成为金主</Text>
             </View>
             <View className="right">
@@ -304,7 +306,6 @@ class User extends Component {
           </AtButton>
           <AtButton className="item" full={true}>
             <View className="left">
-
               <Text>帮助中心</Text>
             </View>
             <View className="right">
@@ -313,7 +314,6 @@ class User extends Component {
           </AtButton>
           <AtButton className="item" open-type="contact" full={true}>
             <View className="left">
-
               <Text>联系客服</Text>
             </View>
             <View className="right">
@@ -322,7 +322,6 @@ class User extends Component {
           </AtButton>
           <AtButton className="item" full={true} onClick={this.logoutHandler}>
             <View className="left">
- 
               <Text>登出</Text>
             </View>
             <View className="right">

@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-08 15:12:23
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-05 15:56:10
+ * @Last Modified time: 2019-03-06 10:19:33
  */
 
 import { ComponentClass } from "react";
@@ -76,7 +76,11 @@ class GoodsList extends Component {
   /********************* 事件handler **********************/
 
   fetchPageData = async () => {
-    let { brandId, cateId, keyword } = this.$router.params; //获取分享进来的参数share
+    let { brandId, cateId, keyword, isFavorite } = this.$router.params; //获取分享进来的参数share
+    console.log("brandId", brandId);
+    console.log("cateId", cateId);
+    console.log("keyword", keyword);
+    console.log("isFavorite", isFavorite);
     console.log("this.$router.params", this.$router.params);
     try {
       const result = await this.props.fetchPageData(GOODSLIST, {
@@ -86,7 +90,8 @@ class GoodsList extends Component {
         cateId: cateId ? cateId : null,
         keyword: keyword,
         pageSize: 14,
-        currentPage: 1
+        currentPage: 1,
+        isFavorite: isFavorite ? !!isFavorite : null
       });
       console.log("请求成功", result);
     } catch (error) {
@@ -96,7 +101,7 @@ class GoodsList extends Component {
 
   fetchMorePageData = async () => {
     const { currentPage, hasNext, pageSize } = this.props.goodsList;
-    let { brandId, cateId, keyword } = this.$router.params; //获取分享进来的参数share
+    let { brandId, cateId, keyword, isFavorite } = this.$router.params; //获取分享进来的参数share
     try {
       if (hasNext) {
         const result = await this.props.fetchMorePageData(GOODSLIST, {
@@ -104,7 +109,8 @@ class GoodsList extends Component {
           cateId: cateId ? cateId : null,
           keyword: keyword,
           pageSize: 14,
-          currentPage: currentPage + 1
+          currentPage: currentPage + 1,
+          isFavorite: isFavorite ? !!isFavorite : null
         });
         console.log("请求成功", result);
       } else {

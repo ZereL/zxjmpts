@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:10:09
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-12 15:10:09
+ * @Last Modified time: 2019-03-06 10:18:50
  */
 import api from "./api";
 
@@ -20,7 +20,14 @@ export function fetchGoodsData(payload) {
 
 // 获取商品列表数据
 export function fetchGoodsListData(payload) {
-  const { pageSize, currentPage, brandId, cateId, keyword } = payload;
+  const {
+    pageSize,
+    currentPage,
+    brandId,
+    cateId,
+    keyword,
+    isFavorite
+  } = payload;
   console.log("keyword", keyword);
   return api.post({
     url: "/goodsService/goods/list",
@@ -29,7 +36,8 @@ export function fetchGoodsListData(payload) {
       currentPage: currentPage || 1,
       brandId: brandId || null,
       cateId: cateId || null,
-      keyword: keyword || null
+      keyword: keyword || null,
+      isFavorite: isFavorite || null
     }
   });
 }

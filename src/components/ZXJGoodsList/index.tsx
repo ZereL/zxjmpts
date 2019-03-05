@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:07:36
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-05 16:00:50
+ * @Last Modified time: 2019-03-06 10:20:29
  */
 import { ComponentClass } from "react";
 import Taro, { Component } from "@tarojs/taro";
@@ -32,11 +32,13 @@ class ZXJGoodsList extends Component {
   };
 
   render() {
-    const { list, loading, tagList } = this.props;
-    console.log("list", list);
+    const { list = [], loading, tagList } = this.props;
+    console.log("list", list); // 注意这里如果没有值返回的是null
     return (
       <View className="goods-list-container">
-        {list.length > 0 ? (
+        {list == null || list.length == 0 ? (
+          <View />
+        ) : (
           <View className="goods-ul">
             {list.map((item, index) => (
               <View
@@ -97,8 +99,6 @@ class ZXJGoodsList extends Component {
               </View>
             ))}
           </View>
-        ) : (
-          <View />
         )}
         {loading && (
           <View className="loadMoreGif">
