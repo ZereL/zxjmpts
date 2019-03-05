@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:58
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-25 16:03:27
+ * @Last Modified time: 2019-03-05 14:25:00
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -20,7 +20,6 @@ import { USER } from "../../constants";
 
 import messageIcon from "../../assets/icon/resource52.png";
 import avatar_img from "../../assets/icon/resource23.png";
-import zxjLogo from "../../assets/icon/resource34.png";
 // import setttingsIcon from "../../assets/icon/resource30.png";
 
 import pendingPayIcon from "../../assets/icon/resource13.png";
@@ -287,7 +286,7 @@ class User extends Component {
         <View className="login">
           <AtButton className="item" open-type="contact" full={true}>
             <View className="left">
-              <Image className="icon-left" src={zxjLogo} />
+
               <Text>收藏的宝贝</Text>
             </View>
             <View className="right">
@@ -296,7 +295,7 @@ class User extends Component {
           </AtButton>
           <AtButton className="item" full={true}>
             <View className="left">
-              <Image className="icon-left" src={zxjLogo} />
+
               <Text>成为金主</Text>
             </View>
             <View className="right">
@@ -305,7 +304,7 @@ class User extends Component {
           </AtButton>
           <AtButton className="item" full={true}>
             <View className="left">
-              <Image className="icon-left" src={zxjLogo} />
+
               <Text>帮助中心</Text>
             </View>
             <View className="right">
@@ -314,7 +313,7 @@ class User extends Component {
           </AtButton>
           <AtButton className="item" open-type="contact" full={true}>
             <View className="left">
-              <Image className="icon-left" src={zxjLogo} />
+
               <Text>联系客服</Text>
             </View>
             <View className="right">
@@ -323,7 +322,7 @@ class User extends Component {
           </AtButton>
           <AtButton className="item" full={true} onClick={this.logoutHandler}>
             <View className="left">
-              <Image className="icon-left" src={zxjLogo} />
+ 
               <Text>登出</Text>
             </View>
             <View className="right">

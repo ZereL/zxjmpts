@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-08 15:12:23
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-27 11:56:46
+ * @Last Modified time: 2019-03-05 14:25:39
  */
 
 import { ComponentClass } from "react";
@@ -191,7 +191,7 @@ class NotLoginShopkeeper extends Component {
     return {
       title: "海淘更便宜，分享有收益❤️全球臻选好物等您来👇。",
       path: `/pages/notLoginShopkeeper/index?code=${invatationCode}&hash=${invatationCodeHash}&name=${name}&avatarImage=${image}&share=true`,
-      imageUrl: `/src/assets/icon/resource63.png`, // TODO：自定义分享图片目前好像不行
+      // imageUrl: `/src/assets/icon/resource63.png`, // TODO：自定义分享图片目前好像不行
       success: function(res) {
         console.log(res);
         console.log("转发成功:" + JSON.stringify(res));
