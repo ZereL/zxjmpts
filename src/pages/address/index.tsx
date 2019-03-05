@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-19 17:37:31
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-05 12:52:54
+ * @Last Modified time: 2019-03-05 14:12:51
  */
 
 import { ComponentClass } from "react";
@@ -14,7 +14,7 @@ import "./index.scss";
 import {
   fetchPageData,
   fetchMorePageData,
-  requestSetDefaultAddress
+  requestDeleteAddress
 } from "../../actions";
 import { getGlobalData } from "../../utils/common";
 import locations from "../../assets/locations.js";
@@ -25,7 +25,7 @@ type PageStateProps = { address: {} };
 type PageDispatchProps = {
   fetchPageData: (namespace: string, payload?: any) => any;
   fetchMorePageData: (namespace: string, payload?: any) => any;
-  requestSetDefaultAddress: (namespace: string, payload?: any) => any;
+  requestDeleteAddress: (namespace: string, payload?: any) => any;
 };
 
 type PageOwnProps = {};
@@ -39,6 +39,7 @@ interface Address {
 }
 
 const windowHeight = getGlobalData("systemInfo").windowHeight;
+const windowWidth = getGlobalData("systemInfo").windowWidth;
 
 @connect(
   ({ address }) => ({
@@ -47,7 +48,7 @@ const windowHeight = getGlobalData("systemInfo").windowHeight;
   {
     fetchPageData: fetchPageData,
     fetchMorePageData: fetchMorePageData,
-    requestSetDefaultAddress: requestSetDefaultAddress
+    requestDeleteAddress: requestDeleteAddress
   }
 )
 class Address extends Component {
@@ -133,12 +134,23 @@ class Address extends Component {
     });
   };
 
+  deleteHandler = async e => {
+    // console.log("e.currentTarget.dataset.id", e.currentTarget.dataset.id);
+    Taro.showLoading({ title: "删除中...", mask: true });
+    await this.props.requestDeleteAddress("address", {
+      id: e.currentTarget.dataset.id
+    });
+    Taro.hideLoading();
+    this.fetchPageData();
+  };
+
   /********************* 渲染页面的方法 *********************/
   /********************* 页面render方法 ********************/
   render() {
     console.log("this.props", this.props);
     const { items = [] } = this.props.address;
     console.log("locations", locations);
+    console.log("windowWidth", windowWidth);
     return (
       <View className="address-page">
         {" "}
@@ -164,22 +176,41 @@ class Address extends Component {
               id
             } = item;
             return (
-              <View
-                className="goods-row"
-                data-info={{
-                  name,
-                  phoneNum,
-                  enCodeFullName,
-                  detailAddress,
-                  idNum,
-                  id
-                }}
-                onClick={this.setDefaltHandler}
-              >
-                <View className="">
-                  {name}, {phoneNum}
+              <View className="goods-row">
+                <View className="top-row">
+                  <View
+                    style={`width: 90%`}
+                    data-info={{
+                      name,
+                      phoneNum,
+                      enCodeFullName,
+                      detailAddress,
+                      idNum,
+                      id
+                    }}
+                    onClick={this.setDefaltHandler}
+                  >
+                    {name}, {phoneNum}
+                  </View>
+                  <View
+                    className="iconfont icon-delete"
+                    style={"width: 5%"}
+                    data-id={id}
+                    onClick={this.deleteHandler.bind(this)}
+                  />
                 </View>
-                <View className="">
+                <View
+                  className=""
+                  data-info={{
+                    name,
+                    phoneNum,
+                    enCodeFullName,
+                    detailAddress,
+                    idNum,
+                    id
+                  }}
+                  onClick={this.setDefaltHandler}
+                >
                   {enCodeFullName}, {detailAddress}
                 </View>
               </View>

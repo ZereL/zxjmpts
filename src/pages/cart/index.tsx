@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:17
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-19 14:32:06
+ * @Last Modified time: 2019-03-05 14:17:12
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -71,7 +71,9 @@ class Cart extends Component {
 
   componentDidShow() {
     if (getGlobalData("token")) {
+      Taro.showLoading({ title: "加载中...", mask: true });
       this.fetchPageData();
+      Taro.hideLoading();
     } else {
       Taro.showToast({ title: "尚未登录", icon: "none", duration: 2000 });
     }

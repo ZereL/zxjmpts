@@ -1,8 +1,9 @@
+import { REQUEST_DELETE_ADDRESS } from './../constants/index';
 /*
  * @Author: Hank
  * @Date: 2019-02-07 10:08:38
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-05 12:46:03
+ * @Last Modified time: 2019-03-05 14:09:55
  */
 
  // TODO: 这些Action需要整理复用。
@@ -110,6 +111,9 @@ export const fetchCartAddress = (namespace: string, payload?: any) =>
   
 export const requestModifyAddress = (namespace: string, payload?: any) =>
   Action(`${namespace}/${REQUEST_MODIFY_ADDRESS}`, payload);
+
+export const requestDeleteAddress = (namespace: string, payload?: any) =>
+  Action(`${namespace}/${REQUEST_DELETE_ADDRESS}`, payload);
 
   // order页面
 export const requestPayOrder = (namespace: string, payload?: any) =>

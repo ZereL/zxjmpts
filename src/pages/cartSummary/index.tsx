@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-19 14:33:17
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-05 09:32:38
+ * @Last Modified time: 2019-03-05 14:15:37
  */
 
 import { ComponentClass } from "react";
@@ -99,9 +99,11 @@ class CartSummary extends Component {
 
   componentWillUnmount() {}
 
-  componentDidShow() {
+  async componentDidShow() {
     if (getGlobalData("token")) {
-      this.fetchCartSummary();
+      Taro.showLoading({ title: "加载中...", mask: true });
+      await this.fetchCartSummary();
+      Taro.hideLoading();
     } else {
       Taro.showToast({ title: "尚未登录", icon: "none", duration: 2000 });
     }

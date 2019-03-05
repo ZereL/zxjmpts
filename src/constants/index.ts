@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:00
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-05 12:45:54
+ * @Last Modified time: 2019-03-05 14:03:01
  */
 export const ADD = "ADD";
 export const REQUEST_LOGIN = "REQUEST_LOGIN";
@@ -37,6 +37,7 @@ export const REQUEST_ADDADDRESS = "REQUEST_ADDADDRESS";
 export const FETCH_CARTADDRESS = "FETCH_CARTADDRESS";
 export const SET_CARTADDRESS = "SET_CARTADDRESS";
 export const REQUEST_MODIFY_ADDRESS = "REQUEST_MODIFY_ADDRESS";
+export const REQUEST_DELETE_ADDRESS = "REQUEST_DELETE_ADDRESS";
 
 // 下单
 export const REQUEST_CREATEORDER = "REQUEST_CREATEORDER";

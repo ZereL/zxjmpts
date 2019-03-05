@@ -2,10 +2,11 @@
  * @Author: Hank 
  * @Date: 2019-02-07 10:09:14 
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-05 11:38:15
+ * @Last Modified time: 2019-03-05 13:44:45
  */
 
 @import "../../styles/mixin";
+@import "../../styles/base";
 
 .address-page {
   @include wh(100%, 100%);
@@ -45,6 +46,14 @@
     margin: 10px;
     @include fj(flex-start);
     flex-direction: column;
+    .top-row {
+      @include fj(flex-start);
+      flex-direction: row;
+      .icon-delete {
+        @include sc(66px, #ccc);
+        float: right;
+      }
+    }
   }
   .goods {
     @include wh(80%, 150px);

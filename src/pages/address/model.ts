@@ -3,7 +3,7 @@ import { defaultGoodsImage } from "./../../config/index";
  * @Author: Hank
  * @Date: 2019-02-07 10:09:21
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-05 12:56:34
+ * @Last Modified time: 2019-03-05 14:11:03
  */
 
 import {
@@ -13,14 +13,16 @@ import {
   REQUEST_ADDADDRESS,
   FETCH_CARTADDRESS,
   FETCH_MOREPAGEDATA,
-  REQUEST_MODIFY_ADDRESS
+  REQUEST_MODIFY_ADDRESS,
+  REQUEST_DELETE_ADDRESS
 } from "./../../constants/index";
 import Taro from "@tarojs/taro";
 import {
   requestAddAddress,
   fetchCartAddress,
   fetchAddressList,
-  modifyAddress
+  modifyAddress,
+  deleteAddress
 } from "../../services/addressService";
 
 export default {
@@ -87,6 +89,14 @@ export default {
     *[REQUEST_MODIFY_ADDRESS]({ payload }, { call }) {
       console.log("收到请求", payload);
       const requestResult = yield call(modifyAddress, payload);
+      console.log("requestResult", requestResult);
+      const requestResultData = requestResult.data;
+
+      return requestResultData;
+    },
+    *[REQUEST_DELETE_ADDRESS]({ payload }, { call }) {
+      console.log("收到请求", payload);
+      const requestResult = yield call(deleteAddress, payload);
       console.log("requestResult", requestResult);
       const requestResultData = requestResult.data;
 
