@@ -2,7 +2,7 @@
  * @Author: Hank 
  * @Date: 2019-02-07 10:09:30 
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-27 13:41:39
+ * @Last Modified time: 2019-03-06 10:47:50
  */
 
 @import "../../styles/mixin";
@@ -30,7 +30,11 @@
         font-weight: bold;
       }
       .model {
-        display: inline-block;
+        width: 100%;
+        padding: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         color: #878787;
         font-size: 28px;
         line-height: 30px;

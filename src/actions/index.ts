@@ -1,12 +1,11 @@
-import { REQUEST_DELETE_ADDRESS } from './../constants/index';
 /*
  * @Author: Hank
  * @Date: 2019-02-07 10:08:38
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-05 14:09:55
+ * @Last Modified time: 2019-03-06 11:21:52
  */
 
- // TODO: 这些Action需要整理复用。
+// TODO: 这些Action需要整理复用。
 import {
   ADD,
   REQUEST_LOGIN,
@@ -30,7 +29,10 @@ import {
   FETCH_INVITATIONCODE,
   FETCH_TAGLISTDATA,
   SET_PAGEDATA,
-  REQUEST_MODIFY_ADDRESS
+  REQUEST_MODIFY_ADDRESS,
+  REQUEST_DELETE_ADDRESS,
+  REQUEST_ADDFAVORITE,
+  REQUEST_DELFAVORITE
 } from "../constants/index";
 import Action from "./actions";
 
@@ -105,19 +107,23 @@ export const fetchInvitationCode = (namespace: string, payload?: any) =>
 // 地址页面
 export const requestAddAddress = (namespace: string, payload?: any) =>
   Action(`${namespace}/${REQUEST_ADDADDRESS}`, payload);
-  
+
 export const fetchCartAddress = (namespace: string, payload?: any) =>
   Action(`${namespace}/${FETCH_CARTADDRESS}`, payload);
-  
+
 export const requestModifyAddress = (namespace: string, payload?: any) =>
   Action(`${namespace}/${REQUEST_MODIFY_ADDRESS}`, payload);
 
 export const requestDeleteAddress = (namespace: string, payload?: any) =>
   Action(`${namespace}/${REQUEST_DELETE_ADDRESS}`, payload);
 
-  // order页面
+// order页面
 export const requestPayOrder = (namespace: string, payload?: any) =>
   Action(`${namespace}/${REQUEST_PAYORDER}`, payload);
 
+// goodsDetail页面
+export const requestAddFavorite = (namespace: string, payload?: any) =>
+  Action(`${namespace}/${REQUEST_ADDFAVORITE}`, payload);
 
-
+export const requestDelFavorite = (namespace: string, payload?: any) =>
+  Action(`${namespace}/${REQUEST_DELFAVORITE}`, payload);

@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:08:02
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-15 16:39:57
+ * @Last Modified time: 2019-03-06 11:36:28
  */
 import {
   GOODSDETAIL,
@@ -10,9 +10,11 @@ import {
   SET_PAGEDATA,
   CLEAR_PAGEDATA,
   REQUEST_UPDATECART,
-  SET_UPDATECART
+  SET_UPDATECART,
+  REQUEST_ADDFAVORITE,
+  REQUEST_DELFAVORITE
 } from "./../../constants/index";
-import { fetchGoodsData } from "../../services/goodsService";
+import { fetchGoodsData, addFavorite, delFavorite  } from "../../services/goodsService";
 import { updateCart } from "../../services/cartService";
 
 export default {
@@ -68,6 +70,31 @@ export default {
           ...requestResult.data
         }
       });
+
+      return requestResult;
+    },
+    *[REQUEST_ADDFAVORITE]({ payload }, { select, put, call }) {
+      const requestResult = yield call(addFavorite, payload);
+
+      // yield put({
+      //   type: SET_UPDATECART,
+      //   payload: {
+      //     ...requestResult.data
+      //   }
+      // });
+
+      return requestResult;
+    },
+    *[REQUEST_DELFAVORITE]({ payload }, { select, put, call }) {
+      const requestResult = yield call(delFavorite, payload);
+      console.log("加入购物车成功", requestResult);
+
+      // yield put({
+      //   type: SET_UPDATECART,
+      //   payload: {
+      //     ...requestResult.data
+      //   }
+      // });
 
       return requestResult;
     }

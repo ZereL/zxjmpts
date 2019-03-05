@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:00
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-05 14:03:01
+ * @Last Modified time: 2019-03-06 11:20:07
  */
 export const ADD = "ADD";
 export const REQUEST_LOGIN = "REQUEST_LOGIN";
@@ -42,6 +42,10 @@ export const REQUEST_DELETE_ADDRESS = "REQUEST_DELETE_ADDRESS";
 // 下单
 export const REQUEST_CREATEORDER = "REQUEST_CREATEORDER";
 export const REQUEST_PAYORDER = "REQUEST_PAYORDER";
+
+// 单品页面
+export const REQUEST_ADDFAVORITE = "REQUEST_ADDFAVORITE";
+export const REQUEST_DELFAVORITE = "REQUEST_DELFAVORITE";
 
 export const HOME = "home"; // 命名空间
 export const CART = "cart"; // 命名空间

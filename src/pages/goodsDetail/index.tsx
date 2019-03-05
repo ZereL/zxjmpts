@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:36
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-27 13:33:42
+ * @Last Modified time: 2019-03-06 11:37:46
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -10,7 +10,13 @@ import { View, Text, Image, Button } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 
 import "./index.scss";
-import { fetchPageData, clearPageData, requestUpdateCart } from "../../actions";
+import {
+  fetchPageData,
+  clearPageData,
+  requestUpdateCart,
+  requestAddFavorite,
+  requestDelFavorite
+} from "../../actions";
 import { GOODSDETAIL } from "../../constants";
 import Carousel from "../../components/Carousel";
 import { AtTabBar, AtButton, AtFloatLayout, AtTag } from "taro-ui";
@@ -37,6 +43,8 @@ type PageDispatchProps = {
   clearPageData: (namespace: string, payload?: any) => any;
   login: (namespace: string, payload?: any) => any;
   requestUpdateCart: (namespace: string, payload?: any) => any;
+  requestAddFavorite: (namespace: string, payload?: any) => any;
+  requestDelFavorite: (namespace: string, payload?: any) => any;
 };
 
 type PageOwnProps = {};
@@ -67,7 +75,9 @@ const windowWidth = getGlobalData("systemInfo").windowWidth;
   {
     fetchPageData: fetchPageData,
     clearPageData: clearPageData,
-    requestUpdateCart: requestUpdateCart
+    requestUpdateCart: requestUpdateCart,
+    requestAddFavorite: requestAddFavorite,
+    requestDelFavorite: requestDelFavorite
   }
 )
 // TODO: 现在和APP一样，不管库存是多少，status是怎样，都可以下单。可能以后要改
@@ -152,6 +162,9 @@ class GoodsDetail extends Component {
 
     try {
       const result = await this.props.fetchPageData(GOODSDETAIL, { id: id });
+      console.log("result", result);
+      const { isFavorite } = result.data;
+      this.setState({ isLiked: isFavorite });
       console.log("请求成功", result);
     } catch (error) {
       console.log("error", error);
@@ -228,6 +241,24 @@ class GoodsDetail extends Component {
    */
   modalCloseHandler = () => {
     this.setState({ isChooseModelModalShow: false });
+  };
+
+  likeGoodsHandler = async () => {
+    const { isLiked } = this.state;
+    const { id } = this.$router.params;
+    console.log("id", id);
+    Taro.showLoading({ title: "加载中..." });
+    if (isLiked) {
+      await this.props.requestDelFavorite("goodsDetail", {
+        id: id
+      });
+    } else {
+      await this.props.requestAddFavorite("goodsDetail", {
+        id: id
+      });
+    }
+    Taro.hideLoading();
+    this.setState({ isLiked: !isLiked });
   };
 
   /**
@@ -368,7 +399,8 @@ class GoodsDetail extends Component {
       property,
       skuPrice,
       firstRowIndex,
-      secondRowIndex
+      secondRowIndex,
+      isLiked
     } = this.state;
     const {
       images,
@@ -433,7 +465,19 @@ class GoodsDetail extends Component {
         <View className="container">
           {/* 商品名称价格*/}
           <View className="info-business-card">
-            <View className="model"> ¥{price.price}</View>
+            <View className="model">
+              <View>¥{price.price}</View>
+              <View onClick={this.likeGoodsHandler}>
+                <Image
+                  style="width: 20px; height: 20px"
+                  src={
+                    isLiked
+                      ? require("../../assets/icon/resource63.png")
+                      : require("../../assets/icon/resource33.png")
+                  }
+                />
+              </View>
+            </View>
           </View>
           <View className="product_name">{name}</View>
           {/* 商品图片详情*/}
@@ -531,7 +575,7 @@ class GoodsDetail extends Component {
                   {values.map((itemPropertyValue, indexValue) => {
                     return (
                       <AtTag
-                      className={"tag"}
+                        className={"tag"}
                         name={`${indexValue}`}
                         key={`${itemPropertyValue}${indexValue}`}
                         active={
