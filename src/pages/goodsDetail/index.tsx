@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:36
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-06 14:13:11
+ * @Last Modified time: 2019-03-06 15:47:24
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -561,7 +561,7 @@ class GoodsDetail extends Component {
               ￥{skuPrice ? skuPrice : price.price}
             </View>
           </View>
-          <View style={`display: flex; flex: 1`}>
+          <View style={`display: flex; flex: 1; flex-direction: column;`}>
             {property.map((itemProperty, index) => {
               const { key, values } = itemProperty;
 
@@ -569,7 +569,8 @@ class GoodsDetail extends Component {
                 // 遍历输出tags的分类名称，如 颜色、尺码
                 <View
                   key={`${itemProperty}${index}`}
-                  style={`width: ${windowWidth}px; padding: 10px;`}
+                  // style={`width: 100%; padding: 10px;`}
+                  className="spec"
                 >
                   {key}
                   <View className={"tags"}>
