@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:07:32
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-19 12:31:16
+ * @Last Modified time: 2019-03-06 17:29:43
  */
 import { ComponentClass } from "react";
 import Taro, { Component } from "@tarojs/taro";
@@ -40,7 +40,21 @@ class CartItem extends Component {
     itemQty: 0
   };
   componentDidShow() {
-    // console.log("进入这个组件");
+    const { tmpQty } = this.props.goods;
+    this.setState({ itemQty: tmpQty }); // 第一次加载时把props中的数量，存到state中， 多写一次保险，可以删掉
+    console.log("componentDidShow tmpQty", tmpQty);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { tmpQty } = nextProps.goods;
+    this.setState({ itemQty: tmpQty }); // 从确认订单页面回来的时候， 把props中的数量，存到state中
+    console.log("componentWillReceiveProps tmpQty", tmpQty);
+  }
+
+  componentDidMount() {
+    const { tmpQty } = this.props.goods;
+    this.setState({ itemQty: tmpQty }); // 第一次加载时把props中的数量，存到state中
+    console.log("componentDidShow tmpQty", tmpQty);
   }
 
   // itemQtyChangeHandler(value, goods) {
@@ -67,6 +81,7 @@ class CartItem extends Component {
     console.log("parseInt(value)", parseInt(value));
     console.log("this", this);
 
+    this.setState({ itemQty: value });
     this.props.onChangeGoodsQty("cart", {
       warehouseId: this.props.goods.warehouseId,
       id: this.props.goods.skuId,
@@ -145,7 +160,8 @@ class CartItem extends Component {
                   min={0}
                   max={10}
                   step={1}
-                  value={goods.tmpQty}
+                  // value={goods.tmpQty}
+                  value={this.state.itemQty}
                   // value={this.state.itemQty}
                   onChange={this.itemQtyChangeHandler.bind(this)} // 这个onChange是直接把value取到的值+1或者-1
                   onBlur={this.itemQtyBlurHandler.bind(this)}

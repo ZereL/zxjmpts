@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-19 14:33:17
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-05 14:15:37
+ * @Last Modified time: 2019-03-06 17:30:25
  */
 
 import { ComponentClass } from "react";
@@ -367,7 +367,7 @@ class CartSummary extends Component {
                 />
               );
             })}
-            <View className="totolNum">共{goodsList.length}件</View>
+            <View className="totolNum">共{goodsList.length}种</View>
           </View>
           <AtRadio
             options={[
