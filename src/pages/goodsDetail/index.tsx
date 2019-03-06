@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:36
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-06 11:37:46
+ * @Last Modified time: 2019-03-06 14:13:11
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -561,54 +561,56 @@ class GoodsDetail extends Component {
               ￥{skuPrice ? skuPrice : price.price}
             </View>
           </View>
-          {property.map((itemProperty, index) => {
-            const { key, values } = itemProperty;
+          <View style={`display: flex; flex: 1`}>
+            {property.map((itemProperty, index) => {
+              const { key, values } = itemProperty;
 
-            return (
-              // 遍历输出tags的分类名称，如 颜色、尺码
-              <View
-                key={`${itemProperty}${index}`}
-                style={`width: ${windowWidth}px; padding: 10px`}
-              >
-                {key}
-                <View className={"tags"}>
-                  {values.map((itemPropertyValue, indexValue) => {
-                    return (
-                      <AtTag
-                        className={"tag"}
-                        name={`${indexValue}`}
-                        key={`${itemPropertyValue}${indexValue}`}
-                        active={
-                          index == 0
-                            ? indexValue == firstRowIndex
-                            : indexValue == secondRowIndex
-                        }
-                        // 设置是否disable
-                        // 如果第一行没有选中任何节点，则第二行都是有效状态
-                        // 如果是第一行，则都是有效状态
-                        // 如果是第二行，则对应的sku不是空才有效
-                        disabled={
-                          firstRowIndex == -1 || index == 0
-                            ? false
-                            : skus[firstRowIndex][indexValue] == null
-                        }
-                        onClick={this.tagClickHandler.bind(
-                          this,
-                          itemProperty,
-                          indexValue,
-                          index,
-                          property,
-                          skus
-                        )}
-                      >
-                        {itemPropertyValue}
-                      </AtTag>
-                    );
-                  })}
+              return (
+                // 遍历输出tags的分类名称，如 颜色、尺码
+                <View
+                  key={`${itemProperty}${index}`}
+                  style={`width: ${windowWidth}px; padding: 10px;`}
+                >
+                  {key}
+                  <View className={"tags"}>
+                    {values.map((itemPropertyValue, indexValue) => {
+                      return (
+                        <AtTag
+                          className={"tag"}
+                          name={`${indexValue}`}
+                          key={`${itemPropertyValue}${indexValue}`}
+                          active={
+                            index == 0
+                              ? indexValue == firstRowIndex
+                              : indexValue == secondRowIndex
+                          }
+                          // 设置是否disable
+                          // 如果第一行没有选中任何节点，则第二行都是有效状态
+                          // 如果是第一行，则都是有效状态
+                          // 如果是第二行，则对应的sku不是空才有效
+                          disabled={
+                            firstRowIndex == -1 || index == 0
+                              ? false
+                              : skus[firstRowIndex][indexValue] == null
+                          }
+                          onClick={this.tagClickHandler.bind(
+                            this,
+                            itemProperty,
+                            indexValue,
+                            index,
+                            property,
+                            skus
+                          )}
+                        >
+                          {itemPropertyValue}
+                        </AtTag>
+                      );
+                    })}
+                  </View>
                 </View>
-              </View>
-            );
-          })}
+              );
+            })}
+          </View>
           <AtButton onClick={this.modalAddToCartHandler}>加入购物车</AtButton>
         </AtFloatLayout>
       </View>
