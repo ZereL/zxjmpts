@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:11:03
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-06 10:09:50
+ * @Last Modified time: 2019-03-06 15:12:53
  */
 
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -58,26 +58,28 @@ class App extends Component {
         {
           pagePath: "pages/home/index",
           text: "首页",
-          iconPath: "./assets/icons/home.png",
-          selectedIconPath: "./assets/icons/home.png"
+          iconPath: "./assets/icon/resource37.png",
+          selectedIconPath: "./assets/icon/resource37.png"
         },
         {
           pagePath: "pages/shopkeeper/index",
           text: "金主",
-          iconPath: "./assets/icons/home.png",
-          selectedIconPath: "./assets/icons/home.png"
+          iconPath: "./assets/icon/resource1.jpg",
+          selectedIconPath: "./assets/icon/resource1.jpg"
         },
         {
           pagePath: "pages/cart/index",
           text: "聚宝盆",
-          iconPath: "./assets/icons/home.png",
-          selectedIconPath: "./assets/icons/home.png"
+          iconPath: "./assets/icon/resource36.png",
+          selectedIconPath: "./assets/icon/resource36.png"
         },
         {
           pagePath: "pages/user/index",
           text: "小主",
-          iconPath: "./assets/icons/home.png",
-          selectedIconPath: "./assets/icons/home.png"
+          iconPath: "./assets/icon/resource35.png",
+          selectedIconPath: "./assets/icon/resource35.png"
+          // iconPath: "./assets/icons/home.png",
+          // selectedIconPath: "./assets/icons/home.png"
         }
       ],
       color: "#333",
