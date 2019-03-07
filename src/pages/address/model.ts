@@ -1,9 +1,8 @@
-import { defaultGoodsImage } from "./../../config/index";
 /*
  * @Author: Hank
  * @Date: 2019-02-07 10:09:21
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-05 14:11:03
+ * @Last Modified time: 2019-03-07 15:59:25
  */
 
 import {
@@ -34,7 +33,7 @@ export default {
     }
   },
   effects: {
-    *[FETCH_PAGEDATA]({ payload }, { select, put, call }) {
+    *[FETCH_PAGEDATA]({ payload }, { put, call }) {
       const requestResult = yield call(fetchAddressList, payload);
       console.log("requestResult", requestResult);
       const requestResultData = requestResult.data;

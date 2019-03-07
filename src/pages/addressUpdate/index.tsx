@@ -3,7 +3,6 @@ import Taro, { Component } from "@tarojs/taro";
 import { View, Input, Image, Text, Picker, Button } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 import "./index.scss";
-import locations from "../../assets/locations.js";
 import AddressPicker from "../../components/AddressPicker";
 import { requestAddAddress, requestModifyAddress } from "../../actions/index";
 
@@ -49,14 +48,8 @@ class AddressUpdate extends Component {
     id: ""
   };
 
-  componentDidMount = () => {
-    // this.props.dispatch({
-    //   type: 'addressUpdate/getDistricts',
-    //   payload: {
-    //     send_cities: 0,
-    //   },
-    // });
-  };
+  /********************* 生命周期函数 **********************/
+  componentDidMount = () => {};
 
   componentDidShow = () => {
     let {
@@ -66,12 +59,6 @@ class AddressUpdate extends Component {
       detailAddress,
       idNum
     } = this.$router.params; //获取传入进来的参数
-
-    console.log("name", name);
-    console.log("phoneNum", phoneNum);
-    console.log("enCodeFullName", enCodeFullName);
-    console.log("detailAddress", detailAddress);
-    console.log("idNum", idNum);
 
     if (name || phoneNum || enCodeFullName || detailAddress || idNum) {
       this.setState({
@@ -84,33 +71,11 @@ class AddressUpdate extends Component {
     }
   };
 
-  updateName = event => {
-    const { value, id } = event.target;
-    console.log(value, id);
-    this.setState({ name: value });
-  };
-  updateCity = event => {
-    const { value, id } = event.target;
-    console.log(value, id);
-    this.setState({ cityInfo: value });
-  };
-  updateDetail = event => {
-    const { value, id } = event.target;
-    console.log(value, id);
-    this.setState({ detailInfo: value });
-  };
-  updateMobile = event => {
-    const { value, id } = event.target;
-    console.log(value, id);
-    this.setState({ mobile: value });
-  };
-  updateId = event => {
-    const { value, id } = event.target;
-    console.log(value, id);
-    this.setState({ id: value });
-  };
+  /********************* 事件handler **********************/
 
-  // 保存提交
+  /**
+   * 保存提交数据事件
+   */
   submit = async () => {
     const { name, cityInfo, detailInfo, mobile, id } = this.state;
     if (!name || !cityInfo || !detailInfo || !mobile || !id) {
@@ -155,6 +120,9 @@ class AddressUpdate extends Component {
     Taro.navigateBack(); // 这个没有测试
   };
 
+  /**
+   * 关闭地址pickerView事件
+   */
   onToggleAddressPicker = (info, params) => {
     console.log("点击", this);
     console.log("点击", info);
@@ -163,8 +131,35 @@ class AddressUpdate extends Component {
     this.setState({ isPickerShow: false, cityInfo: info });
   };
 
+  /********************* 渲染页面的方法 *********************/
   cityInputHandler = () => {
     this.setState({ isPickerShow: true });
+  };
+
+  updateName = event => {
+    const { value, id } = event.target;
+    console.log(value, id);
+    this.setState({ name: value });
+  };
+  updateCity = event => {
+    const { value, id } = event.target;
+    console.log(value, id);
+    this.setState({ cityInfo: value });
+  };
+  updateDetail = event => {
+    const { value, id } = event.target;
+    console.log(value, id);
+    this.setState({ detailInfo: value });
+  };
+  updateMobile = event => {
+    const { value, id } = event.target;
+    console.log(value, id);
+    this.setState({ mobile: value });
+  };
+  updateId = event => {
+    const { value, id } = event.target;
+    console.log(value, id);
+    this.setState({ id: value });
   };
 
   saveChangHandler = async () => {
@@ -214,6 +209,7 @@ class AddressUpdate extends Component {
     Taro.hideLoading();
   };
 
+  /********************* 页面render方法 ********************/
   render() {
     const { isPickerShow } = this.state;
     let {
@@ -239,6 +235,7 @@ class AddressUpdate extends Component {
             placeholder="国家/地区"
             id="address_city"
             value={"中国"}
+            disabled
           />
           <View onClick={this.cityInputHandler}>
             <Input
@@ -247,6 +244,7 @@ class AddressUpdate extends Component {
               id="address_city"
               value={this.state.cityInfo}
               onInput={this.updateCity}
+              disabled
             />
           </View>
           <Input

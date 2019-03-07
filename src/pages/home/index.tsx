@@ -2,12 +2,12 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:07:40
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-06 14:39:09
+ * @Last Modified time: 2019-03-07 15:42:03
  */
 
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
-import { View, Image, Button } from "@tarojs/components";
+import { View, Image } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 
 import "./index.scss";
@@ -21,8 +21,6 @@ import { AtGrid } from "taro-ui";
 type PageStateProps = {};
 
 type PageDispatchProps = {
-  add: (namespace: string, payload?: any) => any;
-  login: (namespace: string, payload?: any) => any;
   fetchPageData: (namespace: string, payload?: any) => any;
   fetchUserInfo: (namespace: string, payload?: any) => any;
   fetchTagList: (namespace: string, payload?: any) => any;
@@ -31,6 +29,7 @@ type PageDispatchProps = {
 type PageOwnProps = {
   home: {
     homeItems: [{ content: Array<object>; type: string }];
+    tagList: Array<Object>;
   };
 };
 
@@ -47,7 +46,6 @@ interface Home {
     home
   }),
   {
-    // add: add,
     fetchPageData: fetchPageData,
     fetchUserInfo: fetchUserInfo,
     fetchTagList: fetchTagList
@@ -101,22 +99,19 @@ class Home extends Component {
     index == 9 && Taro.navigateTo({ url: "/pages/becomeShopkeeper/index" });
     Taro.navigateTo({ url: `/pages/goodsList/index?cateId=${item.cateId}` });
   };
+
+  /**
+   * 跳转到产品列表
+   */
   goGoodsList = () => {
     Taro.navigateTo({ url: "/pages/goodsList/index" });
   };
 
+  /**
+   * 跳转到分享页面
+   */
   goSharePageHandler = () => {
     Taro.navigateTo({ url: "/pages/notLoginShopkeeper/index" });
-  };
-
-  getCode = async () => {
-    const result = await Taro.login();
-    console.log("result", result);
-  };
-
-  getUserInfo = async () => {
-    const result = await Taro.getUserInfo();
-    console.log("result", result);
   };
   /********************* 渲染页面的方法 *********************/
   /**
@@ -137,28 +132,6 @@ class Home extends Component {
     console.log("homeItems", homeItems);
     return (
       <View className="home-page">
-        {/* <AtButton type="primary">TARO UI 按钮</AtButton> */}
-        {/* <Button className="add_btn" onClick={this.add}>
-          +
-        </Button> */}
-        {/* <Button className="add_btn" onClick={this.getCode}>
-          getCode
-        </Button>
-        <Button className="add_btn" onClick={this.getUserInfo}>
-          getUserInfo
-        </Button> */}
-        {/* <Button className="add_btn" onClick={this.loginHandler}>
-          登录
-        </Button> */}
-        {/* <Button className="add_btn" onClick={this.goGoodsList}>
-          商品列表
-        </Button> */}
-        {/* <Button className="add_btn" onClick={this.goGoodsDetailHandler}>
-          查看商品详情
-        </Button> */}
-        {/* <Button className="add_btn" onClick={this.goSharePageHandler}>
-          分享页面
-        </Button> */}
         <View className="search-bar">
           <Image
             mode="aspectFit"
@@ -191,7 +164,7 @@ class Home extends Component {
           })}
         </View>
         <View className="homeItems">
-          {/* TODO：这里需要改成动态！！！！ */}
+          {/* TODO：这里需要改成动态从后台获取，目前图省事写死了！！！！ */}
           <AtGrid
             mode="square"
             columnNum={5}
@@ -201,7 +174,7 @@ class Home extends Component {
               {
                 image: require("../../assets/icon/resource48.png"),
                 value: "人气美妆",
-                cateId: 1
+                cateId: 1 // 这里改了TaroUI的typings，为了TypeScript不报错。
               },
               {
                 image: require("../../assets/icon/resource46.png"),

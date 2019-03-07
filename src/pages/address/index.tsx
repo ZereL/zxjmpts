@@ -2,12 +2,12 @@
  * @Author: Hank
  * @Date: 2019-02-19 17:37:31
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-05 14:12:51
+ * @Last Modified time: 2019-03-07 15:58:10
  */
 
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
-import { View, Button, Text, ScrollView, Picker } from "@tarojs/components";
+import { View, Button, ScrollView } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 
 import "./index.scss";
@@ -17,10 +17,8 @@ import {
   requestDeleteAddress
 } from "../../actions";
 import { getGlobalData } from "../../utils/common";
-import locations from "../../assets/locations.js";
-import { AtButton } from "taro-ui";
 
-type PageStateProps = { address: {} };
+type PageStateProps = { address: any };
 
 type PageDispatchProps = {
   fetchPageData: (namespace: string, payload?: any) => any;
@@ -39,7 +37,7 @@ interface Address {
 }
 
 const windowHeight = getGlobalData("systemInfo").windowHeight;
-const windowWidth = getGlobalData("systemInfo").windowWidth;
+// const windowWidth = getGlobalData("systemInfo").windowWidth;
 
 @connect(
   ({ address }) => ({
@@ -55,8 +53,6 @@ class Address extends Component {
   config: Config = {
     navigationBarTitleText: "我的收件人"
   };
-
-  state = {};
 
   /********************* 生命周期函数 **********************/
   componentWillReceiveProps(nextProps) {
@@ -77,6 +73,9 @@ class Address extends Component {
 
   /********************* 事件handler **********************/
 
+  /**
+   * 请求页面数据
+   */
   fetchPageData = async () => {
     try {
       const result = await this.props.fetchPageData("address", {
@@ -89,12 +88,15 @@ class Address extends Component {
     }
   };
 
+  /**
+   * 上拉加载
+   */
   fetchMorePageData = async () => {
     const { currentPage, hasNext, pageSize } = this.props.address;
     try {
       if (hasNext) {
         const result = await this.props.fetchMorePageData("address", {
-          pageSize: 14,
+          pageSize: pageSize,
           currentPage: currentPage + 1
         });
         console.log("请求成功", result);
@@ -106,9 +108,10 @@ class Address extends Component {
     }
   };
 
+  /**
+   * 设置默认地址
+   */
   setDefaltHandler = e => {
-    console.log("e.currentTarget.dataset.info", e.currentTarget.dataset.info);
-    console.log("设置默认地址");
     const {
       name,
       phoneNum,
@@ -117,43 +120,38 @@ class Address extends Component {
       idNum,
       id
     } = e.currentTarget.dataset.info;
-    // this.props.requestSetDefaultAddress("address", {});
-    // let { info } = this.$router.params; //获取分享进来的参数share
+
     Taro.navigateTo({
       url: `/pages/addressUpdate/index?name=${name}&phoneNum=${phoneNum}&enCodeFullName=${enCodeFullName}&detailAddress=${detailAddress}&idNum=${idNum}&addressId=${id}`
     });
   };
 
+  /**
+   * 跳转到编辑收件人页面
+   */
   addNewAddressHandler = () => {
     Taro.navigateTo({ url: "/pages/addressUpdate/index" });
   };
 
-  goHome = () => {
-    Taro.switchTab({
-      url: "/pages/home/index"
-    });
-  };
-
+  /**
+   * 删除地址
+   */
   deleteHandler = async e => {
-    // console.log("e.currentTarget.dataset.id", e.currentTarget.dataset.id);
     Taro.showLoading({ title: "删除中...", mask: true });
     await this.props.requestDeleteAddress("address", {
       id: e.currentTarget.dataset.id
     });
     Taro.hideLoading();
+    // 删除选定地址，重新加载数据
     this.fetchPageData();
   };
 
   /********************* 渲染页面的方法 *********************/
   /********************* 页面render方法 ********************/
   render() {
-    console.log("this.props", this.props);
     const { items = [] } = this.props.address;
-    console.log("locations", locations);
-    console.log("windowWidth", windowWidth);
     return (
       <View className="address-page">
-        {" "}
         <ScrollView
           className="scrollview"
           scrollY
@@ -161,11 +159,11 @@ class Address extends Component {
           // scrollTop="0"
           style={`height: ${windowHeight - 30}px`}
           lowerThreshold={20}
-          // upperThreshold="20"
           // onScrolltoupper={this.onScrolltoupper}
           // onScroll={this.onScroll}
           onScrollToLower={this.fetchMorePageData}
         >
+          {/* 循环加载地址信息 */}
           {items.map((item, index) => {
             const {
               name,
@@ -176,7 +174,7 @@ class Address extends Component {
               id
             } = item;
             return (
-              <View className="goods-row">
+              <View className="goods-row" key={index}>
                 <View className="top-row">
                   <View
                     style={`width: 90%`}
@@ -217,6 +215,7 @@ class Address extends Component {
             );
           })}
         </ScrollView>
+        {/* 底部新增地址按钮 */}
         <View className="bottom-view">
           <Button className="bottom-button" onClick={this.addNewAddressHandler}>
             添加新地址
