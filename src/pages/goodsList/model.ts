@@ -2,10 +2,10 @@
  * @Author: Hank
  * @Date: 2019-02-08 15:12:38
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-12 14:46:21
+ * @Last Modified time: 2019-03-08 09:51:59
  */
 
-import { GOODSLIST } from "./../../constants/index";
+import { GOODSLIST, CLEAR_PAGEDATA } from "./../../constants/index";
 import {
   FETCH_PAGEDATA,
   SET_PAGEDATA,
@@ -16,13 +16,18 @@ import { fetchGoodsListData } from "../../services/goodsService";
 export default {
   namespace: GOODSLIST,
   state: {
-    num: 1,
     homeItems: []
   },
   reducers: {
     [SET_PAGEDATA](state, { payload }) {
       console.log("SET_PAGEDATA, payload", payload);
       return { ...state, ...payload };
+    },
+    [CLEAR_PAGEDATA](state, {}) {
+      console.log("state", state);
+      return {
+        homeItems: []
+      };
     }
   },
   effects: {

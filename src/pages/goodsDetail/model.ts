@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:08:02
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-07 17:16:04
+ * @Last Modified time: 2019-03-08 09:49:40
  */
 import {
   GOODSDETAIL,
@@ -20,7 +20,6 @@ import { updateCart } from "../../services/cartService";
 export default {
   namespace: GOODSDETAIL,
   state: {
-    num: 1,
     image: [],
     contentImages: [],
     name: "",
@@ -37,7 +36,6 @@ export default {
     [CLEAR_PAGEDATA](state, {}) {
       console.log("state", state);
       return {
-        num: 1,
         image: [],
         contentImages: [],
         name: "",

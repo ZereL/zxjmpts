@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-08 15:12:23
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-07 17:20:41
+ * @Last Modified time: 2019-03-08 09:54:11
  */
 
 import { ComponentClass } from "react";
@@ -11,7 +11,7 @@ import { ScrollView } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 
 import "./index.scss";
-import { fetchPageData, fetchMorePageData } from "../../actions";
+import { fetchPageData, fetchMorePageData, clearPageData } from "../../actions";
 import { GOODSLIST } from "../../constants";
 import ZXJGoodsList from "../../components/ZXJGoodsList/index";
 
@@ -20,6 +20,7 @@ type PageStateProps = {};
 type PageDispatchProps = {
   fetchPageData: (namespace: string, payload?: any) => any;
   fetchMorePageData: (namespace: string, payload?: any) => any;
+  clearPageData: (namespace: string, payload?: any) => any;
 };
 
 type PageOwnProps = {
@@ -47,7 +48,8 @@ interface GoodsList {
   }),
   {
     fetchPageData: fetchPageData,
-    fetchMorePageData: fetchMorePageData
+    fetchMorePageData: fetchMorePageData,
+    clearPageData: clearPageData
   }
 )
 
@@ -63,7 +65,9 @@ class GoodsList extends Component {
     console.log(this.props, nextProps);
   }
 
-  componentWillUnmount() {}
+  componentWillUnmount() {
+    this.props.clearPageData('goodsList')
+  }
 
   componentDidShow() {
     this.fetchPageData();
@@ -71,6 +75,7 @@ class GoodsList extends Component {
 
   componentDidHide() {
     // TODO：清除数据
+    this.props.clearPageData('goodsList')
   }
 
   /********************* 事件handler **********************/

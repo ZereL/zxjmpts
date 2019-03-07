@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:36
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-07 17:15:27
+ * @Last Modified time: 2019-03-08 09:53:58
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -128,7 +128,9 @@ class GoodsDetail extends Component {
     this.fetchPageData();
   }
 
-  componentDidHide() {}
+  componentDidHide() {
+    this.props.clearPageData(GOODSDETAIL);
+  }
 
   // //这个分享的函数必须写在入口中，写在子组件中不生效
   // onShareAppMessage() {
