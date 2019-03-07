@@ -2,17 +2,16 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:07:40
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-07 14:42:38
+ * @Last Modified time: 2019-03-07 17:31:20
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
-import { View, Image, Button, ScrollView } from "@tarojs/components";
+import { View, ScrollView } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 import { AtTag, AtFloatLayout, AtRadio, AtButton } from "taro-ui";
 
 import "./index.scss";
-import { fetchPageData, fetchUserInfo, requestPayOrder } from "../../actions";
-import { getGlobalData } from "../../utils/common";
+import { fetchPageData, requestPayOrder } from "../../actions";
 import Card from "./Card";
 // import Card from "../order/Card";
 
@@ -24,7 +23,7 @@ type PageDispatchProps = {
 };
 
 type PageOwnProps = {
-  order: {};
+  order: any;
 };
 
 type PageState = {};
@@ -79,6 +78,9 @@ class Order extends Component {
 
   /********************* 事件handler **********************/
 
+  /**
+   * 请求页面展示主句
+   */
   fetchPageData = async () => {
     try {
       const result = await this.props.fetchPageData("order", {
@@ -96,11 +98,6 @@ class Order extends Component {
     }
   };
 
-  getCode = async () => {
-    const result = await Taro.login();
-    console.log("result", result);
-  };
-
   // tagActiveHandler(index) {
   //   console.log("index", index);
   //   return true;
@@ -113,10 +110,16 @@ class Order extends Component {
   //   // }
   // }
 
+  /**
+   * 顶部tag点击handler
+   */
   tagClickHandler(index) {
     this.setState({ activeTagIndex: index });
   }
 
+  /**
+   * 请求支付
+   */
   async requestPayOrder() {
     const { orderId, paymentMethod } = this.state;
     try {
@@ -128,6 +131,7 @@ class Order extends Component {
           // wechatCode: "string",
           // joinedPay: true
         });
+        console.log("payResult", payResult); // TODO: 可能需要做payResult验证
         Taro.showToast({ title: "支付成功", icon: "none", duration: 2000 });
       } else if (paymentMethod == "3") {
         const wechatCode = await Taro.login();
@@ -163,15 +167,23 @@ class Order extends Component {
     }
   }
 
+  /**
+   * 显示浮动层（选择支付方式）
+   */
   showFloatLayout(id) {
     this.setState({ orderId: id, isFloatLayoutShow: true });
-    console.log("this.state", this.state);
   }
 
+  /**
+   * 隐藏浮动层
+   */
   floatLayoutCloseHandler = () => {
     this.setState({ isFloatLayoutShow: false });
   };
 
+  /**
+   * 更改支付方式事件
+   */
   changePaymentMethodHandler(paymentMethod) {
     this.setState({ paymentMethod });
   }
@@ -204,9 +216,8 @@ class Order extends Component {
             })}
           </View>
           <ScrollView>
+            {/* 循环输出订单 */}
             {items.map((item, index) => {
-              // console.log("item", item);
-              // return <View>123</View>;
               return (
                 <Card
                   key={index}
@@ -217,6 +228,7 @@ class Order extends Component {
             })}
           </ScrollView>
         </View>
+        {/* 支付方式 */}
         <AtFloatLayout
           isOpened={this.state.isFloatLayoutShow}
           onClose={this.floatLayoutCloseHandler}

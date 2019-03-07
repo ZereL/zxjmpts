@@ -2,12 +2,12 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:07:40
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-07 15:00:14
+ * @Last Modified time: 2019-03-07 17:32:49
  */
 import { ComponentClass } from "react";
-import Taro, { Component, Config } from "@tarojs/taro";
-import { View, Image, Button, ScrollView, Text } from "@tarojs/components";
-import { AtTag, AtDivider } from "taro-ui";
+import Taro, { Component } from "@tarojs/taro";
+import { View, Image, Text } from "@tarojs/components";
+import { AtDivider } from "taro-ui";
 
 import "./index.scss";
 import { IMAGE_URL } from "../../../config/index";
@@ -70,6 +70,7 @@ class Card extends Component {
       <View className="card">
         <View className="card-title">
           {/* <View>{new Date(createTime).format("yyyy-MM-dd  hh:mm")}</View> */}
+          {/* TODO: 现在会报错， 不知为什么 */}
           <View>{new Date(createTime).toLocaleString()}</View>
           <View>{statusSummary.text}</View>
         </View>

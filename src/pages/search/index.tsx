@@ -2,26 +2,19 @@
  * @Author: Hank
  * @Date: 2019-02-08 13:08:53
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-26 13:45:17
+ * @Last Modified time: 2019-03-07 17:34:57
  */
 
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
-import { View, Image } from "@tarojs/components";
-import { connect } from "@tarojs/redux";
+import { View } from "@tarojs/components";
 
 import "./index.scss";
-import { fetchPageData } from "../../actions";
-import { HOME } from "../../constants";
-import { AtSearchBar, AtTag, AtDivider } from "taro-ui";
+import { AtSearchBar, AtTag } from "taro-ui";
 
 type PageStateProps = {};
 
-type PageDispatchProps = {
-  add: (namespace: string, payload?: any) => any;
-  login: (namespace: string, payload?: any) => any;
-  fetchPageData: (namespace: string, payload?: any) => any;
-};
+type PageDispatchProps = {};
 
 type PageOwnProps = {};
 
@@ -32,15 +25,6 @@ type IProps = PageStateProps & PageDispatchProps & PageOwnProps;
 interface Search {
   props: IProps;
 }
-
-// @connect(
-//   ({ Search }) => ({
-//     Search
-//   }),
-//   {
-//     fetchPageData: fetchPageData
-//   }
-// )
 
 // TODO: 研究代替switch case遍历homeItems数组的办法
 class Search extends Component {
@@ -77,15 +61,9 @@ class Search extends Component {
 
   /********************* 事件handler **********************/
 
-  // fetchPageData = async () => {
-  //   try {
-  //     const result = await this.props.fetchPageData(HOME);
-  //     console.log("请求成功", result);
-  //   } catch (error) {
-  //     console.log("error", error);
-  //   }
-  // };
-
+  /**
+   * 顶部搜索关键词更改事件
+   */
   searchTextChangeHandler = value => {
     this.setState({
       searchText: value

@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-19 14:33:17
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-06 17:30:25
+ * @Last Modified time: 2019-03-07 17:02:13
  */
 
 import { ComponentClass } from "react";
@@ -12,9 +12,6 @@ import { connect } from "@tarojs/redux";
 
 import "./index.scss";
 import {
-  add,
-  login,
-  fetchPageData,
   modifyCart,
   removeFromCart,
   fetchCartSummary,
@@ -24,23 +21,15 @@ import {
   requestCreateOrder,
   requestPayOrder
 } from "../../actions";
-import { CART } from "../../constants";
 import { getGlobalData } from "../../utils/common";
-import CartItem from "../../components/CartItem";
 import { IMAGE_URL } from "../../config/index";
 import { AtRadio } from "taro-ui";
 type PageStateProps = {
-  cart: {
-    warehouses: any;
-    totalPrice: number;
-  };
-  address: {};
+  cart: any;
+  address: any;
 };
 
 type PageDispatchProps = {
-  add: (namespace: string, payload?: any) => any;
-  login: (namespace: string, payload?: any) => any;
-  fetchPageData: (namespace: string, payload?: any) => any;
   modifyCart: (namespace: string, payload?: any) => any;
   removeFromCart: (namespace: string, payload?: any) => any;
   fetchCartSummary: (namespace: string, payload?: any) => any;
@@ -69,9 +58,6 @@ interface CartSummary {
     address
   }),
   {
-    add: add,
-    login: login,
-    fetchPageData: fetchPageData,
     modifyCart: modifyCart,
     removeFromCart: removeFromCart,
     fetchCartSummary: fetchCartSummary,
@@ -112,47 +98,10 @@ class CartSummary extends Component {
   componentDidHide() {}
 
   /********************* 事件handler **********************/
-
+  /**
+   * 请求页面展示数据
+   */
   fetchCartSummary = async () => {
-    // const { dispatch, cartReceiver } = this.props;
-    // dispatch({
-    //   type: `cartsummary/${SET_CART_LOCATION}`,
-    //   payload: {
-    //     // resultType: RESULT_TYPE_SUMMARY
-    //     locationCode: cartReceiver == null ? "CN11010200" : cartReceiver.enCode
-    //   },
-    //   cancelToken: this.source.token
-    // })
-    //   .then(data => {
-    //     Toast.hide();
-    //     if (data.status != CART_VALID_STATUS) {
-    //       Toast.fail(data.message);
-    //     }
-
-    //     dispatch({
-    //       type: `cart/${FETCH_PAYMENTMETHODS}`,
-    //       payload: {
-    //         Price: data.totalPrice
-    //       }
-    //     }).catch(error => {
-    //       Toast.offline(error.message);
-    //     });
-
-    //     // 构造商品数据源
-    //     const { warehouses = [] } = data;
-    //     const { items = [] } = data;
-    //     // 商品按照仓库号加入对应仓库
-    //     warehouses.forEach(warehouse => {
-    //       warehouse.data = items.filter(
-    //         item => item.warehouseId == warehouse.id
-    //       );
-    //     });
-    //     this.setState({ warehouses });
-    //   })
-    //   .catch(error => {
-    //     Toast.offline(error.message);
-    //   });
-
     const { status, warehouses, items } = await this.props.setCartLocation(
       "cart"
     ); // 可能需要 写 "CN11010200"
@@ -163,34 +112,21 @@ class CartSummary extends Component {
     warehouses.forEach(warehouse => {
       warehouse.data = items.filter(item => item.warehouseId == warehouse.id);
     });
-    console.log("warehouses123", warehouses);
+
     this.setState({ warehouses });
-    // console.log("status", status);
   };
 
-  handleChange(value) {
+  paymentMethodChangeHandler(value) {
     this.setState({
       paymentMethod: value
     });
   }
 
-  fetchPageData = async () => {
-    try {
-      const result = await this.props.fetchCartSummary("cart");
-      console.log("请求成功", result);
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
 
-  deleteGoodsHandler = () => {};
-  // changeGoodsQtyHandler = (goodsItem) => {
-  //   console.log("数量改变", goodsItem);
-  // };
-
+  // 留着作参考
   // changeGoodsQtyHandler(goodsItem) {
   //   // console.log("数量改变", goodsItem);
-  //   // const newQty = this.refs.CartItem.getCount;
+  //   // const newQty = this.refs.CartItem.getCount; // 原来是，用ref在这里，取数字啊！！！已经用state实现了。
   //   // console.log("newQty", newQty);
   //   this.props.modifyCart(CART, {
   //     payload: {
@@ -202,6 +138,9 @@ class CartSummary extends Component {
   //   });
   // }
 
+  /**
+   * 确认支付事件
+   */
   checkOutHandler = async () => {
     const { totalPrice } = this.props.cart;
     const { defaultAddress } = this.props.address;
@@ -247,11 +186,12 @@ class CartSummary extends Component {
           // wechatCode: "string",
           // joinedPay: true
         });
+        console.log("payResult", payResult);
+        // TODO: 这里需不需要加一层payResult判断？ 目前暂时没做
         Taro.showToast({ title: "支付成功", icon: "none", duration: 2000 });
       } else if (paymentMethod == "WechatSupay") {
         const wechatCode = await Taro.login();
         const payResult = await this.props.requestPayOrder("order", {
-          // memberId: 0,
           orderId: orderId,
           paymentConfigId: "3",
           wechatCode: wechatCode.code,
@@ -277,27 +217,11 @@ class CartSummary extends Component {
       }
     } catch (error) {
       console.log("error", error);
-      console.log("error.message", error.message);
       Taro.showToast({ title: error.message, icon: "none", duration: 2000 });
     }
-
-    // TotalPrice: data.totalPrice, // TODO: 暂时使用购物车总价，实际需要使用支付方式接口返回的总价
-    // Remark: "", // 备注字段
-    // Country: "CN",
-    // Province: cartReceiver.province,
-    // City: cartReceiver.city,
-    // Area: cartReceiver.area,
-    // DetailAddress: cartReceiver.detailAddress,
-    // Name: cartReceiver.name,
-    // PhoneNum: cartReceiver.phoneNum,
-    // IdNum: cartReceiver.idNum,
-    // EnCode: cartReceiver.enCode,
-    // AddressId: cartReceiver.id,
-    // channel: Platform.OS === "ios" ? 1 : 2 // 后端Android写成了Adnro
   };
 
   addAddressHandler = () => {
-    // Taro.navigateTo({ url: "/pages/address/index" });
     Taro.navigateTo({ url: "/pages/addressUpdate/index" });
   };
 
@@ -376,7 +300,7 @@ class CartSummary extends Component {
               { label: "微信", value: "WechatSupay" }
             ]}
             value={this.state.paymentMethod}
-            onClick={this.handleChange.bind(this)}
+            onClick={this.paymentMethodChangeHandler.bind(this)}
           />
           <View className="total-price">
             <View>商品金额</View>

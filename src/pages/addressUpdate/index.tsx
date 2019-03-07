@@ -1,6 +1,6 @@
 import { ComponentClass } from "react";
 import Taro, { Component } from "@tarojs/taro";
-import { View, Input, Image, Text, Picker, Button } from "@tarojs/components";
+import { View, Input, Text, Button } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 import "./index.scss";
 import AddressPicker from "../../components/AddressPicker";
@@ -74,10 +74,11 @@ class AddressUpdate extends Component {
   /********************* 事件handler **********************/
 
   /**
-   * 保存提交数据事件
+   * 新提交地址数据事件
    */
-  submit = async () => {
+  submitHandler = async () => {
     const { name, cityInfo, detailInfo, mobile, id } = this.state;
+    // 验证输入信息
     if (!name || !cityInfo || !detailInfo || !mobile || !id) {
       Taro.showToast({
         title: "请您完整填写表单",
@@ -104,7 +105,9 @@ class AddressUpdate extends Component {
     }
 
     Taro.showLoading({ title: "保存中...", mask: true });
-    const cityInfoArray = cityInfo.split(" ");
+    const cityInfoArray = cityInfo.split(" "); // 注意这里是picker生成的，这里要通过“ ”分割，可以修改成一样的
+
+    // 发请求
     await this.props.requestAddAddress("address", {
       enCode: "CN11010200",
       name: name,
@@ -117,7 +120,59 @@ class AddressUpdate extends Component {
       isDefaultAddress: true
     });
     Taro.hideLoading();
-    Taro.navigateBack(); // 这个没有测试
+  };
+
+  /**
+   * 修改的地址数据事件
+   */
+  saveChangHandler = async () => {
+    let { addressId } = this.$router.params; //获取传入进来的参数
+    const { name, cityInfo, detailInfo, mobile, id } = this.state;
+
+    // 验证输入信息
+    if (!name || !cityInfo || !detailInfo || !mobile || !id) {
+      Taro.showToast({
+        title: "请您完整填写表单",
+        icon: "none",
+        duration: 2000
+      });
+      return;
+    }
+    if (mobile.length != 11) {
+      Taro.showToast({
+        title: "请您填写正确的电话号码",
+        icon: "none",
+        duration: 2000
+      });
+      return;
+    }
+    if (id.length != 18) {
+      Taro.showToast({
+        title: "请您填写正确的身份证号码",
+        icon: "none",
+        duration: 2000
+      });
+      return;
+    }
+
+    Taro.showLoading({ title: "保存中...", mask: true });
+    const cityInfoArray = cityInfo.split(","); // 注意这里是传入的数据，这里要通过“,”分割
+
+    // 发请求
+    await this.props.requestModifyAddress("address", {
+      id: addressId,
+      enCode: "CN11010200",
+      country: "CN",
+      name: name,
+      province: cityInfoArray[0],
+      city: cityInfoArray[1],
+      area: cityInfoArray[2],
+      phoneNum: mobile,
+      detailAddress: detailInfo,
+      idNum: id,
+      isDefaultAddress: true
+    });
+    Taro.hideLoading();
   };
 
   /**
@@ -162,63 +217,10 @@ class AddressUpdate extends Component {
     this.setState({ id: value });
   };
 
-  saveChangHandler = async () => {
-    let { addressId } = this.$router.params; //获取传入进来的参数
-    const { name, cityInfo, detailInfo, mobile, id } = this.state;
-    if (!name || !cityInfo || !detailInfo || !mobile || !id) {
-      Taro.showToast({
-        title: "请您完整填写表单",
-        icon: "none",
-        duration: 2000
-      });
-      return;
-    }
-    if (mobile.length != 11) {
-      Taro.showToast({
-        title: "请您填写正确的电话号码",
-        icon: "none",
-        duration: 2000
-      });
-      return;
-    }
-    if (id.length != 18) {
-      Taro.showToast({
-        title: "请您填写正确的身份证号码",
-        icon: "none",
-        duration: 2000
-      });
-      return;
-    }
-
-    Taro.showLoading({ title: "保存中...", mask: true });
-    const cityInfoArray = cityInfo.split(","); // 这里要通过“,”分割
-
-    await this.props.requestModifyAddress("address", {
-      id: addressId,
-      enCode: "CN11010200",
-      country: "CN",
-      name: name,
-      province: cityInfoArray[0],
-      city: cityInfoArray[1],
-      area: cityInfoArray[2],
-      phoneNum: mobile,
-      detailAddress: detailInfo,
-      idNum: id,
-      isDefaultAddress: true
-    });
-    Taro.hideLoading();
-  };
-
   /********************* 页面render方法 ********************/
   render() {
     const { isPickerShow } = this.state;
-    let {
-      name,
-      phoneNum,
-      enCodeFullName,
-      detailAddress,
-      idNum
-    } = this.$router.params; //获取传入进来的参数
+    let { addressId } = this.$router.params; //获取传入进来的参数
     return (
       <View className="addressUpdate-page">
         {/* <View className="head">{"编辑地址"}</View> */}
@@ -270,16 +272,18 @@ class AddressUpdate extends Component {
             onInput={this.updateId}
           />
         </View>
-        {idNum && (
+        {/* 如果传入参数带有地址的id，说明是修改地址 */}
+        {addressId && (
           <View className="bottom-btn">
             <Button className="confirm" onClick={this.saveChangHandler}>
               <Text>保存修改并设为默认</Text>
             </Button>
           </View>
         )}
-        {!idNum && (
+        {/* 如果传入参数不带有地址的id，说明是修改地址 */}
+        {!addressId && (
           <View className="bottom-btn">
-            <Button className="confirm" onClick={this.submit}>
+            <Button className="confirm" onClick={this.submitHandler}>
               <Text>保存</Text>
             </Button>
           </View>

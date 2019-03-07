@@ -2,18 +2,17 @@
  * @Author: Hank
  * @Date: 2019-02-08 15:12:23
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-05 16:38:08
+ * @Last Modified time: 2019-03-08 09:22:32
  */
 
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
-import { View, Image, ScrollView, Text } from "@tarojs/components";
+import { View, ScrollView } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 
 import "./index.scss";
 import { fetchPageData, fetchMorePageData, fetchUserInfo } from "../../actions";
 import ZXJGoodsList from "../../components/ZXJGoodsList/index";
-import { getGlobalData } from "../../utils/common";
 
 type PageStateProps = {};
 
@@ -118,11 +117,10 @@ class Shopkeeper extends Component {
     console.log("this.props", this.props);
     const { items = [] } = this.props.shopkeeper;
     const { tagList = [] } = this.props.home;
-    const { id } = this.props.user;
-    let share = this.$router.params.share; //获取分享进来的参数share
-    let { goodId, code, hash, name, avatarImage } = this.$router.params; //获取分享进来的参数share
+    // const { id } = this.props.user;
+    // let share = this.$router.params.share; //获取分享进来的参数share
+    let { avatarImage } = this.$router.params; //获取分享进来的参数share
     console.log("params", this.$router.params);
-    // let {share} = this.$router.params.share; //获取分享进来的参数share
     console.log("avatarImage", avatarImage);
     return (
       <View className="shopkeeper-page">

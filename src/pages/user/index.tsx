@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:58
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-07 15:16:52
+ * @Last Modified time: 2019-03-08 09:24:05
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -68,7 +68,7 @@ interface User {
   props: IProps;
 }
 
-const windowWidth = getGlobalData("systemInfo").windowWidth;
+// const windowWidth = getGlobalData("systemInfo").windowWidth;
 
 @connect(
   ({ user }) => ({
@@ -104,7 +104,7 @@ class User extends Component {
     if (token === "") {
       this.setState({ isOpened: true });
     } else {
-      const result = this.props.fetchUserInfo(USER);
+      this.props.fetchUserInfo(USER);
     }
   }
 
@@ -168,7 +168,8 @@ class User extends Component {
           // 存储全局变量，下次进入程序自动登录
           Taro.setStorage({ key: "token", data: data.token });
           console.log(data);
-          const result = this.props.fetchUserInfo(USER);
+          this.props.fetchUserInfo(USER);
+
         } else {
           Taro.showToast({
             title: "授权失败，请先授权",
@@ -213,7 +214,7 @@ class User extends Component {
     console.log("清除缓存");
     Taro.clearStorageSync();
     setGlobalData("token", "");
-    const result = this.props.clearPageData(USER);
+    this.props.clearPageData(USER);
   };
 
   goLikeGoods = () => {

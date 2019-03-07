@@ -2,16 +2,14 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:07:32
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-06 17:29:43
+ * @Last Modified time: 2019-03-07 17:17:19
  */
 import { ComponentClass } from "react";
 import Taro, { Component } from "@tarojs/taro";
 import { Image, View, Checkbox } from "@tarojs/components";
 import { AtInputNumber } from "taro-ui";
 import "./index.scss";
-import { IMAGE_URL, cdnSmallSuffix, cdnMediumSuffix } from "../../config";
-import { MODIFY_TEMP_CART_THEN_UPDATE } from "../../constants/index";
-import { any } from "prop-types";
+import { IMAGE_URL, cdnSmallSuffix } from "../../config";
 
 type PageStateProps = {};
 
@@ -124,7 +122,7 @@ class CartItem extends Component {
   };
 
   render() {
-    const { goods, onDeleteGoods } = this.props;
+    const { goods } = this.props;
     console.log("goods", goods);
     return (
       <View className="ClothingsItem-page">

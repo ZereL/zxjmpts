@@ -2,12 +2,12 @@
  * @Author: Hank
  * @Date: 2019-02-08 15:12:23
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-05 16:24:14
+ * @Last Modified time: 2019-03-07 17:24:50
  */
 
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
-import { View, Image, ScrollView, Text, Button } from "@tarojs/components";
+import { View, Image, ScrollView, Button } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 
 import "./index.scss";
@@ -22,16 +22,12 @@ import {
 import ZXJGoodsList from "../../components/ZXJGoodsList/index";
 import { getGlobalData, setGlobalData, MD5 } from "../../utils/common";
 import {
-  AtTabBar,
-  AtButton,
-  AtNoticebar,
   AtAvatar,
   AtModal,
   AtModalHeader,
   AtModalContent,
   AtModalAction,
-  AtInput,
-  AtToast
+  AtInput
 } from "taro-ui";
 import { IMAGE_URL, cdnSmallSuffix } from "../../config";
 import avatar_img from "../../assets/icon/resource23.png";
@@ -145,11 +141,7 @@ class NotLoginShopkeeper extends Component {
     // 用户已经登录
     if (getGlobalData("token")) {
       const { data } = await this.props.fetchUserInfo("user");
-      const {
-        invatationCode,
-        invatationCodeHash,
-        isCommissionAvailable
-      } = data;
+      const { invatationCode, isCommissionAvailable } = data;
       console.log(
         "invatationCode",
         invatationCode,
@@ -246,15 +238,6 @@ class NotLoginShopkeeper extends Component {
     }
   };
 
-  onScrollToLower = () => {
-    const { currentPage, hasNext, pageSize } = this.props.notLoginShopkeeper;
-    // console.log('滑到底部');
-    this.props.fetchMorePageData("notLoginShopkeeper", {
-      pageSize: pageSize,
-      currentPage: currentPage + 1
-    });
-  };
-
   /**
    * 跳转到金主有礼页面
    */
@@ -269,10 +252,10 @@ class NotLoginShopkeeper extends Component {
     // QBF219
     try {
       Taro.showLoading({ title: "注册中...", mask: true });
-      let { goodId, code, hash, name, avatarImage } = this.$router.params; //获取分享进来的参数share
+      let { code } = this.$router.params; //获取分享进来的参数share
       const loginResult = await Taro.login();
       console.log(loginResult);
-      const { userInfo, encryptedData, iv } = await Taro.getUserInfo();
+      const { encryptedData, iv } = await Taro.getUserInfo();
 
       const registerResult = await this.props.requestRegisterUid(
         "notLoginShopkeeper",
@@ -345,7 +328,7 @@ class NotLoginShopkeeper extends Component {
       Taro.showLoading({ title: "注册中...", mask: true });
       const loginResult = await Taro.login();
       console.log(loginResult);
-      const { userInfo, encryptedData, iv } = await Taro.getUserInfo();
+      const { encryptedData, iv } = await Taro.getUserInfo();
 
       console.log(
         "encryptedData",
@@ -432,21 +415,10 @@ class NotLoginShopkeeper extends Component {
     const { items = [] } = this.props.notLoginShopkeeper;
     const { id, isCommissionAvailable } = this.props.user;
     let share = this.$router.params.share; //获取分享进来的参数share
-    // let share = true;
-    let { goodId, code, hash, name, avatarImage } = this.$router.params; //获取分享进来的参数share
-    console.log("打印params", this.$router.params);
-    console.log("isCommissionAvailable", isCommissionAvailable);
-    console.log("id", id);
-    // let {share} = this.$router.params.share; //获取分享进来的参数share
-    console.log("avatarImage", avatarImage);
-    console.log("userModel", this.props.user);
+    let { code, name, avatarImage } = this.$router.params; //获取分享进来的参数share
+
     return (
       <View className="not-login-shopkeeper-page">
-        {/* {share ? (
-          <AtNoticebar className="fixIndex">
-            <AtAvatar circle image={avatarImage}></AtAvatar> 臻享家用户{name}, id为{id} code为{code} hash为{hash}}
-          </AtNoticebar>
-        ) : null} */}
         {share ? (
           <View className="fixIndex">
             <AtAvatar
@@ -460,9 +432,6 @@ class NotLoginShopkeeper extends Component {
               className="avatar-image"
             />
             <View className="shared-data">
-              {/* 臻享家用户 {name}, 邀请您加入臻享家。邀请码为： {code}{" "}
-              {id && "您已经接受过邀请。请点击“成为金主”获取更多收益"} */}
-
               {id && isCommissionAvailable
                 ? `臻享家用户 ${name}, 邀请您加入臻享家。邀请码为： ${code}, 您已经是臻享家 金主。点击“一键分享”分享全球好物`
                 : null}

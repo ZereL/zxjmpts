@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:08:02
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-06 11:36:28
+ * @Last Modified time: 2019-03-07 17:16:04
  */
 import {
   GOODSDETAIL,
@@ -47,7 +47,7 @@ export default {
     }
   },
   effects: {
-    *[FETCH_PAGEDATA]({ payload }, { select, put, call }) {
+    *[FETCH_PAGEDATA]({ payload }, { put, call }) {
       const requestResult = yield call(fetchGoodsData, payload);
       console.log("requestResult", requestResult);
 
@@ -60,7 +60,7 @@ export default {
 
       return requestResult;
     },
-    *[REQUEST_UPDATECART]({ payload }, { select, put, call }) {
+    *[REQUEST_UPDATECART]({ payload }, { put, call }) {
       const requestResult = yield call(updateCart, payload);
       console.log("加入购物车成功", requestResult);
 
@@ -73,28 +73,14 @@ export default {
 
       return requestResult;
     },
-    *[REQUEST_ADDFAVORITE]({ payload }, { select, put, call }) {
+    *[REQUEST_ADDFAVORITE]({ payload }, { call }) {
       const requestResult = yield call(addFavorite, payload);
-
-      // yield put({
-      //   type: SET_UPDATECART,
-      //   payload: {
-      //     ...requestResult.data
-      //   }
-      // });
 
       return requestResult;
     },
-    *[REQUEST_DELFAVORITE]({ payload }, { select, put, call }) {
+    *[REQUEST_DELFAVORITE]({ payload }, { call }) {
       const requestResult = yield call(delFavorite, payload);
       console.log("加入购物车成功", requestResult);
-
-      // yield put({
-      //   type: SET_UPDATECART,
-      //   payload: {
-      //     ...requestResult.data
-      //   }
-      // });
 
       return requestResult;
     }

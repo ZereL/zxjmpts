@@ -2,11 +2,11 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:36
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-06 15:47:24
+ * @Last Modified time: 2019-03-07 17:15:27
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
-import { View, Text, Image, Button } from "@tarojs/components";
+import { View, Text, Image } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 
 import "./index.scss";
@@ -20,16 +20,16 @@ import {
 import { GOODSDETAIL } from "../../constants";
 import Carousel from "../../components/Carousel";
 import { AtTabBar, AtButton, AtFloatLayout, AtTag } from "taro-ui";
-import { IMAGE_URL, cdnMediumSuffix, cdnSmallSuffix } from "../../config";
+import { IMAGE_URL, cdnMediumSuffix } from "../../config";
 import { getGlobalData } from "../../utils/common";
 
 type PageStateProps = {
   goodsDetail: {
-    num: number;
-    images: Array<string>;
-    name: string;
+    num: any;
+    images: any;
+    name: any;
     price: any;
-    contentImages: Array<string>;
+    contentImages: any;
     // property: Array<Object>;
     // skus: Array<Array<Object>>;
     property: any;
@@ -416,9 +416,9 @@ class GoodsDetail extends Component {
     console.log("images", images);
 
     // SKU的图片
-    let skuImage = "";
+    let skuImage: any = null;
     let foundImage = false;
-    property.forEach((itemProperty, index) => {
+    property.forEach(itemProperty => {
       if (!foundImage && firstRowIndex != -1) {
         const value = itemProperty.values[firstRowIndex];
         const filteredImages = images.filter(image => image.property == value);
@@ -429,8 +429,8 @@ class GoodsDetail extends Component {
       }
     });
 
-    skuImage == "" && (skuImage = { image: image });
-    skuImage == "" && (skuImage = images[0]);
+    skuImage == null && (skuImage = { image: image });
+    skuImage == null && (skuImage = images[0]);
 
     console.log("property", property);
     console.log("property.length", property.length);
@@ -542,7 +542,6 @@ class GoodsDetail extends Component {
 
         <AtFloatLayout
           isOpened={this.state.isChooseModelModalShow}
-          // title="这是个标题"
           className="float-layout"
           onClose={this.modalCloseHandler}
         >

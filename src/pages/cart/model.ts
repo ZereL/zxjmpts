@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:21
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-20 16:19:29
+ * @Last Modified time: 2019-03-07 16:44:45
  */
 import {
   CART,
@@ -146,7 +146,7 @@ export default {
 
       return requestResult;
     },
-    *[FETCH_PAGEDATA]({ payload }, { select, put, call }) {
+    *[FETCH_PAGEDATA]({ payload }, { put, call }) {
       const requestResult = yield call(fetchCartData, payload);
       console.log("requestResult", requestResult);
       const requestResultData = requestResult.data;
@@ -163,7 +163,7 @@ export default {
         console.log("result请求", result);
       });
     },
-    *[REMOVE_FROM_CART]({ payload }, { call, put, select }) {
+    *[REMOVE_FROM_CART]({ payload }, { call, put }) {
       // TODO： 我去！！！ 上下换下位置就行了？？？
       console.log("进入删除");
       const result = yield call(removeFromCart, payload);
@@ -174,7 +174,7 @@ export default {
         payload: resultData
       });
     },
-    *[FETCH_CARTSUMMARY]({ payload }, { call, put, select }) {
+    *[FETCH_CARTSUMMARY]({ payload }, { call, put }) {
       console.log("进入删除");
       const result = yield call(removeFromCart, payload);
       console.log("result", result);
@@ -184,7 +184,7 @@ export default {
         payload: resultData
       });
     },
-    *[SET_CART_LOCATION]({ payload }, { call, put, select }) {
+    *[SET_CART_LOCATION]({ payload }, { call, put }) {
       console.log("进入删除");
       const result = yield call(setLocationCode, payload);
       console.log("请求完成", result);

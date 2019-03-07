@@ -2,16 +2,15 @@
  * @Author: Hank
  * @Date: 2019-02-08 15:12:38
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-13 15:22:40
+ * @Last Modified time: 2019-03-08 09:23:01
  */
 
-import { GOODSLIST } from "./../../constants/index";
 import {
   FETCH_PAGEDATA,
   SET_PAGEDATA,
   FETCH_MOREPAGEDATA
 } from "./../../constants/index";
-import { fetchGoodsListData, fetchEntryGoodsListData } from "../../services/goodsService";
+import { fetchEntryGoodsListData } from "../../services/goodsService";
 
 export default {
   namespace: 'shopkeeper',

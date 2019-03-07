@@ -2,24 +2,22 @@
  * @Author: Hank
  * @Date: 2019-02-08 15:12:23
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-06 10:19:33
+ * @Last Modified time: 2019-03-07 17:20:41
  */
 
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
-import { View, Image, ScrollView } from "@tarojs/components";
+import { ScrollView } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 
 import "./index.scss";
 import { fetchPageData, fetchMorePageData } from "../../actions";
-import { GOODSLIST, GOODSDETAIL } from "../../constants";
+import { GOODSLIST } from "../../constants";
 import ZXJGoodsList from "../../components/ZXJGoodsList/index";
 
 type PageStateProps = {};
 
 type PageDispatchProps = {
-  add: (namespace: string, payload?: any) => any;
-  login: (namespace: string, payload?: any) => any;
   fetchPageData: (namespace: string, payload?: any) => any;
   fetchMorePageData: (namespace: string, payload?: any) => any;
 };
@@ -71,17 +69,17 @@ class GoodsList extends Component {
     this.fetchPageData();
   }
 
-  componentDidHide() {}
+  componentDidHide() {
+    // TODO：清除数据
+  }
 
   /********************* 事件handler **********************/
 
+  /**
+   * 请求页面展示数据
+   */
   fetchPageData = async () => {
     let { brandId, cateId, keyword, isFavorite } = this.$router.params; //获取分享进来的参数share
-    console.log("brandId", brandId);
-    console.log("cateId", cateId);
-    console.log("keyword", keyword);
-    console.log("isFavorite", isFavorite);
-    console.log("this.$router.params", this.$router.params);
     try {
       const result = await this.props.fetchPageData(GOODSLIST, {
         // pageSize: pageSize,
@@ -99,6 +97,9 @@ class GoodsList extends Component {
     }
   };
 
+  /**
+   * 上拉加载更多
+   */
   fetchMorePageData = async () => {
     const { currentPage, hasNext, pageSize } = this.props.goodsList;
     let { brandId, cateId, keyword, isFavorite } = this.$router.params; //获取分享进来的参数share
@@ -108,7 +109,7 @@ class GoodsList extends Component {
           brandId: brandId ? brandId : null,
           cateId: cateId ? cateId : null,
           keyword: keyword,
-          pageSize: 14,
+          pageSize: pageSize,
           currentPage: currentPage + 1,
           isFavorite: isFavorite ? !!isFavorite : null
         });
@@ -145,9 +146,7 @@ class GoodsList extends Component {
   render() {
     console.log("this.props", this.props);
     const { tagList } = this.props.home;
-    console.log("tagList@@", tagList);
     const { items } = this.props.goodsList;
-    console.log("items@@", items);
 
     return (
       <ScrollView
@@ -164,10 +163,6 @@ class GoodsList extends Component {
       >
         <ZXJGoodsList list={items} tagList={tagList} />
       </ScrollView>
-      // <View className="goodsList-page">
-
-      //   <ZXJGoodsList list={items} />
-      // </View>
     );
   }
 }
