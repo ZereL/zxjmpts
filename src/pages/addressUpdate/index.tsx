@@ -284,7 +284,7 @@ class AddressUpdate extends Component {
             </Button>
           </View>
         )}
-
+        {/* 地址选择器 */}
         <AddressPicker
           pickerShow={isPickerShow}
           onHandleToggleShow={this.onToggleAddressPicker.bind(this)}

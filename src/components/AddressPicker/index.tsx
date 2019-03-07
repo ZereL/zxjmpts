@@ -1,9 +1,33 @@
+import { ComponentClass } from "react";
 import Taro, { Component } from "@tarojs/taro";
 import { View, PickerView, PickerViewColumn } from "@tarojs/components";
-import PropTypes from "prop-types";
 import address from "./city.js";
 import "./index.scss";
 
+type PageStateProps = {};
+
+type PageDispatchProps = {};
+
+type PageOwnProps = {
+  onHandleToggleShow: any;
+  pickerShow: any;
+};
+
+type PageState = {
+  value: any,
+  provinces: any,
+  citys: any,
+  areas: any,
+  areaInfo: string
+};;
+
+type IProps = PageStateProps & PageDispatchProps & PageOwnProps;
+
+interface AddressPicker {
+  props: IProps;
+}
+
+// 地址选择器
 class AddressPicker extends Component {
   state = {
     value: [18, 11, 0],
@@ -135,9 +159,4 @@ class AddressPicker extends Component {
   }
 }
 
-AddressPicker.propTypes = {
-  pickerShow: PropTypes.bool.isRequired,
-  onHandleToggleShow: PropTypes.func.isRequired
-};
-
-export default AddressPicker;
+export default AddressPicker as ComponentClass<PageOwnProps, PageState>;
