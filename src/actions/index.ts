@@ -2,12 +2,11 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:08:38
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-06 11:21:52
+ * @Last Modified time: 2019-03-08 10:05:45
  */
 
 // TODO: 这些Action需要整理复用。
 import {
-  ADD,
   REQUEST_LOGIN,
   FETCH_PAGEDATA,
   CLEAR_PAGEDATA,
@@ -35,10 +34,6 @@ import {
   REQUEST_DELFAVORITE
 } from "../constants/index";
 import Action from "./actions";
-
-// 公用action
-export const add = (namespace: string, payload?: any) =>
-  Action(`${namespace}/${ADD}`, payload);
 
 // 公用action
 export const fetchPageData = (namespace: string, payload?: any) =>
@@ -97,7 +92,6 @@ export const requestCreateOrder = (namespace: string, payload?: any) =>
 export const requestRegisterUid = (namespace: string, payload?: any) =>
   Action(`${namespace}/${REQUEST_REGISTERUID}`, payload);
 
-// 未登录金主页面action
 export const requestRegisterWechat = (namespace: string, payload?: any) =>
   Action(`${namespace}/${REQUEST_REGISTERWECHAT}`, payload);
 

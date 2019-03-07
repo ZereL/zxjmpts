@@ -2,10 +2,9 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:21
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-07 16:44:45
+ * @Last Modified time: 2019-03-08 10:11:24
  */
 import {
-  CART,
   MODIFY_TEMP_CART_THEN_UPDATE,
   SET_CART_TEMP_DATA,
   SET_CART_LOCATION,
@@ -14,7 +13,6 @@ import {
 } from "../../constants";
 import {
   REQUEST_LOGIN,
-  ADD,
   FETCH_PAGEDATA,
   SET_PAGEDATA,
   REMOVE_FROM_CART,
@@ -32,17 +30,11 @@ import {
 import { delay } from "redux-saga";
 
 export default {
-  namespace: CART,
+  namespace: "cart",
   state: {
     warehouses: []
   },
   reducers: {
-    SetAdd(state, { payload }) {
-      return { ...state, ...payload };
-    },
-    // [SET_PAGEDATA](state, { payload }) {
-    //   return { ...state, ...payload };
-    // }
     [SET_PAGEDATA](state, { payload: payload }) {
       const data = payload.cateItemDetails || [];
       const warehouses = payload.warehouses || [];
@@ -130,22 +122,6 @@ export default {
     }
   },
   effects: {
-    *[ADD]({ payload }, { select, put, call }) {
-      console.log("收到请求", payload);
-      const { num } = yield select(state => state.home);
-      console.log("准备请求");
-      const requestResult = yield call(fetchCartData);
-      console.log("requestResult", requestResult);
-
-      yield put({
-        type: "SetAdd",
-        payload: {
-          num: num + 1
-        }
-      });
-
-      return requestResult;
-    },
     *[FETCH_PAGEDATA]({ payload }, { put, call }) {
       const requestResult = yield call(fetchCartData, payload);
       console.log("requestResult", requestResult);

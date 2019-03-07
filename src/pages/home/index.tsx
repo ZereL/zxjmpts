@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:07:40
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-07 15:42:03
+ * @Last Modified time: 2019-03-08 10:23:40
  */
 
 import { ComponentClass } from "react";
@@ -12,7 +12,6 @@ import { connect } from "@tarojs/redux";
 
 import "./index.scss";
 import { fetchPageData, fetchUserInfo, fetchTagList } from "../../actions";
-import { HOME } from "../../constants";
 import ZXJCarousel from "../../components/Carousel/index";
 import DynamicList from "../../components/DynamicList/index";
 import { getGlobalData } from "../../utils/common";
@@ -119,7 +118,7 @@ class Home extends Component {
    */
   fetchPageData = async () => {
     try {
-      const result = await this.props.fetchPageData(HOME);
+      const result = await this.props.fetchPageData("home");
       console.log("请求成功", result);
     } catch (error) {
       console.log("error", error);

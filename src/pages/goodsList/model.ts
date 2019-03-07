@@ -2,10 +2,10 @@
  * @Author: Hank
  * @Date: 2019-02-08 15:12:38
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-08 09:51:59
+ * @Last Modified time: 2019-03-08 10:23:09
  */
 
-import { GOODSLIST, CLEAR_PAGEDATA } from "./../../constants/index";
+import { CLEAR_PAGEDATA } from "./../../constants/index";
 import {
   FETCH_PAGEDATA,
   SET_PAGEDATA,
@@ -14,7 +14,7 @@ import {
 import { fetchGoodsListData } from "../../services/goodsService";
 
 export default {
-  namespace: GOODSLIST,
+  namespace: "goodsList",
   state: {
     homeItems: []
   },

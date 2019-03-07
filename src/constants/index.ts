@@ -2,14 +2,16 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:00
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-06 11:20:07
+ * @Last Modified time: 2019-03-08 10:36:04
  */
-export const ADD = "ADD";
+// 公用字段
 export const REQUEST_LOGIN = "REQUEST_LOGIN";
 export const FETCH_PAGEDATA = "FETCH_PAGEDATA";
 export const FETCH_MOREPAGEDATA = "FETCH_MOREPAGEDATA";
+export const REQUEST_UPDATEPAGEDATA = "REQUEST_UPDATEPAGEDATA";
 export const CLEAR_PAGEDATA = "CLEAR_PAGEDATA";
 export const SET_PAGEDATA = "SET_PAGEDATA";
+
 export const FETCH_GOODSDETAIL = "FETCH_GOODSDETAIL";
 export const FETCH_USERTOKEN = "FETCH_USERTOKEN";
 export const SET_USERTOKEN = "SET_USERTOKEN";
@@ -46,9 +48,3 @@ export const REQUEST_PAYORDER = "REQUEST_PAYORDER";
 // 单品页面
 export const REQUEST_ADDFAVORITE = "REQUEST_ADDFAVORITE";
 export const REQUEST_DELFAVORITE = "REQUEST_DELFAVORITE";
-
-export const HOME = "home"; // 命名空间
-export const CART = "cart"; // 命名空间
-export const USER = "user"; // 命名空间
-export const GOODSDETAIL = "goodsDetail"; // 命名空间
-export const GOODSLIST = "goodsList"; // 命名空间

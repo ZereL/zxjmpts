@@ -2,11 +2,10 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:10:01
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-08 09:27:01
+ * @Last Modified time: 2019-03-08 10:28:44
  */
 import {
   REQUEST_LOGIN,
-  USER,
   FETCH_USERTOKEN,
   SET_USERTOKEN,
   FETCH_USERINFO,
@@ -22,7 +21,7 @@ import {
 import Taro from "@tarojs/taro";
 
 export default {
-  namespace: USER,
+  namespace: "user",
   state: {},
   reducers: {
     // 把后台返回的token和用户名存入redux

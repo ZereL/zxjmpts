@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:36
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-08 09:53:58
+ * @Last Modified time: 2019-03-08 10:21:42
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -17,7 +17,6 @@ import {
   requestAddFavorite,
   requestDelFavorite
 } from "../../actions";
-import { GOODSDETAIL } from "../../constants";
 import Carousel from "../../components/Carousel";
 import { AtTabBar, AtButton, AtFloatLayout, AtTag } from "taro-ui";
 import { IMAGE_URL, cdnMediumSuffix } from "../../config";
@@ -41,7 +40,6 @@ type PageStateProps = {
 type PageDispatchProps = {
   fetchPageData: (namespace: string, payload?: any) => any;
   clearPageData: (namespace: string, payload?: any) => any;
-  login: (namespace: string, payload?: any) => any;
   requestUpdateCart: (namespace: string, payload?: any) => any;
   requestAddFavorite: (namespace: string, payload?: any) => any;
   requestDelFavorite: (namespace: string, payload?: any) => any;
@@ -119,7 +117,7 @@ class GoodsDetail extends Component {
 
   componentWillUnmount() {
     console.log("componentWillUnmount");
-    this.props.clearPageData(GOODSDETAIL);
+    this.props.clearPageData("goodsDetail");
   }
 
   componentDidShow() {
@@ -129,7 +127,7 @@ class GoodsDetail extends Component {
   }
 
   componentDidHide() {
-    this.props.clearPageData(GOODSDETAIL);
+    this.props.clearPageData("goodsDetail");
   }
 
   // //这个分享的函数必须写在入口中，写在子组件中不生效
@@ -163,7 +161,7 @@ class GoodsDetail extends Component {
     console.log("this.$router", this.$router);
 
     try {
-      const result = await this.props.fetchPageData(GOODSDETAIL, { id: id });
+      const result = await this.props.fetchPageData("goodsDetail", { id: id });
       console.log("result", result);
       const { isFavorite } = result.data;
       this.setState({ isLiked: isFavorite });
@@ -206,7 +204,7 @@ class GoodsDetail extends Component {
     const { id } = this.$router.params;
     console.log("加入购物车id", id);
     const { skus } = this.props.goodsDetail;
-    const addCartResult = await this.props.requestUpdateCart(GOODSDETAIL, {
+    const addCartResult = await this.props.requestUpdateCart("goodsDetail", {
       skuId: skus[0][0].id,
       qty: 1
     });
@@ -383,7 +381,7 @@ class GoodsDetail extends Component {
 
       console.log("selectedSku", selectedSku);
 
-      this.props.requestUpdateCart(GOODSDETAIL, {
+      this.props.requestUpdateCart("goodsDetail", {
         skuId: selectedSku.id,
         qty: 1
       });

@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:17
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-06 17:17:14
+ * @Last Modified time: 2019-03-08 10:12:47
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -11,13 +11,11 @@ import { connect } from "@tarojs/redux";
 
 import "./index.scss";
 import {
-  add,
   login,
   fetchPageData,
   modifyCart,
   removeFromCart
 } from "../../actions";
-import { CART } from "../../constants";
 import { getGlobalData } from "../../utils/common";
 import CartItem from "../../components/CartItem";
 type PageStateProps = {
@@ -28,7 +26,6 @@ type PageStateProps = {
 };
 
 type PageDispatchProps = {
-  add: (namespace: string, payload?: any) => any;
   login: (namespace: string, payload?: any) => any;
   fetchPageData: (namespace: string, payload?: any) => any;
   modifyCart: (namespace: string, payload?: any) => any;
@@ -50,7 +47,6 @@ interface Cart {
     cart
   }),
   {
-    add: add,
     login: login,
     fetchPageData: fetchPageData,
     modifyCart: modifyCart,
@@ -86,15 +82,6 @@ class Cart extends Component {
   fetchPageData = async () => {
     try {
       const result = await this.props.fetchPageData("cart");
-      console.log("请求成功", result);
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-
-  add = async () => {
-    try {
-      const result = await this.props.add(CART);
       console.log("请求成功", result);
     } catch (error) {
       console.log("error", error);

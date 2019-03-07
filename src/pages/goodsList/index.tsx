@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-08 15:12:23
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-08 09:54:11
+ * @Last Modified time: 2019-03-08 10:22:59
  */
 
 import { ComponentClass } from "react";
@@ -12,7 +12,6 @@ import { connect } from "@tarojs/redux";
 
 import "./index.scss";
 import { fetchPageData, fetchMorePageData, clearPageData } from "../../actions";
-import { GOODSLIST } from "../../constants";
 import ZXJGoodsList from "../../components/ZXJGoodsList/index";
 
 type PageStateProps = {};
@@ -66,7 +65,7 @@ class GoodsList extends Component {
   }
 
   componentWillUnmount() {
-    this.props.clearPageData('goodsList')
+    this.props.clearPageData("goodsList");
   }
 
   componentDidShow() {
@@ -75,7 +74,7 @@ class GoodsList extends Component {
 
   componentDidHide() {
     // TODO：清除数据
-    this.props.clearPageData('goodsList')
+    this.props.clearPageData("goodsList");
   }
 
   /********************* 事件handler **********************/
@@ -86,7 +85,7 @@ class GoodsList extends Component {
   fetchPageData = async () => {
     let { brandId, cateId, keyword, isFavorite } = this.$router.params; //获取分享进来的参数share
     try {
-      const result = await this.props.fetchPageData(GOODSLIST, {
+      const result = await this.props.fetchPageData("goodsList", {
         // pageSize: pageSize,
         // currentPage: currentPage + 1,
         brandId: brandId ? brandId : null,
@@ -110,7 +109,7 @@ class GoodsList extends Component {
     let { brandId, cateId, keyword, isFavorite } = this.$router.params; //获取分享进来的参数share
     try {
       if (hasNext) {
-        const result = await this.props.fetchMorePageData(GOODSLIST, {
+        const result = await this.props.fetchMorePageData("goodsList", {
           brandId: brandId ? brandId : null,
           cateId: cateId ? cateId : null,
           keyword: keyword,

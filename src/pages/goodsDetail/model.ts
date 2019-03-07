@@ -2,10 +2,9 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:08:02
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-08 09:49:40
+ * @Last Modified time: 2019-03-08 10:13:52
  */
 import {
-  GOODSDETAIL,
   FETCH_PAGEDATA,
   SET_PAGEDATA,
   CLEAR_PAGEDATA,
@@ -18,7 +17,7 @@ import { fetchGoodsData, addFavorite, delFavorite  } from "../../services/goodsS
 import { updateCart } from "../../services/cartService";
 
 export default {
-  namespace: GOODSDETAIL,
+  namespace: "goodsDetail",
   state: {
     image: [],
     contentImages: [],

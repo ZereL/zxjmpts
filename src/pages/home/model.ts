@@ -2,9 +2,8 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:07:53
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-07 15:43:17
+ * @Last Modified time: 2019-03-08 10:26:52
  */
-import { HOME } from "./../../constants/index";
 import {
   FETCH_PAGEDATA,
   SET_PAGEDATA,
@@ -13,15 +12,12 @@ import {
 import { fetchHomeData, fetchTagListData } from "../../services/homeService";
 
 export default {
-  namespace: HOME,
+  namespace: "home",
   state: {
     num: 1,
     homeItems: []
   },
   reducers: {
-    SetAdd(state, { payload }) {
-      return { ...state, ...payload };
-    },
     [SET_PAGEDATA](state, { payload }) {
       return { ...state, ...payload };
     }
