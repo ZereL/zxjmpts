@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:58
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-05 17:10:10
+ * @Last Modified time: 2019-03-07 15:16:52
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -220,6 +220,10 @@ class User extends Component {
     Taro.navigateTo({ url: "/pages/goodsList/index?isFavorite=true" });
   };
 
+  goBecomeShopkeeper = () => {
+    Taro.navigateTo({ url: "/pages/shopkeeper/index" });
+  };
+
   /********************* 渲染页面的方法 *********************/
   /********************* 页面render方法 ********************/
   render() {
@@ -296,7 +300,11 @@ class User extends Component {
               <View className="iconfont icon-more arrow" />
             </View>
           </AtButton>
-          <AtButton className="item" full={true}>
+          <AtButton
+            className="item"
+            full={true}
+            onClick={this.goBecomeShopkeeper}
+          >
             <View className="left">
               <Text>成为金主</Text>
             </View>
@@ -304,14 +312,14 @@ class User extends Component {
               <View className="iconfont icon-more arrow" />
             </View>
           </AtButton>
-          <AtButton className="item" full={true}>
+          {/* <AtButton className="item" full={true}>
             <View className="left">
               <Text>帮助中心</Text>
             </View>
             <View className="right">
               <View className="iconfont icon-more arrow" />
             </View>
-          </AtButton>
+          </AtButton> */}
           <AtButton className="item" open-type="contact" full={true}>
             <View className="left">
               <Text>联系客服</Text>

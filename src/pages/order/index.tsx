@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:07:40
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-26 14:17:55
+ * @Last Modified time: 2019-03-07 14:42:38
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -180,7 +180,7 @@ class Order extends Component {
 
   /********************* 页面render方法 ********************/
   render() {
-    const { items } = this.props.order;
+    const { items = [] } = this.props.order;
     const { topTags, activeTagIndex } = this.state;
     console.log("this.props", this.props);
     console.log("items", items);
@@ -192,6 +192,7 @@ class Order extends Component {
             {topTags.map((item, index) => {
               return (
                 <AtTag
+                  key={index}
                   className="tags"
                   type="primary"
                   active={activeTagIndex == index ? true : false}

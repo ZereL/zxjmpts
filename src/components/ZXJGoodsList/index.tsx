@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:07:36
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-06 10:20:29
+ * @Last Modified time: 2019-03-07 13:38:23
  */
 import { ComponentClass } from "react";
 import Taro, { Component } from "@tarojs/taro";
@@ -89,7 +89,7 @@ class ZXJGoodsList extends Component {
                       });
                       // console.log("selectedTag", selectedTag);
                       return (
-                        <View className="zan-capsule__left">
+                        <View className="zan-capsule__left" key={index}>
                           {selectedTag[0].name}
                         </View>
                       );

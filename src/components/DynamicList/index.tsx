@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:07:36
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-08 16:56:49
+ * @Last Modified time: 2019-03-07 14:44:59
  */
 import { ComponentClass } from "react";
 import Taro, { Component } from "@tarojs/taro";
@@ -37,7 +37,9 @@ class DynamicList extends Component {
     console.log("list", list);
     return (
       <View className="goods-list-container">
-        {list.length > 0 ? (
+        {list == null || list.length == 0 ? (
+          <View />
+        ) : (
           <View className="goods-ul">
             {list.map((item, index) => (
               <View
@@ -126,7 +128,7 @@ class DynamicList extends Component {
                       });
                       // console.log("selectedTag", selectedTag);
                       return (
-                        <View className="zan-capsule__left">
+                        <View className="zan-capsule__left" key={index}>
                           {selectedTag[0].name}
                         </View>
                       );
@@ -136,8 +138,6 @@ class DynamicList extends Component {
               </View>
             ))}
           </View>
-        ) : (
-          <View />
         )}
         {loading && (
           <View className="loadMoreGif">

@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:07:32
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-26 17:32:27
+ * @Last Modified time: 2019-03-07 13:47:59
  */
 import { ComponentClass } from "react";
 import Taro, { Component } from "@tarojs/taro";
@@ -34,7 +34,7 @@ class Carousel extends Component {
     // console.log("进入这个组件");
   }
   render() {
-    const { images, containerStyle, imageStyle } = this.props;
+    const { images = [], containerStyle, imageStyle } = this.props;
     return (
       <Swiper
         className={containerStyle ? "" : "swiper"}

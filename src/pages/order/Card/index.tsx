@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:07:40
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-22 11:29:03
+ * @Last Modified time: 2019-03-07 15:00:14
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -53,10 +53,19 @@ class Card extends Component {
 
   /********************* 页面render方法 ********************/
   render() {
-    const { createTime, id, items, price, statusSummary } = this.props.item;
-    // console.log("this.props.item", this.props.item);
-    // console.log("this.props", this.props);
-    // console.log("this", this);
+    const {
+      createTime = "",
+      id = "",
+      items = [],
+      price = "",
+      statusSummary = ""
+    } = this.props.item;
+
+    console.log("createTime", createTime);
+    console.log("id", id);
+    console.log("items", items);
+    console.log("price", price);
+    console.log("statusSummary", statusSummary);
     return (
       <View className="card">
         <View className="card-title">
