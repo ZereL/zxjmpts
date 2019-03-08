@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-19 14:33:17
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-07 17:02:13
+ * @Last Modified time: 2019-03-08 15:42:46
  */
 
 import { ComponentClass } from "react";
@@ -122,7 +122,6 @@ class CartSummary extends Component {
     });
   }
 
-
   // 留着作参考
   // changeGoodsQtyHandler(goodsItem) {
   //   // console.log("数量改变", goodsItem);
@@ -155,29 +154,29 @@ class CartSummary extends Component {
       return null;
     }
 
-    const { paymentMethod } = this.state;
-    const orderId = await this.props.requestCreateOrder("order", {
-      totalPrice: totalPrice,
-      remark: "",
-      country: "CN",
-      province: defaultAddress.province,
-      city: defaultAddress.city,
-      area: defaultAddress.area,
-      detailAddress: defaultAddress.detailAddress,
-      name: defaultAddress.name,
-      phoneNum: defaultAddress.phoneNum,
-      idNum: defaultAddress.idNum,
-      enCode: defaultAddress.enCode,
-      addressId: defaultAddress.id,
-      channel: 1 // 现在先用1
-      // sender: {
-      //   id: 0,
-      //   name: "string",
-      //   phoneNum: "string"
-      // }
-    });
-
     try {
+      const { paymentMethod } = this.state;
+      const orderId = await this.props.requestCreateOrder("order", {
+        totalPrice: totalPrice,
+        remark: "",
+        country: "CN",
+        province: defaultAddress.province,
+        city: defaultAddress.city,
+        area: defaultAddress.area,
+        detailAddress: defaultAddress.detailAddress,
+        name: defaultAddress.name,
+        phoneNum: defaultAddress.phoneNum,
+        idNum: defaultAddress.idNum,
+        enCode: defaultAddress.enCode,
+        addressId: defaultAddress.id,
+        channel: 1 // 现在先用1
+        // sender: {
+        //   id: 0,
+        //   name: "string",
+        //   phoneNum: "string"
+        // }
+      });
+
       if (paymentMethod == "Balance") {
         const payResult = await this.props.requestPayOrder("order", {
           // memberId: 0,

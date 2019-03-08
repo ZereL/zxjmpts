@@ -2,7 +2,7 @@
  * @Author: Hank 
  * @Date: 2019-02-21 12:02:30 
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-21 13:47:45
+ * @Last Modified time: 2019-03-08 12:39:47
  */
 
 @import "../../../styles/mixin";
@@ -11,11 +11,13 @@
   width: 100%;
   margin: 0px 0px 40px 0px;
   .card-title {
-    width: 100%;
+    width: 95%;
+    padding: 0 10px 0 10px;
     @include fj(space-between);
   }
   .card-top {
-    width: 100%;
+    width: 95%;
+    padding: 0 10px 0 10px;
     flex-direction: column;
     @include fj(flex-start);
     .card-item {
@@ -34,9 +36,15 @@
     }
   }
   .card-bottom {
-    width: 100%;
+    width: 95%;
     @include fj(center);
     align-items: center;
     text-align: center;
+    .pay-button {
+      background-color: $color-primary;
+      color: #fff;
+      border-radius: 10px;
+      padding: 0 10px 0 10px;
+    }
   }
 }

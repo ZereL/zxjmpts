@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:07:40
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-07 17:32:49
+ * @Last Modified time: 2019-03-08 12:18:34
  */
 import { ComponentClass } from "react";
 import Taro, { Component } from "@tarojs/taro";
@@ -60,7 +60,7 @@ class Card extends Component {
       price = "",
       statusSummary = ""
     } = this.props.item;
-
+    console.log("this.props", this.props);
     console.log("createTime", createTime);
     console.log("id", id);
     console.log("items", items);
@@ -103,7 +103,14 @@ class Card extends Component {
         <View className="card-bottom">
           <View>应付款{price.total}</View>
           <View>（含运费：{price.delivery}）</View>
-          <View onClick={this.payOrderHandler.bind(this, id)}>付款</View>
+          {statusSummary.status == "NotPaid" && (
+            <View
+              onClick={this.payOrderHandler.bind(this, id)}
+              className={"pay-button"}
+            >
+              付款
+            </View>
+          )}
         </View>
         <AtDivider content="" customStyle="height:5px" />
       </View>

@@ -2,7 +2,7 @@
  * @Author: Hank 
  * @Date: 2019-02-21 09:53:33 
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-21 14:02:04
+ * @Last Modified time: 2019-03-08 15:33:46
  */
 
 @import "../../styles/mixin";
@@ -12,7 +12,5 @@
   .top-tags {
     @include wh(100%, 10%);
     @include fj(flex-start);
-    .tags {
-    }
   }
 }

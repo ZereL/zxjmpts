@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:07:40
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-07 17:31:20
+ * @Last Modified time: 2019-03-08 16:08:51
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -11,7 +11,12 @@ import { connect } from "@tarojs/redux";
 import { AtTag, AtFloatLayout, AtRadio, AtButton } from "taro-ui";
 
 import "./index.scss";
-import { fetchPageData, requestPayOrder } from "../../actions";
+import {
+  fetchPageData,
+  requestPayOrder,
+  clearPageData,
+  fetchMorePageData
+} from "../../actions";
 import Card from "./Card";
 // import Card from "../order/Card";
 
@@ -20,6 +25,8 @@ type PageStateProps = {};
 type PageDispatchProps = {
   fetchPageData: (namespace: string, payload?: any) => any;
   requestPayOrder: (namespace: string, payload?: any) => any;
+  clearPageData: (namespace: string, payload?: any) => any;
+  fetchMorePageData: (namespace: string, payload?: any) => any;
 };
 
 type PageOwnProps = {
@@ -40,7 +47,9 @@ interface Order {
   }),
   {
     fetchPageData: fetchPageData,
-    requestPayOrder: requestPayOrder
+    fetchMorePageData: fetchMorePageData,
+    requestPayOrder: requestPayOrder,
+    clearPageData: clearPageData
   }
 )
 
@@ -57,7 +66,7 @@ class Order extends Component {
       { title: "待收货", onClick: () => {} },
       { title: "已收货", onClick: () => {} }
     ],
-    activeTagIndex: 0,
+    activeTagIndex: 1,
     isFloatLayoutShow: false,
     orderId: "",
     paymentMethod: "1"
@@ -79,12 +88,12 @@ class Order extends Component {
   /********************* 事件handler **********************/
 
   /**
-   * 请求页面展示主句
+   * 请求页面展示数据
    */
   fetchPageData = async () => {
     try {
       const result = await this.props.fetchPageData("order", {
-        // status: "canceled",
+        status: "NotPaid",
         // memberId: 0,
         // keyword: "string",
         currentPage: 1,
@@ -93,6 +102,35 @@ class Order extends Component {
         // sortMode: 0
       });
       console.log("请求成功", result);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  /**
+   * 上拉加载更多
+   */
+  fetchMorePageData = async () => {
+    const { currentPage, hasNext, pageSize, status } = this.props.order;
+    console.log("currentPage", currentPage);
+    console.log("hasNext", hasNext);
+    console.log("pageSize", pageSize);
+    console.log("status", status);
+    try {
+      if (hasNext) {
+        const result = await this.props.fetchMorePageData("order", {
+          status: status,
+          // memberId: 0,
+          // keyword: "string",
+          currentPage: currentPage + 1,
+          pageSize: pageSize
+          // sortBy: "string",
+          // sortMode: 0
+        });
+        console.log("请求成功", result);
+      } else {
+        console.log("没有更多了");
+      }
     } catch (error) {
       console.log("error", error);
     }
@@ -113,7 +151,75 @@ class Order extends Component {
   /**
    * 顶部tag点击handler
    */
-  tagClickHandler(index) {
+  async tagClickHandler(index) {
+    console.log("index", index);
+    switch (index) {
+      case 0:
+        this.props.fetchPageData("order", {
+          payload: {
+            // status: "NotPaid",
+            // memberId: 0,
+            // keyword: "string",
+            currentPage: 1,
+            pageSize: 15
+            // sortBy: "string",
+            // sortMode: 0
+          }
+        });
+        break;
+      case 1:
+        this.props.fetchPageData("order", {
+          status: "NotPaid",
+          // memberId: 0,
+          // keyword: "string",
+          currentPage: 1,
+          pageSize: 15
+          // sortBy: "string",
+          // sortMode: 0
+        });
+
+        break;
+      case 2:
+        this.props.fetchPageData("order", {
+          status: "Processing",
+          // memberId: 0,
+          // keyword: "string",
+          currentPage: 1,
+          pageSize: 14
+          // sortBy: "string",
+          // sortMode: 0
+        });
+
+        break;
+      case 3:
+        this.props.fetchPageData("order", {
+          status: "Pending",
+          // memberId: 0,
+          // keyword: "string",
+          currentPage: 1,
+          pageSize: 15
+          // sortBy: "string",
+          // sortMode: 0
+        });
+
+        break;
+      case 4:
+        this.props.fetchPageData("order", {
+          status: "Recevied",
+          // memberId: 0,
+          // keyword: "string",
+          currentPage: 1,
+          pageSize: 15
+          // sortBy: "string",
+          // sortMode: 0
+        });
+
+        break;
+
+      default:
+        break;
+    }
+
     this.setState({ activeTagIndex: index });
   }
 
@@ -215,7 +321,18 @@ class Order extends Component {
               );
             })}
           </View>
-          <ScrollView>
+          <ScrollView
+            className="scrollview"
+            scrollY
+            scrollWithAnimation
+            // scrollTop="0"
+            style="height: 600px"
+            lowerThreshold={20}
+            // upperThreshold="20"
+            // onScrolltoupper={this.onScrolltoupper}
+            // onScroll={this.onScroll}
+            onScrollToLower={this.fetchMorePageData}
+          >
             {/* 循环输出订单 */}
             {items.map((item, index) => {
               return (

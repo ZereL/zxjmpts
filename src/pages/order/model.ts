@@ -2,14 +2,15 @@
  * @Author: Hank
  * @Date: 2019-02-20 16:33:05
  * @Last Modified by: Hank
- * @Last Modified time: 2019-02-22 10:20:11
+ * @Last Modified time: 2019-03-08 14:48:29
  */
 
 import {
   FETCH_PAGEDATA,
   SET_PAGEDATA,
   REQUEST_CREATEORDER,
-  REQUEST_PAYORDER
+  REQUEST_PAYORDER,
+  CLEAR_PAGEDATA
 } from "./../../constants/index";
 import {
   requestCreateOrder,
@@ -28,12 +29,19 @@ export default {
   reducers: {
     [SET_PAGEDATA](state, { payload }) {
       return { ...state, ...payload };
+    },
+    [CLEAR_PAGEDATA](state, {}) {
+      console.log("state", state);
+      return {
+        items: []
+      };
     }
   },
   effects: {
     *[FETCH_PAGEDATA]({ payload }, { select, put, call }) {
+      console.log("收到请求payload", payload);
       const requestResult = yield call(fetchOrderList, payload);
-      console.log("requestResult", requestResult);
+      console.log("requestResult!!!!!!!!!", requestResult);
       const requestResultData = requestResult.data;
       yield put({
         type: SET_PAGEDATA,
