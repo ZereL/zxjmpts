@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:58
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-08 09:24:05
+ * @Last Modified time: 2019-03-08 16:36:00
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -169,7 +169,6 @@ class User extends Component {
           Taro.setStorage({ key: "token", data: data.token });
           console.log(data);
           this.props.fetchUserInfo(USER);
-
         } else {
           Taro.showToast({
             title: "授权失败，请先授权",
@@ -206,8 +205,10 @@ class User extends Component {
 
   handleConfirm = () => {};
 
-  goOrderListHandler = () => {
-    Taro.navigateTo({ url: "/pages/order/index" });
+  goOrderListHandler = e => {
+    console.log("e.currentTarget.dataset.index", e.currentTarget.dataset.index);
+    const { index } = e.currentTarget.dataset;
+    Taro.navigateTo({ url: `/pages/order/index?index=${index}` });
   };
 
   logoutHandler = () => {
@@ -265,27 +266,43 @@ class User extends Component {
             </View>
           </View>
           <View className="list">
-            <View className="item" onClick={this.goOrderListHandler}>
+            <View
+              className="item"
+              data-index={0}
+              onClick={this.goOrderListHandler}
+            >
               <Image mode="widthFix" src={pendingPayIcon} />
               <Text>待支付</Text>
               {/* {item.num > 0 && <Icon className="num">{item.num}</Icon>} */}
             </View>
-            <View className="item" onClick={this.goOrderListHandler}>
+            <View
+              className="item"
+              data-index={1}
+              onClick={this.goOrderListHandler}
+            >
               <Image mode="widthFix" src={pendingDeliveryIcon} />
               <Text>待发货</Text>
               {/* {item.num > 0 && <Icon className="num">{item.num}</Icon>} */}
             </View>
-            <View className="item" onClick={this.goOrderListHandler}>
+            <View
+              className="item"
+              data-index={2}
+              onClick={this.goOrderListHandler}
+            >
               <Image mode="widthFix" src={pendingReceiveIcon} />
               <Text>待收货</Text>
               {/* {item.num > 0 && <Icon className="num">{item.num}</Icon>} */}
             </View>
-            <View className="item" onClick={this.goOrderListHandler}>
+            <View
+              className="item"
+              data-index={3}
+              onClick={this.goOrderListHandler}
+            >
               <Image mode="widthFix" src={completeOrderIcon} />
               <Text>交易成功</Text>
               {/* {item.num > 0 && <Icon className="num">{item.num}</Icon>} */}
             </View>
-            <View className="item" onClick={this.goOrderListHandler}>
+            <View className="item">
               <Image mode="widthFix" src={refundIcon} />
               <Text>退款售后</Text>
               {/* {item.num > 0 && <Icon className="num">{item.num}</Icon>} */}

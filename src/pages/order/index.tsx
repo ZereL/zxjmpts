@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:07:40
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-08 16:08:51
+ * @Last Modified time: 2019-03-08 16:32:49
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -58,6 +58,7 @@ class Order extends Component {
   config: Config = {
     navigationBarTitleText: "我的订单"
   };
+
   state = {
     topTags: [
       { title: "全部", onClick: () => {} },
@@ -80,7 +81,11 @@ class Order extends Component {
   componentWillUnmount() {}
 
   componentDidShow() {
-    this.fetchPageData();
+    let { index } = this.$router.params; //获取分享进来的参数share
+    console.log("index", index);
+
+    this.tagClickHandler(parseInt(index) + 1);
+    // this.fetchPageData();
   }
 
   componentDidHide() {}
@@ -168,6 +173,7 @@ class Order extends Component {
         });
         break;
       case 1:
+        console.log("我请求");
         this.props.fetchPageData("order", {
           status: "NotPaid",
           // memberId: 0,
@@ -185,7 +191,7 @@ class Order extends Component {
           // memberId: 0,
           // keyword: "string",
           currentPage: 1,
-          pageSize: 14
+          pageSize: 15
           // sortBy: "string",
           // sortMode: 0
         });
