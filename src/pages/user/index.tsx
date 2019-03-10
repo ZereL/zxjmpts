@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:58
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-08 16:36:00
+ * @Last Modified time: 2019-03-08 16:42:23
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -16,7 +16,6 @@ import {
   fetchUserInfo,
   clearPageData
 } from "../../actions";
-import { USER } from "../../constants";
 
 import messageIcon from "../../assets/icon/resource52.png";
 import avatar_img from "../../assets/icon/resource23.png";
@@ -104,7 +103,7 @@ class User extends Component {
     if (token === "") {
       this.setState({ isOpened: true });
     } else {
-      this.props.fetchUserInfo(USER);
+      this.props.fetchUserInfo("user");
     }
   }
 
@@ -156,7 +155,7 @@ class User extends Component {
 
         if (encryptedData != void 23333 && iv != void 23333) {
           this.setState({ isOpened: false });
-          const { data } = await this.props.fetchUserToken(USER, {
+          const { data } = await this.props.fetchUserToken("user", {
             wechatCode: code,
             encryptedData: encryptedData,
             iv: iv
@@ -168,7 +167,7 @@ class User extends Component {
           // 存储全局变量，下次进入程序自动登录
           Taro.setStorage({ key: "token", data: data.token });
           console.log(data);
-          this.props.fetchUserInfo(USER);
+          this.props.fetchUserInfo("user");
         } else {
           Taro.showToast({
             title: "授权失败，请先授权",
@@ -215,7 +214,7 @@ class User extends Component {
     console.log("清除缓存");
     Taro.clearStorageSync();
     setGlobalData("token", "");
-    this.props.clearPageData(USER);
+    this.props.clearPageData("user");
   };
 
   goLikeGoods = () => {

@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:07:40
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-08 16:32:49
+ * @Last Modified time: 2019-03-08 16:49:29
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -311,7 +311,6 @@ class Order extends Component {
     return (
       <View className="order-page">
         <View>
-          <View>我的订单</View>
           <View className="top-tags">
             {topTags.map((item, index) => {
               return (
@@ -332,7 +331,7 @@ class Order extends Component {
             scrollY
             scrollWithAnimation
             // scrollTop="0"
-            style="height: 600px"
+            style="height: 570px"
             lowerThreshold={20}
             // upperThreshold="20"
             // onScrolltoupper={this.onScrolltoupper}

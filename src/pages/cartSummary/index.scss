@@ -2,7 +2,7 @@
  * @Author: Hank 
  * @Date: 2019-02-07 10:09:14 
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-05 11:37:20
+ * @Last Modified time: 2019-03-08 16:44:35
  */
 
 @import "../../styles/mixin";
@@ -58,13 +58,13 @@
     align-items: center;
   }
   .total-price {
-    @include wh(100%, 150px);
+    @include wh(95%, 150px);
     @include fj(space-between);
     align-items: center;
     padding: 20px;
   }
   .courier-price {
-    @include wh(100%, 150px);
+    @include wh(95%, 150px);
     @include fj(space-between);
     align-items: center;
     padding: 20px;
