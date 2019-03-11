@@ -222,7 +222,8 @@ class User extends Component {
   };
 
   goBecomeShopkeeper = () => {
-    Taro.navigateTo({ url: "/pages/shopkeeper/index" });
+    // Taro.navigateTo({ url: "/pages/shopkeeper/index" });
+    Taro.switchTab({ url: "/pages/shopkeeper/index" });
   };
 
   /********************* 渲染页面的方法 *********************/
