@@ -16,6 +16,7 @@ import ZXJCarousel from "../../components/Carousel/index";
 import DynamicList from "../../components/DynamicList/index";
 import { getGlobalData } from "../../utils/common";
 import { AtGrid } from "taro-ui";
+import { IMAGE_URL, cdnMediumSuffix } from "../../../src/config";
 
 type PageStateProps = {};
 
@@ -39,6 +40,9 @@ type IProps = PageStateProps & PageDispatchProps & PageOwnProps;
 interface Home {
   props: IProps;
 }
+
+// const windowHeight = getGlobalData("systemInfo").windowHeight;
+const windowWidth = getGlobalData("systemInfo").windowWidth;
 
 @connect(
   ({ home }) => ({
@@ -112,6 +116,19 @@ class Home extends Component {
   goSharePageHandler = () => {
     Taro.navigateTo({ url: "/pages/notLoginShopkeeper/index" });
   };
+
+  /**
+   * bannerOneTwo点击事件
+   */
+  bannerOneTwoClickHandler = link => {
+    link.type == "CommingSoon" && console.log("comming soon");
+    link.type == "Cate" &&
+      Taro.navigateTo({ url: `/pages/goodsList/index?cateId=${link.cateId}` });
+
+    link.type == "Goods" &&
+      Taro.navigateTo({ url: `/pages/goodsDetail/index?id=${link.goodsId}` });
+  };
+
   /********************* 渲染页面的方法 *********************/
   /**
    * 加载页面数据
@@ -222,6 +239,59 @@ class Home extends Component {
               }
             ]}
           />
+        </View>
+        <View style={`width: ${windowWidth}px;height: 400px;background: #fff;`}>
+          {homeItems.map((item: any, index) => {
+            return (
+              item.type === "BannerOneTwo" && (
+                <View>
+                  <Image
+                    style={`width: ${windowWidth}px;height: 200px;background: #fff;`}
+                    src={`${IMAGE_URL}${
+                      item.mainImage.image
+                    }${cdnMediumSuffix}`}
+                    onClick={this.bannerOneTwoClickHandler.bind(this, item.mainImage.link)}
+                  />
+                  <Image
+                    style={`width: ${windowWidth /
+                      2}px;height: 200px;background: #fff;`}
+                    src={`${IMAGE_URL}${
+                      item.leftImage.image
+                    }${cdnMediumSuffix}`}
+                    onClick={this.bannerOneTwoClickHandler.bind(this, item.leftImage.link)}
+                  />
+                  <Image
+                    style={`width: ${windowWidth /
+                      2}px;height: 200px;background: #fff;`}
+                    src={`${IMAGE_URL}${
+                      item.rightImage.image
+                    }${cdnMediumSuffix}`}
+                    onClick={this.bannerOneTwoClickHandler.bind(this, item.rightImage.link)}
+                  />
+                </View>
+                // <View>
+                //   <Image
+                //     style={`width: ${windowWidth}px;height: 100px;background: #fff;`}
+                //     src={`${IMAGE_URL}${
+                //       item.mainImage.image
+                //     }${cdnMediumSuffix}`}
+                //   />
+                //   <Image
+                //     style={`width: ${windowWidth}px;height: 100px;background: #fff;`}
+                //     src={`${IMAGE_URL}${
+                //       item.leftImage.image
+                //     }${cdnMediumSuffix}`}
+                //   />
+                //   <Image
+                //     style={`width: ${windowWidth}px;height: 100px;background: #fff;`}
+                //     src={`${IMAGE_URL}${
+                //       item.rightImage.image
+                //     }${cdnMediumSuffix}`}
+                //   />
+                // </View>
+              )
+            );
+          })}
         </View>
         <View className="homeItems">
           {homeItems.map((item, index) => {
