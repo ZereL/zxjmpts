@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:07:32
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-07 13:47:59
+ * @Last Modified time: 2019-03-15 15:52:40
  */
 import { ComponentClass } from "react";
 import Taro, { Component } from "@tarojs/taro";
@@ -33,8 +33,22 @@ class Carousel extends Component {
   componentDidShow() {
     // console.log("进入这个组件");
   }
+
+  onClickHandler = link => {
+    const { cate, type } = link;
+
+    link.type == "Goods" &&
+      Taro.navigateTo({ url: `/pages/goodsDetail/index?id=${link.goodsId}` });
+
+    link.type == "Cate" &&
+      Taro.navigateTo({ url: `/pages/goodsList/index?cateId=${link.cateId}` });
+    link.type == "CommingSoon" && console.log("commingsoon");
+    // Taro.navigateTo({url:""})
+  };
+
   render() {
     const { images = [], containerStyle, imageStyle } = this.props;
+    console.log("this.props!!!!!!!!!", this.props);
     return (
       <Swiper
         className={containerStyle ? "" : "swiper"}
@@ -50,6 +64,7 @@ class Carousel extends Component {
             key={index}
             className={imageStyle ? "" : "image"}
             style={imageStyle}
+            onClick={this.onClickHandler.bind(this, item.link)}
           >
             <Image
               mode={"widthFix"}
