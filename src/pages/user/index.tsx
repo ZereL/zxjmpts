@@ -2,7 +2,7 @@
  * @Author: Hank
  * @Date: 2019-02-07 10:09:58
  * @Last Modified by: Hank
- * @Last Modified time: 2019-03-08 16:42:23
+ * @Last Modified time: 2019-03-19 13:09:53
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
@@ -149,6 +149,7 @@ class User extends Component {
     const { code } = await Taro.login();
     console.log("code", code);
     try {
+      Taro.showLoading({ title: "登录中...", mask: true });
       if (code) {
         const { userInfo, encryptedData, iv } = await Taro.getUserInfo();
         console.log("userInfo, encryptedData, iv", userInfo, encryptedData, iv);
@@ -167,8 +168,10 @@ class User extends Component {
           // 存储全局变量，下次进入程序自动登录
           Taro.setStorage({ key: "token", data: data.token });
           console.log(data);
-          this.props.fetchUserInfo("user");
+          await this.props.fetchUserInfo("user");
+          Taro.hideLoading();
         } else {
+          Taro.hideLoading();
           Taro.showToast({
             title: "授权失败，请先授权",
             icon: "none",
@@ -176,6 +179,7 @@ class User extends Component {
           });
         }
       } else {
+        Taro.hideLoading();
         Taro.showToast({
           title: "授权失败，请先授权",
           icon: "none",
@@ -184,7 +188,7 @@ class User extends Component {
       }
     } catch (error) {
       // console.log("error", error);
-      this.setState({ isOpened: true });
+      // this.setState({ isOpened: true });
     }
   };
 
@@ -244,9 +248,17 @@ class User extends Component {
                   {name ? (
                     <Text>{`欢迎您回来，${name}`}</Text>
                   ) : (
-                    <Text onClick={this.loginHandler} open-type="getUserInfo">
-                      已经是小主？请登录 >
-                    </Text>
+                    // <Text onClick={this.loginHandler} open-type="getUserInfo">
+                    //   已经是小主？请登录 >
+                    // </Text>
+                    <Button
+                      className="name-button"
+                      open-type="getUserInfo"
+                      // onGetUserInfo={this.getUserInfoHandler} // TODO: 暂时注释掉
+                      onGetUserInfo={this.loginHandler} // TODO: 暂时注释掉
+                    >
+                      请登录 >>>
+                    </Button>
                   )}
                 </View>
               </View>
@@ -395,7 +407,7 @@ class User extends Component {
             </View>
           </View> */}
         </View>
-        <AtModal isOpened={this.state.isOpened}>
+        {/* <AtModal isOpened={this.state.isOpened}>
           <AtModalHeader>臻享家需要您的授权</AtModalHeader>
           <AtModalContent>
             <View>
@@ -412,7 +424,7 @@ class User extends Component {
           <AtModalAction>
             <Button onClick={this.modalCancelHandler}>取消授权</Button>
           </AtModalAction>
-        </AtModal>
+        </AtModal> */}
       </View>
     );
   }

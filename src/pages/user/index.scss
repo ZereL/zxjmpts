@@ -34,6 +34,16 @@
           &.black {
             color: #000000;
           }
+          .name-button {
+            background: none !important;
+            border: none;
+            font-size: 48px;
+            color: #999999;
+            border-color: #fff;
+          }
+          .name-button::after {
+            border: none;
+          }
         }
         .msg {
           width: 50px;

@@ -6,7 +6,7 @@
  */
 import { ComponentClass } from "react";
 import Taro, { Component, Config } from "@tarojs/taro";
-import { View, Text, Image } from "@tarojs/components";
+import { View, Text, Image, ScrollView } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 
 import "./index.scss";
@@ -435,17 +435,18 @@ class GoodsDetail extends Component {
     console.log("property", property);
     console.log("property.length", property.length);
     return (
-      <View className="detail-page">
+      <ScrollView className="detail-page">
         {/* 顶部tabBar */}
         {/* TODO： 如果这个TabBar想有用的话， 那么就得把这页换成scrollview中。 */}
         {/* <Button open-type="share">分享本页</Button>
         <Button open-type="share">显示modal</Button> */}
         {share ? <Text className="fixIndex">通过分享进入页面</Text> : null}
-        <AtTabBar
+        {/* 目前Taro好像没有支持ref的例子 */}
+        {/* <AtTabBar
           tabList={[{ title: "商品" }, { title: "相关" }, { title: "详情" }]}
           onClick={this.tabBarClickHandler}
           current={this.state.activeTab}
-        />
+        /> */}
         {/* 轮播图 */}
         <View className="image-box-wrap">
           <View
@@ -613,7 +614,7 @@ class GoodsDetail extends Component {
           </View>
           <AtButton onClick={this.modalAddToCartHandler}>加入购物车</AtButton>
         </AtFloatLayout>
-      </View>
+      </ScrollView>
     );
   }
 }
